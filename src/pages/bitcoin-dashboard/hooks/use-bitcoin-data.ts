@@ -49,15 +49,31 @@ export function useBitcoinData() {
   useEffect(() => {
     const fetchBitcoinData = async () => {
       try {
+        // Use a more conservative approach with error handling and timeouts
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
         const response = await fetch(
           'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30',
+          {
+            signal: controller.signal,
+            headers: {
+              Accept: 'application/json',
+            },
+          },
         );
 
+        clearTimeout(timeoutId);
+
         if (!response.ok) {
-          throw new Error('Failed to fetch Bitcoin data');
+          throw new Error(`Failed to fetch Bitcoin data: ${response.status} ${response.statusText}`);
         }
 
         const result = await response.json();
+
+        if (!result || !result.prices || !Array.isArray(result.prices) || result.prices.length === 0) {
+          throw new Error('Invalid API response format');
+        }
 
         // Process prices data
         const priceData = result.prices.map((item: [number, number]) => ({
@@ -91,29 +107,40 @@ export function useBitcoinData() {
           };
         });
 
+        // Ensure we have data before processing
+        if (combinedData.length === 0) {
+          throw new Error('No data received from API');
+        }
+
         // Get current price (last item in the array)
-        const currentPrice = combinedData[combinedData.length - 1].price;
+        const currentPrice = combinedData[combinedData.length - 1]?.price || 0;
 
         // Calculate price changes
         const last24hIndex = combinedData.length - 24; // Approximation for 24h
         const last7dIndex = combinedData.length - 168; // Approximation for 7 days (24 * 7)
         const last30dIndex = 0; // First item in the 30-day dataset
 
-        const price24hAgo = last24hIndex >= 0 ? combinedData[last24hIndex].price : combinedData[0].price;
-        const price7dAgo = last7dIndex >= 0 ? combinedData[last7dIndex].price : combinedData[0].price;
-        const price30dAgo = combinedData[last30dIndex].price;
+        const price24hAgo =
+          last24hIndex >= 0 && combinedData[last24hIndex]
+            ? combinedData[last24hIndex].price
+            : combinedData[0]?.price || 0;
+
+        const price7dAgo =
+          last7dIndex >= 0 && combinedData[last7dIndex] ? combinedData[last7dIndex].price : combinedData[0]?.price || 0;
+
+        const price30dAgo = combinedData[last30dIndex]?.price || 0;
 
         const priceChange24h = currentPrice - price24hAgo;
         const priceChange7d = currentPrice - price7dAgo;
         const priceChange30d = currentPrice - price30dAgo;
 
-        const priceChangePercentage24h = (priceChange24h / price24hAgo) * 100;
-        const priceChangePercentage7d = (priceChange7d / price7dAgo) * 100;
-        const priceChangePercentage30d = (priceChange30d / price30dAgo) * 100;
+        const priceChangePercentage24h = price24hAgo !== 0 ? (priceChange24h / price24hAgo) * 100 : 0;
+        const priceChangePercentage7d = price7dAgo !== 0 ? (priceChange7d / price7dAgo) * 100 : 0;
+        const priceChangePercentage30d = price30dAgo !== 0 ? (priceChange30d / price30dAgo) * 100 : 0;
 
         // Get current market cap and volume
-        const marketCap = combinedData[combinedData.length - 1].marketCap;
-        const volume = combinedData[combinedData.length - 1].volume;
+        const marketCap = combinedData[combinedData.length - 1]?.marketCap || 0;
+        const volume = combinedData[combinedData.length - 1]?.volume || 0;
 
         setData({
           currentPrice,

@@ -18,14 +18,18 @@ interface MetricsBoxProps {
 
 export function MetricsBox({ loading }: MetricsBoxProps) {
   const {
-    currentPrice,
-    priceChange24h,
-    priceChange7d,
-    priceChange30d,
-    priceChangePercentage24h,
-    priceChangePercentage7d,
-    priceChangePercentage30d,
-  } = useBitcoinData();
+    currentPrice = 0,
+    priceChange24h = 0,
+    priceChange7d = 0,
+    priceChange30d = 0,
+    priceChangePercentage24h = 0,
+    priceChangePercentage7d = 0,
+    priceChangePercentage30d = 0,
+    loading: dataLoading = true,
+  } = useBitcoinData() || {};
+
+  // Use either the passed loading prop or the data loading state
+  const isLoading = loading || dataLoading;
 
   return (
     <Container
@@ -69,7 +73,7 @@ export function MetricsBox({ loading }: MetricsBoxProps) {
             <SpaceBetween size="xs">
               <Box>24h Performance</Box>
               <ProgressBar
-                value={Math.abs(priceChangePercentage24h)}
+                value={Math.min(Math.abs(priceChangePercentage24h), 100)}
                 label=""
                 description=""
                 status={priceChangePercentage24h >= 0 ? 'success' : 'error'}
@@ -79,7 +83,7 @@ export function MetricsBox({ loading }: MetricsBoxProps) {
             <SpaceBetween size="xs">
               <Box>7d Performance</Box>
               <ProgressBar
-                value={Math.abs(priceChangePercentage7d)}
+                value={Math.min(Math.abs(priceChangePercentage7d), 100)}
                 label=""
                 description=""
                 status={priceChangePercentage7d >= 0 ? 'success' : 'error'}
@@ -89,7 +93,7 @@ export function MetricsBox({ loading }: MetricsBoxProps) {
             <SpaceBetween size="xs">
               <Box>30d Performance</Box>
               <ProgressBar
-                value={Math.abs(priceChangePercentage30d)}
+                value={Math.min(Math.abs(priceChangePercentage30d), 100)}
                 label=""
                 description=""
                 status={priceChangePercentage30d >= 0 ? 'success' : 'error'}

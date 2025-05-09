@@ -17,23 +17,30 @@ interface PriceChartProps {
 }
 
 export function PriceChart({ priceHistory, loading }: PriceChartProps) {
+  // Ensure priceHistory is never undefined
+  const safeHistory = priceHistory || [];
+
   const domain =
-    priceHistory.length > 0
-      ? [priceHistory[0].date, priceHistory[priceHistory.length - 1].date]
-      : [new Date(), new Date()];
+    safeHistory.length > 0 ? [safeHistory[0].date, safeHistory[safeHistory.length - 1].date] : [new Date(), new Date()];
 
   const series = [
     {
       title: 'Bitcoin Price (USD)',
       type: 'line' as const,
-      data: priceHistory.map(item => ({ x: item.date, y: item.price })),
+      data: safeHistory.map(item => ({
+        x: item.date,
+        y: item.price || 0,
+      })),
       valueFormatter: (value: number) => formatCurrency(value),
       color: colorChartsPalette09,
     },
     {
       title: 'Market Cap (Billions USD)',
       type: 'line' as const,
-      data: priceHistory.map(item => ({ x: item.date, y: item.marketCap / 1000000000 })),
+      data: safeHistory.map(item => ({
+        x: item.date,
+        y: (item.marketCap || 0) / 1000000000,
+      })),
       valueFormatter: (value: number) => `$${value.toFixed(2)}B`,
       color: colorChartsPalette03,
     },

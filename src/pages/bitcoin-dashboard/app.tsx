@@ -5,6 +5,7 @@ import React, { useRef, useState } from 'react';
 import { AppLayoutProps } from '@cloudscape-design/components/app-layout';
 import Button from '@cloudscape-design/components/button';
 import SpaceBetween from '@cloudscape-design/components/space-between';
+import { BitcoinErrorBoundary } from './components/bitcoin-error-boundary';
 
 import { Breadcrumbs, HelpPanelProvider, Notifications } from '../commons';
 import { CustomAppLayout } from '../commons/common-components';
@@ -28,16 +29,18 @@ export function App() {
       <CustomAppLayout
         ref={appLayout}
         content={
-          <SpaceBetween size="m">
-            <BitcoinDashboardHeader
-              actions={
-                <Button variant="primary" href="https://www.coingecko.com/en/coins/bitcoin" external>
-                  View on CoinGecko
-                </Button>
-              }
-            />
-            <Content />
-          </SpaceBetween>
+          <BitcoinErrorBoundary>
+            <SpaceBetween size="m">
+              <BitcoinDashboardHeader
+                actions={
+                  <Button variant="primary" href="https://www.coingecko.com/en/coins/bitcoin" external>
+                    View on CoinGecko
+                  </Button>
+                }
+              />
+              <Content />
+            </SpaceBetween>
+          </BitcoinErrorBoundary>
         }
         breadcrumbs={
           <Breadcrumbs

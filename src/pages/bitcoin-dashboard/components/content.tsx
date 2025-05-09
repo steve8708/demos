@@ -11,7 +11,14 @@ import { MarketDataCard } from './market-data-card';
 import { useBitcoinData } from '../hooks/use-bitcoin-data';
 
 export function Content() {
-  const { priceHistory, loading, marketCap, volume, circulatingSupply, allTimeHigh } = useBitcoinData();
+  const {
+    priceHistory = [],
+    loading = true,
+    marketCap = 0,
+    volume = 0,
+    circulatingSupply = 0,
+    allTimeHigh = 0,
+  } = useBitcoinData() || {};
 
   return (
     <SpaceBetween size="l">
