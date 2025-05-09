@@ -38,21 +38,13 @@ export function CurrentWeatherPanel({ current, location }: CurrentWeatherPanelPr
         ]}
       >
         {/* Main temperature and condition display */}
-        <div
-          className="temperature-display"
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
+        <div className="temperature-display" style={{ textAlign: 'center', padding: '0 16px' }}>
           <SpaceBetween size="xs">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Box fontSize="display-l" fontWeight="bold" margin={{ right: 'xs' }}>
-                {Math.round(current.temperature)}°C
-              </Box>
-              <Box fontSize="heading-xl" color="text-body-secondary">
-                <Icon name={weatherIcon} size="big" />
-              </Box>
-            </div>
-            <Box fontSize="heading-s" textAlign="center">
-              {weatherCondition}
+            <Box fontSize="heading-xl" fontWeight="bold" textAlign="center">
+              {Math.round(current.temperature)}°C
+            </Box>
+            <Box fontSize="heading-s" textAlign="center" color="text-body-secondary">
+              <Icon name={weatherIcon} /> {weatherCondition}
             </Box>
           </SpaceBetween>
         </div>
@@ -60,10 +52,10 @@ export function CurrentWeatherPanel({ current, location }: CurrentWeatherPanelPr
         {/* Weather details in a clean grid layout */}
         <Grid
           gridDefinition={[
-            { colspan: { l: 6, m: 6, default: 6 } },
-            { colspan: { l: 6, m: 6, default: 6 } },
-            { colspan: { l: 6, m: 6, default: 6 } },
-            { colspan: { l: 6, m: 6, default: 6 } },
+            { colspan: { l: 3, m: 3, default: 6 } },
+            { colspan: { l: 3, m: 3, default: 6 } },
+            { colspan: { l: 3, m: 3, default: 6 } },
+            { colspan: { l: 3, m: 3, default: 6 } },
           ]}
         >
           <WeatherDetailItem
@@ -105,7 +97,9 @@ function WeatherDetailItem({ label, value, icon, iconRotation }: WeatherDetailIt
             }
           />
         )}
-        <Box variant="awsui-value-large">{value}</Box>
+        <Box fontSize="body-l" fontWeight="bold">
+          {value}
+        </Box>
       </div>
     </div>
   );
