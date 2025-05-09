@@ -6,7 +6,7 @@ import Box from '@cloudscape-design/components/box';
 import Container from '@cloudscape-design/components/container';
 import Header from '@cloudscape-design/components/header';
 import LineChart from '@cloudscape-design/components/line-chart';
-import { colorChartsPalette09, colorChartsPalette03 } from '@cloudscape-design/design-tokens';
+import { colorChartsThematic09, colorChartsThematic03 } from '@cloudscape-design/design-tokens';
 
 import { BitcoinPriceData } from '../hooks/use-bitcoin-data';
 import { formatCurrency } from '../utils/formatters';
@@ -32,7 +32,7 @@ export function PriceChart({ priceHistory, loading }: PriceChartProps) {
         y: item.price || 0,
       })),
       valueFormatter: (value: number) => formatCurrency(value),
-      color: colorChartsPalette09,
+      color: colorChartsThematic09,
     },
     {
       title: 'Market Cap (Billions USD)',
@@ -42,7 +42,7 @@ export function PriceChart({ priceHistory, loading }: PriceChartProps) {
         y: (item.marketCap || 0) / 1000000000,
       })),
       valueFormatter: (value: number) => `$${value.toFixed(2)}B`,
-      color: colorChartsPalette03,
+      color: colorChartsThematic03,
     },
   ];
 
