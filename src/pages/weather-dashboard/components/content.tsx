@@ -1,12 +1,11 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Alert from '@cloudscape-design/components/alert';
 import Grid from '@cloudscape-design/components/grid';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 
-import { useAsyncData } from '../../commons/use-async-data';
 import { CurrentWeatherPanel } from './current-weather-panel';
 import { DailyForecastPanel } from './daily-forecast-panel';
 import { HourlyForecastChart } from './hourly-forecast-chart';
@@ -19,21 +18,41 @@ interface WeatherDashboardContentProps {
 }
 
 export function WeatherDashboardContent({ location }: WeatherDashboardContentProps) {
-  const [weatherData, loading] = useAsyncData<WeatherData>(async () => {
-    try {
-      const data = await fetchWeatherData(location);
-      return [data];
-    } catch (error) {
-      console.error('Failed to fetch weather data:', error);
-      return [];
-    }
-  });
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch weather data whenever location changes
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    setError(null);
+
+    fetchWeatherData(location)
+      .then(data => {
+        if (isMounted) {
+          setWeatherData(data);
+          setLoading(false);
+        }
+      })
+      .catch(err => {
+        if (isMounted) {
+          console.error('Failed to fetch weather data:', err);
+          setError('Failed to load weather data for this location');
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [location.latitude, location.longitude]); // Re-fetch when coordinates change
 
   if (loading) {
     return <LoadingStatus resourceName="weather data" />;
   }
 
-  if (!weatherData || weatherData.length === 0) {
+  if (error || !weatherData) {
     return (
       <Alert type="error" header="Error loading weather data">
         <SpaceBetween size="m">
@@ -46,8 +65,6 @@ export function WeatherDashboardContent({ location }: WeatherDashboardContentPro
     );
   }
 
-  const weather = weatherData[0];
-
   return (
     <Grid
       gridDefinition={[
@@ -56,9 +73,9 @@ export function WeatherDashboardContent({ location }: WeatherDashboardContentPro
         { colspan: 12 },
       ]}
     >
-      <CurrentWeatherPanel current={weather.current} location={weather.location} />
-      <DailyForecastPanel forecast={weather.daily} />
-      <HourlyForecastChart hourlyData={weather.hourly} />
+      <CurrentWeatherPanel current={weatherData.current} location={weatherData.location} />
+      <DailyForecastPanel forecast={weatherData.daily} />
+      <HourlyForecastChart hourlyData={weatherData.hourly} />
     </Grid>
   );
 }

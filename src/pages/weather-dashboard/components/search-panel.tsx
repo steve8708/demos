@@ -9,8 +9,10 @@ import Input from '@cloudscape-design/components/input';
 import Modal from '@cloudscape-design/components/modal';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 
+import { Location } from '../utils/types';
+
 // List of popular cities with their coordinates
-const popularLocations = [
+const popularLocations: Location[] = [
   { name: 'New York, NY', latitude: 40.7128, longitude: -74.006 },
   { name: 'Los Angeles, CA', latitude: 34.0522, longitude: -118.2437 },
   { name: 'Chicago, IL', latitude: 41.8781, longitude: -87.6298 },
@@ -24,7 +26,7 @@ const popularLocations = [
 ];
 
 interface SearchPanelProps {
-  onLocationChange: (location: { latitude: number; longitude: number; name: string }) => void;
+  onLocationChange: (location: Location) => void;
 }
 
 export function SearchPanel({ onLocationChange }: SearchPanelProps) {
@@ -67,7 +69,7 @@ export function SearchPanel({ onLocationChange }: SearchPanelProps) {
     setVisible(false);
   };
 
-  const selectLocation = (location: (typeof popularLocations)[0]) => {
+  const selectLocation = (location: Location) => {
     onLocationChange(location);
     setVisible(false);
   };
