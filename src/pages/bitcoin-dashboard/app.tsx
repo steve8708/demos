@@ -9,9 +9,8 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import { Breadcrumbs, HelpPanelProvider, Notifications } from '../commons';
 import { CustomAppLayout } from '../commons/common-components';
 import { Content } from './components/content';
-import { BitcoinDashboardHeader } from './components/header';
+import { BitcoinDashboardHeader, BitcoinInfo } from './components/header';
 import { BitcoinDashboardSideNavigation } from './components/side-navigation';
-import { BitcoinInfo } from './components/bitcoin-info';
 
 export function App() {
   const [toolsOpen, setToolsOpen] = useState(false);
