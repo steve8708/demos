@@ -21,6 +21,12 @@ import Link from '@cloudscape-design/components/link';
 
 // Demo definitions with category information
 const demos = [
+  {
+    route: '/bitcoin-dashboard',
+    title: 'Bitcoin Price Dashboard',
+    description: 'Real-time Bitcoin price tracking dashboard.',
+    category: 'Dashboards',
+  },
   { route: '/cards', title: 'Card View', description: 'Demo of Cloudscape Cards component.', category: 'Components' },
   { route: '/chat', title: 'Chat', description: 'Chat UI demo.', category: 'Applications' },
   {
