@@ -126,6 +126,12 @@ const demos = [
     description: 'Table with select filter.',
     category: 'Tables',
   },
+  {
+    route: '/us-population-dashboard',
+    title: 'US Population Dashboard',
+    description: 'Dashboard for US population data.',
+    category: 'Dashboards',
+  },
   { route: '/wizard', title: 'Wizard', description: 'Multi-step wizard demo.', category: 'Forms' },
   { route: '/write-to-s3', title: 'Write to S3', description: 'Write data to Amazon S3.', category: 'Integration' },
 ];
