@@ -10,6 +10,7 @@ import BarChart from '@cloudscape-design/components/bar-chart';
 import LineChart from '@cloudscape-design/components/line-chart';
 import SegmentedControl from '@cloudscape-design/components/segmented-control';
 import SpaceBetween from '@cloudscape-design/components/space-between';
+import Tabs from '@cloudscape-design/components/tabs';
 
 import { HourlyForecast } from '../utils/types';
 import { formatHour } from '../utils/api';
@@ -32,6 +33,7 @@ export function HourlyForecastChart({ hourlyData }: HourlyForecastChartProps) {
           y: hour.temperature,
         })),
         valueFormatter: (value: number) => `${value.toFixed(1)}°C`,
+        color: '#FF9900', // AWS orange color
       },
     ],
     xDomain: hourlyData.map(hour => formatHour(hour.time)),
@@ -49,6 +51,7 @@ export function HourlyForecastChart({ hourlyData }: HourlyForecastChartProps) {
           y: hour.precipitation,
         })),
         valueFormatter: (value: number) => `${value.toFixed(1)} mm`,
+        color: '#0073BB', // Blue color for precipitation
       },
     ],
     xDomain: hourlyData.map(hour => formatHour(hour.time)),
@@ -66,6 +69,7 @@ export function HourlyForecastChart({ hourlyData }: HourlyForecastChartProps) {
           y: hour.humidity,
         })),
         valueFormatter: (value: number) => `${value.toFixed(0)}%`,
+        color: '#16A2C8', // Teal color for humidity
       },
     ],
     xDomain: hourlyData.map(hour => formatHour(hour.time)),
@@ -83,6 +87,7 @@ export function HourlyForecastChart({ hourlyData }: HourlyForecastChartProps) {
           y: hour.windSpeed,
         })),
         valueFormatter: (value: number) => `${value.toFixed(1)} km/h`,
+        color: '#879596', // Gray color for wind
       },
     ],
     xDomain: hourlyData.map(hour => formatHour(hour.time)),
@@ -108,6 +113,9 @@ export function HourlyForecastChart({ hourlyData }: HourlyForecastChartProps) {
               filterPlaceholder: 'Filter data',
               xTickFormatter: value => value,
             }}
+            emphasizeBaselineZero={false}
+            highlightedSeries={0}
+            statusType="finished"
           />
         );
       case 'precipitation':
@@ -127,6 +135,9 @@ export function HourlyForecastChart({ hourlyData }: HourlyForecastChartProps) {
               filterPlaceholder: 'Filter data',
               xTickFormatter: value => value,
             }}
+            emphasizeBaselineZero={true}
+            highlightedSeries={0}
+            statusType="finished"
           />
         );
       case 'humidity':
@@ -146,6 +157,9 @@ export function HourlyForecastChart({ hourlyData }: HourlyForecastChartProps) {
               filterPlaceholder: 'Filter data',
               xTickFormatter: value => value,
             }}
+            emphasizeBaselineZero={false}
+            highlightedSeries={0}
+            statusType="finished"
           />
         );
       case 'wind':
@@ -165,6 +179,9 @@ export function HourlyForecastChart({ hourlyData }: HourlyForecastChartProps) {
               filterPlaceholder: 'Filter data',
               xTickFormatter: value => value,
             }}
+            emphasizeBaselineZero={true}
+            highlightedSeries={0}
+            statusType="finished"
           />
         );
       default:
@@ -173,30 +190,52 @@ export function HourlyForecastChart({ hourlyData }: HourlyForecastChartProps) {
   };
 
   return (
-    <Container
-      header={
-        <Header
-          variant="h2"
-          actions={
-            <SegmentedControl
-              selectedId={selectedMetric}
-              onChange={({ detail }) => setSelectedMetric(detail.selectedId)}
-              options={[
-                { id: 'temperature', text: 'Temperature' },
-                { id: 'precipitation', text: 'Precipitation' },
-                { id: 'humidity', text: 'Humidity' },
-                { id: 'wind', text: 'Wind' },
-              ]}
-            />
-          }
-        >
-          24-hour forecast
-        </Header>
-      }
-    >
-      <Grid gridDefinition={[{ colspan: { default: 12 } }]}>
-        <Box>{renderChart()}</Box>
-      </Grid>
+    <Container header={<Header variant="h2">24-hour forecast</Header>}>
+      <SpaceBetween size="l">
+        <Tabs
+          tabs={[
+            {
+              id: 'temperature',
+              label: 'Temperature',
+              content: (
+                <Grid gridDefinition={[{ colspan: { default: 12 } }]}>
+                  <Box>{renderChart()}</Box>
+                </Grid>
+              ),
+            },
+            {
+              id: 'precipitation',
+              label: 'Precipitation',
+              content: (
+                <Grid gridDefinition={[{ colspan: { default: 12 } }]}>
+                  <Box>{renderChart()}</Box>
+                </Grid>
+              ),
+            },
+            {
+              id: 'humidity',
+              label: 'Humidity',
+              content: (
+                <Grid gridDefinition={[{ colspan: { default: 12 } }]}>
+                  <Box>{renderChart()}</Box>
+                </Grid>
+              ),
+            },
+            {
+              id: 'wind',
+              label: 'Wind',
+              content: (
+                <Grid gridDefinition={[{ colspan: { default: 12 } }]}>
+                  <Box>{renderChart()}</Box>
+                </Grid>
+              ),
+            },
+          ]}
+          activeTabId={selectedMetric}
+          onChange={({ detail }) => setSelectedMetric(detail.activeTabId)}
+          ariaLabel="24-hour weather metrics"
+        />
+      </SpaceBetween>
     </Container>
   );
 }

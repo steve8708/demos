@@ -31,46 +31,82 @@ export function CurrentWeatherPanel({ current, location }: CurrentWeatherPanelPr
         </Header>
       }
     >
-      <SpaceBetween size="l">
-        <Grid gridDefinition={[{ colspan: { default: 12 } }, { colspan: { default: 6 } }, { colspan: { default: 6 } }]}>
-          <Box textAlign="center">
-            <SpaceBetween size="xs">
-              <Box fontSize="display-l" fontWeight="bold">
+      <Grid
+        gridDefinition={[
+          { colspan: { xl: 4, l: 4, m: 4, s: 12, default: 12 } },
+          { colspan: { xl: 8, l: 8, m: 8, s: 12, default: 12 } },
+        ]}
+      >
+        {/* Main temperature and condition display */}
+        <div
+          className="temperature-display"
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+          <SpaceBetween size="xs">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Box fontSize="display-l" fontWeight="bold" margin={{ right: 'xs' }}>
                 {Math.round(current.temperature)}°C
               </Box>
-              <Box fontSize="heading-m">
-                <Icon name={weatherIcon} /> {weatherCondition}
+              <Box fontSize="heading-xl" color="text-body-secondary">
+                <Icon name={weatherIcon} size="big" />
               </Box>
-            </SpaceBetween>
-          </Box>
+            </div>
+            <Box fontSize="heading-s" textAlign="center">
+              {weatherCondition}
+            </Box>
+          </SpaceBetween>
+        </div>
 
-          <div>
-            <SpaceBetween size="s">
-              <Grid gridDefinition={[{ colspan: { default: 6 } }, { colspan: { default: 6 } }]}>
-                <Box variant="awsui-key-label">Wind</Box>
-                <Box variant="awsui-value-large">{current.windSpeed} km/h</Box>
-              </Grid>
-              <Grid gridDefinition={[{ colspan: { default: 6 } }, { colspan: { default: 6 } }]}>
-                <Box variant="awsui-key-label">Wind direction</Box>
-                <Box variant="awsui-value-large">{current.windDirection}°</Box>
-              </Grid>
-            </SpaceBetween>
-          </div>
-
-          <div>
-            <SpaceBetween size="s">
-              <Grid gridDefinition={[{ colspan: { default: 6 } }, { colspan: { default: 6 } }]}>
-                <Box variant="awsui-key-label">Humidity</Box>
-                <Box variant="awsui-value-large">{current.humidity}%</Box>
-              </Grid>
-              <Grid gridDefinition={[{ colspan: { default: 6 } }, { colspan: { default: 6 } }]}>
-                <Box variant="awsui-key-label">Precipitation</Box>
-                <Box variant="awsui-value-large">{current.precipitation} mm</Box>
-              </Grid>
-            </SpaceBetween>
-          </div>
+        {/* Weather details in a clean grid layout */}
+        <Grid
+          gridDefinition={[
+            { colspan: { l: 6, m: 6, default: 6 } },
+            { colspan: { l: 6, m: 6, default: 6 } },
+            { colspan: { l: 6, m: 6, default: 6 } },
+            { colspan: { l: 6, m: 6, default: 6 } },
+          ]}
+        >
+          <WeatherDetailItem
+            label="Wind"
+            value={`${current.windSpeed} km/h`}
+            icon="arrow-up"
+            iconRotation={current.windDirection}
+          />
+          <WeatherDetailItem label="Wind direction" value={`${current.windDirection}°`} />
+          <WeatherDetailItem label="Humidity" value={`${current.humidity}%`} icon="status-positive" />
+          <WeatherDetailItem
+            label="Precipitation"
+            value={`${current.precipitation} mm`}
+            icon={current.precipitation > 0 ? 'cloud-rain' : 'cloud'}
+          />
         </Grid>
-      </SpaceBetween>
+      </Grid>
     </Container>
+  );
+}
+
+interface WeatherDetailItemProps {
+  label: string;
+  value: string;
+  icon?: string;
+  iconRotation?: number;
+}
+
+function WeatherDetailItem({ label, value, icon, iconRotation }: WeatherDetailItemProps) {
+  return (
+    <div style={{ padding: '8px 0' }}>
+      <Box variant="awsui-key-label">{label}</Box>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        {icon && (
+          <Icon
+            name={icon}
+            style={
+              iconRotation ? { transform: `rotate(${iconRotation}deg)`, marginRight: '4px' } : { marginRight: '4px' }
+            }
+          />
+        )}
+        <Box variant="awsui-value-large">{value}</Box>
+      </div>
+    </div>
   );
 }

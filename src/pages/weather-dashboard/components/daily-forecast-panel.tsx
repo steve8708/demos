@@ -23,37 +23,59 @@ export function DailyForecastPanel({ forecast }: DailyForecastPanelProps) {
         {forecast.map((day, index) => {
           const weatherIcon = getWeatherIcon(day.weatherCode);
           const weatherCondition = getWeatherLabel(day.weatherCode);
+          const precipProb = day.precipitationProbabilityMax;
+          const hasPrecipitation = day.precipitationSum > 0;
 
           return (
-            <div key={index}>
+            <div key={index} style={{ textAlign: 'center', padding: '8px 0' }}>
               <SpaceBetween size="xxs">
-                <Box textAlign="center" fontWeight="bold">
+                {/* Day label */}
+                <Box fontWeight="bold" fontSize="heading-s">
                   {index === 0 ? 'Today' : formatDate(day.date)}
                 </Box>
+
+                {/* Weather icon */}
                 <Box textAlign="center" fontSize="display-l">
-                  <Icon name={weatherIcon} />
+                  <Icon name={weatherIcon} size="big" />
                 </Box>
-                <Box textAlign="center" fontWeight="normal" fontSize="body-s">
+
+                {/* Weather condition */}
+                <Box textAlign="center" fontWeight="normal" fontSize="body-s" color="text-body-secondary">
                   {weatherCondition}
                 </Box>
-                <div>
-                  <Box textAlign="center" fontWeight="bold">
+
+                {/* Temperature range */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <Box fontWeight="bold" fontSize="heading-m">
                     {Math.round(day.temperatureMax)}°
                   </Box>
-                  <Box textAlign="center" color="text-body-secondary">
-                    {Math.round(day.temperatureMin)}°
-                  </Box>
+                  <Box color="text-body-secondary">{Math.round(day.temperatureMin)}°</Box>
                 </div>
-                <Box textAlign="center" fontSize="body-s">
-                  <SpaceBetween size="xxxs">
-                    <div>Precipitation: {day.precipitationSum} mm</div>
-                    <div>Probability: {day.precipitationProbabilityMax}%</div>
-                  </SpaceBetween>
+
+                {/* Precipitation info */}
+                <Box
+                  textAlign="center"
+                  fontSize="body-s"
+                  color={hasPrecipitation ? 'text-status-info' : 'text-body-secondary'}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                    {hasPrecipitation && <Icon name="cloud-rain" size="small" />}
+                    {hasPrecipitation ? `${day.precipitationSum} mm` : 'No rain'}
+                  </div>
+                  <div>{precipProb > 0 ? `${precipProb}% chance` : '0% chance'}</div>
                 </Box>
-                <Box textAlign="center" fontSize="body-s">
+
+                {/* Sun times */}
+                <Box textAlign="center" fontSize="body-s" color="text-body-secondary">
                   <SpaceBetween size="xxxs">
-                    <div>Sunrise: {formatTime(day.sunrise)}</div>
-                    <div>Sunset: {formatTime(day.sunset)}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                      <Icon name="sun" size="small" />
+                      <span>{formatTime(day.sunrise)}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                      <Icon name="moon-filled" size="small" />
+                      <span>{formatTime(day.sunset)}</span>
+                    </div>
                   </SpaceBetween>
                 </Box>
               </SpaceBetween>
