@@ -23,6 +23,7 @@ export function StatePieChart({ title = 'Population Distribution', selectedYear,
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // This useEffect will run whenever selectedYear or selectedStates changes
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,7 +46,7 @@ export function StatePieChart({ title = 'Population Distribution', selectedYear,
     };
 
     fetchData();
-  }, [selectedYear, selectedStates]);
+  }, [selectedYear, selectedStates]); // Add both dependencies to trigger refresh when either changes
 
   if (loading) {
     return (

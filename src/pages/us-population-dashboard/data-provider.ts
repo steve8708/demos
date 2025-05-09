@@ -14,6 +14,8 @@ const BASE_URL = 'https://datausa.io/api/data';
 class USPopulationDataProvider {
   // Fetch national population data
   async getNationalPopulationData(): Promise<PopulationData[]> {
+    console.log('Fetching national population data');
+
     const params = new URLSearchParams({
       drilldowns: 'Nation',
       measures: 'Population',
@@ -30,6 +32,8 @@ class USPopulationDataProvider {
 
   // Fetch state population data
   async getStatePopulationData(): Promise<StatePopulationData[]> {
+    console.log('Fetching state population data');
+
     const params = new URLSearchParams({
       drilldowns: 'State',
       measures: 'Population',
@@ -46,6 +50,8 @@ class USPopulationDataProvider {
 
   // Get population trend data (formatted for charts)
   async getPopulationTrend(): Promise<PopulationTrendData[]> {
+    console.log('Getting population trend data');
+
     const nationalData = await this.getNationalPopulationData();
 
     // Sort by year (ascending)
@@ -57,8 +63,10 @@ class USPopulationDataProvider {
     }));
   }
 
-  // Get population data by state (for the most recent available year)
+  // Get population data by state (for the most recent available year or specified year)
   async getPopulationByState(year?: number): Promise<PopulationByStateData[]> {
+    console.log('Getting population by state data for year:', year);
+
     const stateData = await this.getStatePopulationData();
 
     // Filter by specified year or get the most recent year
@@ -66,9 +74,11 @@ class USPopulationDataProvider {
     if (!targetYear) {
       const years = stateData.map(item => parseInt(item.Year));
       targetYear = Math.max(...years);
+      console.log('No year specified, using most recent year:', targetYear);
     }
 
     const filteredData = stateData.filter(item => parseInt(item.Year) === targetYear);
+    console.log(`Found ${filteredData.length} states for year ${targetYear}`);
 
     return filteredData.map(item => ({
       state: item.State,
@@ -79,6 +89,8 @@ class USPopulationDataProvider {
 
   // Calculate population growth rate
   async getPopulationGrowthRate(): Promise<number> {
+    console.log('Calculating population growth rate');
+
     const trendData = await this.getPopulationTrend();
 
     if (trendData.length < 2) {
@@ -93,11 +105,16 @@ class USPopulationDataProvider {
     const previous = sortedData[sortedData.length - 2];
 
     // Calculate growth rate
-    return ((current.population - previous.population) / previous.population) * 100;
+    const growthRate = ((current.population - previous.population) / previous.population) * 100;
+    console.log(`Growth rate calculated: ${growthRate.toFixed(2)}%`);
+
+    return growthRate;
   }
 
   // Get key metrics for the dashboard
   async getKeyMetrics(): Promise<PopulationMetricData[]> {
+    console.log('Getting key metrics');
+
     const trendData = await this.getPopulationTrend();
     const growthRate = await this.getPopulationGrowthRate();
 
@@ -141,16 +158,26 @@ class USPopulationDataProvider {
 
   // Get all available years from the dataset
   async getAvailableYears(): Promise<number[]> {
+    console.log('Getting available years');
+
     const nationalData = await this.getNationalPopulationData();
     const years = nationalData.map(item => parseInt(item.Year));
-    return [...new Set(years)].sort((a, b) => b - a); // Sort years in descending order
+    const uniqueSortedYears = [...new Set(years)].sort((a, b) => b - a); // Sort years in descending order
+
+    console.log('Available years:', uniqueSortedYears);
+    return uniqueSortedYears;
   }
 
   // Get all state names from the dataset
   async getAvailableStates(): Promise<string[]> {
+    console.log('Getting available states');
+
     const stateData = await this.getStatePopulationData();
     const states = stateData.map(item => item.State);
-    return [...new Set(states)].sort(); // Sort states alphabetically
+    const uniqueSortedStates = [...new Set(states)].sort(); // Sort states alphabetically
+
+    console.log(`Found ${uniqueSortedStates.length} unique states`);
+    return uniqueSortedStates;
   }
 }
 

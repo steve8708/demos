@@ -11,7 +11,7 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import Table from '@cloudscape-design/components/table';
 import TextFilter from '@cloudscape-design/components/text-filter';
 
-import { PopulationByStateData, StatePopulationData } from '../interfaces';
+import { PopulationByStateData } from '../interfaces';
 import dataProvider from '../data-provider';
 
 interface PopulationTableProps {
@@ -29,6 +29,7 @@ export function PopulationTable({ title = 'Population by State', selectedYear }:
 
   const itemsPerPage = 10;
 
+  // This useEffect will run whenever selectedYear changes
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,7 +46,7 @@ export function PopulationTable({ title = 'Population by State', selectedYear }:
     };
 
     fetchData();
-  }, [selectedYear]);
+  }, [selectedYear]); // Dependency on selectedYear ensures data refreshes when year changes
 
   // Filter data based on search text
   const filteredData = data.filter(item => item.state.toLowerCase().includes(filterText.toLowerCase()));

@@ -1,6 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Alert from '@cloudscape-design/components/alert';
 import Grid from '@cloudscape-design/components/grid';
@@ -15,6 +15,17 @@ import { StatePieChart } from './components/state-pie-chart';
 export function Content() {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [selectedStates, setSelectedStates] = useState<string[]>([]);
+
+  // Use useCallback to prevent unnecessary re-renders
+  const handleYearChange = useCallback((year: number) => {
+    console.log('Year changed to:', year);
+    setSelectedYear(year);
+  }, []);
+
+  const handleStatesChange = useCallback((states: string[]) => {
+    console.log('States changed to:', states);
+    setSelectedStates(states);
+  }, []);
 
   return (
     <SpaceBetween size="l">
@@ -33,8 +44,8 @@ export function Content() {
       >
         {/* Filters Panel */}
         <StateSelector
-          onYearChange={setSelectedYear}
-          onStatesChange={setSelectedStates}
+          onYearChange={handleYearChange}
+          onStatesChange={handleStatesChange}
           selectedStates={selectedStates}
           selectedYear={selectedYear}
         />

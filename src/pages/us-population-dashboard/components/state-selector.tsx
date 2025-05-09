@@ -50,7 +50,7 @@ export function StateSelector({ onYearChange, onStatesChange, selectedStates, se
     };
 
     fetchData();
-  }, [onYearChange, selectedYear]);
+  }, []); // Run only on mount
 
   if (loading) {
     return (
@@ -82,6 +82,7 @@ export function StateSelector({ onYearChange, onStatesChange, selectedStates, se
             selectedOption={selectedYear ? { label: selectedYear.toString(), value: selectedYear.toString() } : null}
             onChange={({ detail }) => {
               if (detail.selectedOption) {
+                // Immediately call the parent handler to update state
                 onYearChange(parseInt(detail.selectedOption.value as string));
               }
             }}
@@ -95,6 +96,7 @@ export function StateSelector({ onYearChange, onStatesChange, selectedStates, se
           <Multiselect
             selectedOptions={selectedStates.map(state => ({ label: state, value: state }))}
             onChange={({ detail }) => {
+              // Immediately call the parent handler to update state
               onStatesChange(detail.selectedOptions.map(option => option.value as string));
             }}
             options={states.map(state => ({ label: state, value: state }))}
