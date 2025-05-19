@@ -27,6 +27,9 @@ export function DashboardContent({ parkCode, parkName }: DashboardContentProps) 
         Dashboard for {parkName}
       </Box>
 
+      {/* Images widget is now placed at the top of the grid */}
+      <ImagesWidget parkCode={parkCode} />
+
       <Grid
         gridDefinition={[
           { colspan: { l: 8, m: 8, default: 12 } },
@@ -37,7 +40,6 @@ export function DashboardContent({ parkCode, parkName }: DashboardContentProps) 
           { colspan: { l: 6, m: 6, default: 12 } },
           { colspan: { l: 6, m: 6, default: 12 } },
           { colspan: { l: 6, m: 6, default: 12 } },
-          { colspan: { l: 12, m: 12, default: 12 } },
         ]}
       >
         <ParkOverview parkCode={parkCode} />
@@ -48,7 +50,6 @@ export function DashboardContent({ parkCode, parkName }: DashboardContentProps) 
         <ActivitiesChartWidget parkCode={parkCode} />
         <ClimateChartWidget parkCode={parkCode} />
         <TrailDifficultyWidget parkCode={parkCode} />
-        <ImagesWidget parkCode={parkCode} />
       </Grid>
     </SpaceBetween>
   );
