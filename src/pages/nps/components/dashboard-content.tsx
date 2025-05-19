@@ -11,6 +11,9 @@ import { WeatherWidget } from './weather-widget';
 import { AmenitiesWidget } from './amenities-widget';
 import { ImagesWidget } from './images-widget';
 import { VisitorStatsWidget } from './visitor-stats-widget';
+import { ActivitiesChartWidget } from './activities-chart-widget';
+import { ClimateChartWidget } from './climate-chart-widget';
+import { TrailDifficultyWidget } from './trail-difficulty-widget';
 
 interface DashboardContentProps {
   parkCode: string;
@@ -30,7 +33,10 @@ export function DashboardContent({ parkCode, parkName }: DashboardContentProps) 
           { colspan: { l: 4, m: 4, default: 12 } },
           { colspan: { l: 6, m: 6, default: 12 } },
           { colspan: { l: 6, m: 6, default: 12 } },
-          { colspan: { l: 12, m: 12, default: 12 } },
+          { colspan: { l: 6, m: 6, default: 12 } },
+          { colspan: { l: 6, m: 6, default: 12 } },
+          { colspan: { l: 6, m: 6, default: 12 } },
+          { colspan: { l: 6, m: 6, default: 12 } },
           { colspan: { l: 12, m: 12, default: 12 } },
         ]}
       >
@@ -39,6 +45,9 @@ export function DashboardContent({ parkCode, parkName }: DashboardContentProps) 
         <AlertsWidget parkCode={parkCode} />
         <AmenitiesWidget parkCode={parkCode} />
         <VisitorStatsWidget parkCode={parkCode} />
+        <ActivitiesChartWidget parkCode={parkCode} />
+        <ClimateChartWidget parkCode={parkCode} />
+        <TrailDifficultyWidget parkCode={parkCode} />
         <ImagesWidget parkCode={parkCode} />
       </Grid>
     </SpaceBetween>
