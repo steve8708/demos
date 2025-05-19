@@ -1,0 +1,33 @@
+/* Weather Dashboard Styles */
+.hourly-forecast {
+  &-scroll {
+    overflow-x: auto;
+    padding-bottom: 16px;
+  }
+
+  .hourly-item {
+    min-width: 70px;
+    text-align: center;
+  }
+}
+
+.daily-forecast {
+  margin-bottom: 16px;
+
+  .daily-item {
+    text-align: center;
+    padding: 8px 4px;
+    min-width: 80px;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: #f2f4f5;
+    }
+  }
+}
+
+.weather-icon-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
