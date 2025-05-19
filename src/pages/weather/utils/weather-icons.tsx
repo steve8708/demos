@@ -4,16 +4,43 @@
 import React from 'react';
 import {
   IconSun,
-  IconCloudSun,
   IconCloud,
-  IconMist,
+  IconCloudFog,
   IconCloudRain,
   IconCloudSnow,
-  IconCloudFog,
-  IconThunderstorm,
-  IconCloudStorm,
   IconSnowflake,
+  IconCloudStorm,
 } from '@tabler/icons-react';
+
+// Component to simulate a cloud with sun since IconCloudSun isn't available
+const IconCloudWithSun: React.FC<{ size?: number }> = ({ size = 24 }) => (
+  <div style={{ position: 'relative', display: 'inline-block', width: size, height: size }}>
+    <IconCloud size={size} />
+    <div
+      style={{
+        position: 'absolute',
+        top: '0',
+        right: '0',
+        transform: 'translate(25%, -25%)',
+        background: 'transparent',
+      }}
+    >
+      <IconSun size={size * 0.5} />
+    </div>
+  </div>
+);
+
+// Component to simulate a thunderstorm icon
+const IconThunderstorm: React.FC<{ size?: number }> = ({ size = 24 }) => (
+  <div style={{ position: 'relative', display: 'inline-block', width: size, height: size }}>
+    <IconCloudRain size={size} />
+    <div
+      style={{ position: 'absolute', bottom: '0', right: '0', transform: 'translate(0, 0)', background: 'transparent' }}
+    >
+      <IconCloudStorm size={size * 0.5} />
+    </div>
+  </div>
+);
 
 // Map WMO weather codes to icon components
 // Based on the codes from Open-Meteo API
@@ -24,7 +51,7 @@ export function getWeatherIconComponent(weatherCode: number): React.ComponentTyp
       return IconSun;
     case 1: // Mainly clear
     case 2: // Partly cloudy
-      return IconCloudSun;
+      return IconCloudWithSun;
     case 3: // Overcast
       return IconCloud;
     case 45: // Fog
