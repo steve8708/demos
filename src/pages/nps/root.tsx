@@ -9,6 +9,8 @@ import Flashbar from '@cloudscape-design/components/flashbar';
 import Button from '@cloudscape-design/components/button';
 import Select from '@cloudscape-design/components/select';
 import Box from '@cloudscape-design/components/box';
+import Alert from '@cloudscape-design/components/alert';
+import Modal from '@cloudscape-design/components/modal';
 import { useDisclaimerFlashbarItem } from '../commons/disclaimer-flashbar-item';
 
 import { DashboardContent } from './components/dashboard-content';
@@ -23,6 +25,9 @@ export function NPSDashboard() {
   const [parks, setParks] = useState<{ label: string; value: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deletedParks, setDeletedParks] = useState<string[]>([]);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     const loadParks = async () => {
@@ -31,16 +36,21 @@ export function NPSDashboard() {
         const parksData = await fetchParks();
 
         // Map the parks data to the format expected by the Select component
-        const parkOptions = parksData.data.map((park: Park) => ({
-          label: park.fullName,
-          value: park.parkCode,
-        }));
+        const parkOptions = parksData.data
+          .filter((park: Park) => !deletedParks.includes(park.parkCode))
+          .map((park: Park) => ({
+            label: park.fullName,
+            value: park.parkCode,
+          }));
 
         setParks(parkOptions);
 
         // If there are parks available, select the first one by default
-        if (parkOptions.length > 0) {
+        if (parkOptions.length > 0 && !selectedPark) {
           setSelectedPark(parkOptions[0]);
+        } else if (selectedPark && deletedParks.includes(selectedPark.value)) {
+          // If the currently selected park was deleted, reset selection
+          setSelectedPark(parkOptions.length > 0 ? parkOptions[0] : null);
         }
       } catch (err) {
         console.error('Failed to load parks:', err);
@@ -51,10 +61,36 @@ export function NPSDashboard() {
     };
 
     loadParks();
-  }, []);
+  }, [deletedParks]);
 
   const handleParkChange = (option: { label: string; value: string } | null) => {
     setSelectedPark(option);
+  };
+
+  const handleDeletePark = () => {
+    if (selectedPark) {
+      setIsDeleteModalVisible(true);
+    }
+  };
+
+  const confirmDeletePark = () => {
+    if (selectedPark) {
+      // Add the current park to the deleted parks list
+      setDeletedParks(prev => [...prev, selectedPark.value]);
+      // Show success message
+      setDeleteSuccess(`${selectedPark.label} has been deleted.`);
+      // Close the modal
+      setIsDeleteModalVisible(false);
+
+      // Clear the success message after a few seconds
+      setTimeout(() => {
+        setDeleteSuccess(null);
+      }, 5000);
+    }
+  };
+
+  const cancelDeletePark = () => {
+    setIsDeleteModalVisible(false);
   };
 
   return (
@@ -68,15 +104,17 @@ export function NPSDashboard() {
               <Header
                 variant="h1"
                 actions={
-                  <Button
-                    href="https://www.nps.gov/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    iconAlign="right"
-                    iconName="external"
-                  >
-                    Visit NPS Website
-                  </Button>
+                  <SpaceBetween direction="horizontal" size="xs">
+                    <Button
+                      href="https://www.nps.gov/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      iconAlign="right"
+                      iconName="external"
+                    >
+                      Visit NPS Website
+                    </Button>
+                  </SpaceBetween>
                 }
               >
                 National Parks Service Dashboard
@@ -92,6 +130,19 @@ export function NPSDashboard() {
                       content: error,
                       dismissible: true,
                       onDismiss: () => setError(null),
+                    },
+                  ]}
+                />
+              )}
+
+              {deleteSuccess && (
+                <Flashbar
+                  items={[
+                    {
+                      type: 'success',
+                      content: deleteSuccess,
+                      dismissible: true,
+                      onDismiss: () => setDeleteSuccess(null),
                     },
                   ]}
                 />
@@ -113,6 +164,11 @@ export function NPSDashboard() {
                       disabled={loading}
                     />
                   </div>
+                  {selectedPark && (
+                    <Button variant="normal" iconName="remove" onClick={handleDeletePark}>
+                      Delete Park
+                    </Button>
+                  )}
                 </SpaceBetween>
               </Box>
             </SpaceBetween>
@@ -120,6 +176,14 @@ export function NPSDashboard() {
         >
           {selectedPark ? (
             <DashboardContent parkCode={selectedPark.value} parkName={selectedPark.label} />
+          ) : deletedParks.length > 0 ? (
+            <Box textAlign="center" padding={{ top: 'xxl', bottom: 'xxl' }}>
+              <Alert type="info" header="No parks available">
+                {parks.length === 0
+                  ? "You've deleted all available parks. Please refresh the page to reset the dashboard."
+                  : 'The selected park was deleted. Please select another park from the dropdown.'}
+              </Alert>
+            </Box>
           ) : (
             <Box textAlign="center" padding={{ top: 'xxl', bottom: 'xxl' }}>
               {loading ? (
@@ -129,6 +193,32 @@ export function NPSDashboard() {
               )}
             </Box>
           )}
+
+          {/* Confirmation Modal for Park Deletion */}
+          <Modal
+            visible={isDeleteModalVisible}
+            onDismiss={cancelDeletePark}
+            header="Confirm Deletion"
+            closeAriaLabel="Close modal"
+            footer={
+              <Box float="right">
+                <SpaceBetween direction="horizontal" size="xs">
+                  <Button variant="link" onClick={cancelDeletePark}>
+                    Cancel
+                  </Button>
+                  <Button variant="primary" onClick={confirmDeletePark}>
+                    Delete
+                  </Button>
+                </SpaceBetween>
+              </Box>
+            }
+          >
+            {selectedPark && (
+              <Alert type="warning" header="Warning">
+                Are you sure you want to delete <b>{selectedPark.label}</b>? This action cannot be undone.
+              </Alert>
+            )}
+          </Modal>
         </ContentLayout>
       }
     />
