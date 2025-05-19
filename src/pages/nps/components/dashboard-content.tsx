@@ -6,7 +6,6 @@ import Box from '@cloudscape-design/components/box';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 
 import { ParkOverview } from './park-overview';
-import { EventsWidget } from './events-widget';
 import { AlertsWidget } from './alerts-widget';
 import { WeatherWidget } from './weather-widget';
 import { AmenitiesWidget } from './amenities-widget';
@@ -31,15 +30,13 @@ export function DashboardContent({ parkCode, parkName }: DashboardContentProps) 
           { colspan: { l: 4, m: 4, default: 12 } },
           { colspan: { l: 6, m: 6, default: 12 } },
           { colspan: { l: 6, m: 6, default: 12 } },
-          { colspan: { l: 6, m: 6, default: 12 } },
-          { colspan: { l: 6, m: 6, default: 12 } },
+          { colspan: { l: 12, m: 12, default: 12 } },
           { colspan: { l: 12, m: 12, default: 12 } },
         ]}
       >
         <ParkOverview parkCode={parkCode} />
         <WeatherWidget parkCode={parkCode} />
         <AlertsWidget parkCode={parkCode} />
-        <EventsWidget parkCode={parkCode} />
         <AmenitiesWidget parkCode={parkCode} />
         <VisitorStatsWidget parkCode={parkCode} />
         <ImagesWidget parkCode={parkCode} />
