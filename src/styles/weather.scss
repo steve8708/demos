@@ -12,11 +12,17 @@
 }
 
 .daily-forecast {
+  margin-bottom: 16px;
+
   .daily-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
+    text-align: center;
+    padding: 8px 4px;
+    min-width: 80px;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: #f2f4f5;
+    }
   }
 }
 

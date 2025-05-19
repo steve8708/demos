@@ -19,29 +19,35 @@ export function WeatherForecast({ data }: WeatherForecastProps) {
     return new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(date);
   };
 
+  // Display only next 7 days (or less if fewer are available)
+  const days = data.slice(0, 7);
+
   return (
     <div className="daily-forecast">
-      <SpaceBetween size="s">
-        {data.map((day, index) => {
+      {/* Horizontal layout for daily forecast items */}
+      <ColumnLayout columns={days.length} variant="text-grid">
+        {days.map((day, index) => {
           const WeatherIcon = getWeatherIconComponent(day.weatherCode);
           const formattedDay = index === 0 ? 'Today' : formatDay(day.date);
 
           return (
-            <Box key={index}>
-              <ColumnLayout columns={4} variant="text-grid">
-                <Box variant="h4">{formattedDay}</Box>
-                <Box display="flex" alignItems="center">
-                  <WeatherIcon size={24} />
-                </Box>
-                <Box variant="h4">
-                  {Math.round(day.temperatureMax)}° / {Math.round(day.temperatureMin)}°
-                </Box>
-                <Box variant="p">{Math.round(day.precipitationSum * 10) / 10} mm</Box>
-              </ColumnLayout>
-            </Box>
+            <div key={index} className="daily-item">
+              <Box textAlign="center">
+                <SpaceBetween size="xs">
+                  <Box variant="h4">{formattedDay}</Box>
+                  <Box>
+                    <WeatherIcon size={32} />
+                  </Box>
+                  <Box variant="h3">
+                    {Math.round(day.temperatureMax)}° / {Math.round(day.temperatureMin)}°
+                  </Box>
+                  <Box variant="p">{Math.round(day.precipitationSum * 10) / 10} mm</Box>
+                </SpaceBetween>
+              </Box>
+            </div>
           );
         })}
-      </SpaceBetween>
+      </ColumnLayout>
     </div>
   );
 }

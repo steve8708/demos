@@ -46,39 +46,32 @@ export function WeatherContent() {
           )}
 
           {!loading && !error && selectedCity && currentWeather && (
-            <Grid
-              gridDefinition={[
-                { colspan: { default: 12, xs: 12, s: 12, m: 12, l: 12, xl: 12 } },
-                { colspan: { default: 12, xs: 12, s: 12, m: 12, l: 6, xl: 6 } },
-                { colspan: { default: 12, xs: 12, s: 12, m: 12, l: 6, xl: 6 } },
-              ]}
-            >
-              <div>
-                <CurrentWeather city={selectedCity} data={currentWeather} />
-              </div>
-              <div>
-                <Container
-                  header={
-                    <Header variant="h2" description="24-hour forecast breakdown">
-                      Hourly Forecast
-                    </Header>
-                  }
-                >
-                  <HourlyForecast data={hourlyForecast} />
-                </Container>
-              </div>
-              <div>
-                <Container
-                  header={
-                    <Header variant="h2" description="7-day weather outlook">
-                      Daily Forecast
-                    </Header>
-                  }
-                >
-                  <WeatherForecast data={dailyForecast} />
-                </Container>
-              </div>
-            </Grid>
+            <SpaceBetween size="l">
+              {/* Current Weather */}
+              <CurrentWeather city={selectedCity} data={currentWeather} />
+
+              {/* Daily Forecast - Full Width */}
+              <Container
+                header={
+                  <Header variant="h2" description="7-day weather outlook">
+                    Daily Forecast
+                  </Header>
+                }
+              >
+                <WeatherForecast data={dailyForecast} />
+              </Container>
+
+              {/* Hourly Forecast - Below Daily */}
+              <Container
+                header={
+                  <Header variant="h2" description="24-hour forecast breakdown">
+                    Hourly Forecast
+                  </Header>
+                }
+              >
+                <HourlyForecast data={hourlyForecast} />
+              </Container>
+            </SpaceBetween>
           )}
 
           {!loading && !error && !selectedCity && (
