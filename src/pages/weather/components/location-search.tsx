@@ -57,7 +57,14 @@ export default function LocationSearch({ onLocationSelect, loading }: LocationSe
             }))}
             onSelect={({ detail }) => {
               setSearchQuery(detail.value);
-              setSelectedOption(detail.option?.data || null);
+              // Find the matching location from our suggestions and set it as selected
+              const selectedLocation = suggestions.find(
+                location =>
+                  location.name === detail.value ||
+                  `${location.name}${location.admin1 ? `, ${location.admin1}` : ''}, ${location.country}` ===
+                    detail.value,
+              );
+              setSelectedOption(selectedLocation || null);
             }}
             statusType={isSearching ? 'loading' : 'finished'}
             placeholder="Enter location (min. 2 characters)"
