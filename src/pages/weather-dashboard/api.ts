@@ -176,44 +176,58 @@ export async function fetchWeatherData({
   timeZone = 'auto',
   forecastDays = 7,
 }: FetchWeatherParams): Promise<WeatherResponse> {
-  const url = new URL('https://api.open-meteo.com/v1/forecast');
-
-  // Add required parameters
-  url.searchParams.append('latitude', latitude.toString());
-  url.searchParams.append('longitude', longitude.toString());
-  url.searchParams.append('timezone', timeZone);
-  url.searchParams.append('forecast_days', forecastDays.toString());
-
-  // Add units
-  url.searchParams.append('temperature_unit', temperatureUnit);
-  url.searchParams.append('wind_speed_unit', windSpeedUnit);
-  url.searchParams.append('precipitation_unit', precipitationUnit);
-
-  // Add data parameters
-  url.searchParams.append(
-    'current',
-    'temperature,windspeed,winddirection,weathercode,is_day,apparent_temperature,precipitation,humidity,cloudcover,pressure_msl,surface_pressure,visibility',
-  );
-  url.searchParams.append(
-    'hourly',
-    'temperature_2m,weathercode,windspeed_10m,winddirection_10m,precipitation_probability,precipitation',
-  );
-  url.searchParams.append(
-    'daily',
-    'weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,precipitation_probability_max',
-  );
-
   try {
+    console.log(`Fetching weather data for coordinates: ${latitude}, ${longitude}`);
+
+    const url = new URL('https://api.open-meteo.com/v1/forecast');
+
+    // Add required parameters
+    url.searchParams.append('latitude', latitude.toString());
+    url.searchParams.append('longitude', longitude.toString());
+    url.searchParams.append('timezone', timeZone);
+    url.searchParams.append('forecast_days', forecastDays.toString());
+
+    // Add units
+    url.searchParams.append('temperature_unit', temperatureUnit);
+    url.searchParams.append('wind_speed_unit', windSpeedUnit);
+    url.searchParams.append('precipitation_unit', precipitationUnit);
+
+    // Add data parameters
+    url.searchParams.append(
+      'current',
+      'temperature,windspeed,winddirection,weathercode,is_day,apparent_temperature,precipitation,humidity,cloudcover,pressure_msl,surface_pressure,visibility',
+    );
+    url.searchParams.append(
+      'hourly',
+      'temperature_2m,weathercode,windspeed_10m,winddirection_10m,precipitation_probability,precipitation',
+    );
+    url.searchParams.append(
+      'daily',
+      'weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_sum,precipitation_probability_max',
+    );
+
+    console.log(`API request URL: ${url.toString()}`);
+
     const response = await fetch(url.toString());
 
     if (!response.ok) {
+      console.error(`HTTP error! Status: ${response.status}`);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const data = await response.json();
-    return WeatherResponseSchema.parse(data);
+    console.log('Raw API response:', data);
+
+    try {
+      const parsedData = WeatherResponseSchema.parse(data);
+      console.log('Successfully parsed weather data');
+      return parsedData;
+    } catch (parseError) {
+      console.error('Error parsing API response:', parseError);
+      throw new Error('Invalid API response format');
+    }
   } catch (error) {
-    console.error('Error fetching weather data:', error);
+    console.error('Error in fetchWeatherData:', error);
     throw error;
   }
 }
@@ -224,20 +238,26 @@ export async function searchLocation(query: string): Promise<{ name: string; lat
     return [];
   }
 
-  const url = new URL('https://geocoding-api.open-meteo.com/v1/search');
-  url.searchParams.append('name', query);
-  url.searchParams.append('count', '10');
-  url.searchParams.append('language', 'en');
-  url.searchParams.append('format', 'json');
-
   try {
+    console.log(`Searching for location: ${query}`);
+
+    const url = new URL('https://geocoding-api.open-meteo.com/v1/search');
+    url.searchParams.append('name', query);
+    url.searchParams.append('count', '10');
+    url.searchParams.append('language', 'en');
+    url.searchParams.append('format', 'json');
+
+    console.log(`Geocoding API request URL: ${url.toString()}`);
+
     const response = await fetch(url.toString());
 
     if (!response.ok) {
+      console.error(`HTTP error! Status: ${response.status}`);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const data = await response.json();
+    console.log('Geocoding API response:', data);
 
     if (!data.results) {
       return [];
@@ -249,7 +269,7 @@ export async function searchLocation(query: string): Promise<{ name: string; lat
       longitude: result.longitude,
     }));
   } catch (error) {
-    console.error('Error searching locations:', error);
+    console.error('Error in searchLocation:', error);
     return [];
   }
 }

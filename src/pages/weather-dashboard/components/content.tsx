@@ -31,6 +31,7 @@ export function WeatherDashboardContent() {
       return;
     }
 
+    console.log('Fetching weather data for location:', location);
     setLoading(true);
     setError(undefined);
 
@@ -44,6 +45,7 @@ export function WeatherDashboardContent() {
       forecastDays: 7,
     })
       .then(data => {
+        console.log('Received weather data:', data);
         setWeatherData(data);
         setError(undefined);
       })
@@ -57,6 +59,7 @@ export function WeatherDashboardContent() {
   }, [location, units]);
 
   const handleLocationSelect = (selectedLocation: { name: string; latitude: number; longitude: number }) => {
+    console.log('Location selected:', selectedLocation);
     setLocation(selectedLocation);
   };
 

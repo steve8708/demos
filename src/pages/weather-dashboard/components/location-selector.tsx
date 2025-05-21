@@ -31,6 +31,13 @@ export function LocationSelector({ onLocationSelect, onUnitsChange, selectedLoca
   const [suggestions, setSuggestions] = useState<{ value: string; latitude: number; longitude: number }[]>([]);
   const [loading, setLoading] = useState(false);
 
+  // Update input value when selectedLocation changes
+  useEffect(() => {
+    if (selectedLocation) {
+      setValue(selectedLocation.name);
+    }
+  }, [selectedLocation]);
+
   // Handle location search
   useEffect(() => {
     const fetchLocations = async () => {
@@ -70,6 +77,12 @@ export function LocationSelector({ onLocationSelect, onUnitsChange, selectedLoca
     });
   };
 
+  // Handle predefined location selection
+  const handlePredefinedLocationClick = (location: { name: string; latitude: number; longitude: number }) => {
+    setValue(location.name);
+    onLocationSelect(location);
+  };
+
   return (
     <Container header={<Header variant="h2">Location Settings</Header>}>
       <SpaceBetween size="l">
@@ -105,8 +118,13 @@ export function LocationSelector({ onLocationSelect, onUnitsChange, selectedLoca
           {predefinedLocations.slice(0, 6).map(location => (
             <Button
               key={location.name}
-              onClick={() => onLocationSelect(location)}
-              variant={selectedLocation?.name === location.name ? 'primary' : 'normal'}
+              onClick={() => handlePredefinedLocationClick(location)}
+              variant={
+                selectedLocation?.name === location.name ||
+                (selectedLocation?.latitude === location.latitude && selectedLocation?.longitude === location.longitude)
+                  ? 'primary'
+                  : 'normal'
+              }
               fullWidth
             >
               {location.name}
