@@ -5,6 +5,7 @@ import React from 'react';
 import Box from '@cloudscape-design/components/box';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Link from '@cloudscape-design/components/link';
+import SideNavigation from '@cloudscape-design/components/side-navigation';
 
 import { Navigation as CommonNavigation } from '../../commons';
 import { PREDEFINED_LOCATIONS } from '../utils/constants';
@@ -20,7 +21,7 @@ export function WeatherSideNavigation() {
 
   return (
     <SpaceBetween size="m">
-      <CommonNavigation activeHref="#/weather" header={<Box margin={{ vertical: 'xs' }}>Weather Dashboard</Box>} />
+      <CommonNavigation activeHref="#/weather" />
 
       <SpaceBetween size="s">
         <Box variant="h3">Popular Locations</Box>

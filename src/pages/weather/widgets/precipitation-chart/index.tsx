@@ -50,22 +50,22 @@ function PrecipitationChartContent() {
           title: 'Probability (%)',
           type: 'bar',
           data: precipProbData,
-          valueFormatter: value => `${value}%`,
+          valueFormatter: (value: number) => `${value}%`,
           color: 'blue',
         },
         {
           title: `Amount (${units === 'metric' ? 'mm' : 'in'})`,
           type: 'bar',
           data: precipAmountData,
-          valueFormatter: value => `${value} ${units === 'metric' ? 'mm' : 'in'}`,
+          valueFormatter: (value: number) => `${value} ${units === 'metric' ? 'mm' : 'in'}`,
           color: 'purple',
         },
       ]}
-      xDomain={times.slice(0, 24).map(time => formatTime(time))}
+      xDomain={times.slice(0, 24).map((time: string) => formatTime(time))}
       yDomain={[0, 100]}
       i18nStrings={{
-        xTickFormatter: value => value,
-        yTickFormatter: value => `${value}`,
+        xTickFormatter: (value: string) => value,
+        yTickFormatter: (value: number) => `${value}`,
       }}
       ariaLabel="Precipitation forecast chart"
       height={300}

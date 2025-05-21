@@ -63,7 +63,7 @@ function AirQualityContent() {
 
         <SpaceBetween size="s">
           <Box fontSize="heading-m">Visibility</Box>
-          <Box fontSize="display-s">
+          <Box fontSize="heading-l">
             <IconWind size={24} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
             {visibility.toFixed(1)} km
           </Box>

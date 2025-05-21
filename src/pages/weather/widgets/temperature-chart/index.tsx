@@ -62,22 +62,22 @@ function TemperatureChartContent() {
           title: 'Temperature',
           type: 'line',
           data: tempData,
-          valueFormatter: value => `${value}${units === 'metric' ? '°C' : '°F'}`,
+          valueFormatter: (value: number) => `${value}${units === 'metric' ? '°C' : '°F'}`,
           color: 'blue',
         },
         {
           title: 'Feels like',
           type: 'line',
           data: apparentTempData,
-          valueFormatter: value => `${value}${units === 'metric' ? '°C' : '°F'}`,
+          valueFormatter: (value: number) => `${value}${units === 'metric' ? '°C' : '°F'}`,
           color: 'orange',
         },
       ]}
-      xDomain={times.slice(0, 24).map(time => formatTime(time))}
+      xDomain={times.slice(0, 24).map((time: string) => formatTime(time))}
       yDomain={undefined}
       i18nStrings={{
-        xTickFormatter: value => value,
-        yTickFormatter: value => `${value}${units === 'metric' ? '°C' : '°F'}`,
+        xTickFormatter: (value: string) => value,
+        yTickFormatter: (value: number) => `${value}${units === 'metric' ? '°C' : '°F'}`,
       }}
       ariaLabel="Temperature forecast chart"
       height={300}

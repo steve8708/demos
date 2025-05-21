@@ -17,7 +17,7 @@ import { useWeatherContext } from '../context/weather-context';
 import { UNITS, DEFAULT_LOCATION } from '../utils/constants';
 
 export function WeatherMainInfo() {
-  const setHelpPanelContent = useHelpPanel('main');
+  const setHelpPanelContent = useHelpPanel();
 
   return (
     <SpaceBetween size="l">
