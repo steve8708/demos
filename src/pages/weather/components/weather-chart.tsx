@@ -9,7 +9,8 @@ import Header from '@cloudscape-design/components/header';
 import SegmentedControl from '@cloudscape-design/components/segmented-control';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Tabs from '@cloudscape-design/components/tabs';
-import { LineChart, BarChart } from '@cloudscape-design/components/mixed-line-bar-chart';
+import LineChart from '@cloudscape-design/components/line-chart';
+import BarChart from '@cloudscape-design/components/bar-chart';
 
 import { HourlyForecast, WEATHER_CODES } from '../types';
 import { formatTime } from '../api';
