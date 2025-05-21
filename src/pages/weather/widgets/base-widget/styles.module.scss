@@ -1,0 +1,96 @@
+/* Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved. */
+/* SPDX-License-Identifier: MIT-0 */
+
+.weatherWidget {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    > div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      > div {
+        flex: 1;
+      }
+    }
+  }
+}
+
+.weatherIcon {
+  font-size: 2.5rem;
+  margin-right: 1rem;
+}
+
+.temperatureValue {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.weatherDescription {
+  font-size: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.weatherDetail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+
+  .weatherDetailIcon {
+    margin-right: 0.5rem;
+    min-width: 1.5rem;
+  }
+
+  .weatherDetailLabel {
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+}
+
+.forecastItem {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  .forecastDay {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .forecastIcon {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .forecastTemperature {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.hourlyItem {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  .hourlyTime {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .hourlyIcon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+}
