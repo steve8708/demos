@@ -1,6 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import { AppLayoutProps } from '@cloudscape-design/components/app-layout';
 import Button from '@cloudscape-design/components/button';
@@ -21,8 +21,24 @@ export function App() {
   const [coordinates, setCoordinates] = useState({
     latitude: 47.6062,
     longitude: -122.3321,
-    name: 'Seattle, WA',
+    name: 'Seattle, WA, United States',
   });
+
+  // Parse URL parameters on initial load
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const lat = searchParams.get('lat');
+    const lng = searchParams.get('lng');
+    const name = searchParams.get('name');
+
+    if (lat && lng && name) {
+      setCoordinates({
+        latitude: parseFloat(lat),
+        longitude: parseFloat(lng),
+        name: name.replace(/,/g, ', '),
+      });
+    }
+  }, []);
 
   const handleToolsContentChange = (content: React.ReactNode) => {
     setToolsOpen(true);
