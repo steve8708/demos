@@ -18,14 +18,14 @@ export class WeatherApiError extends Error {
 function transformApiResponse(response: WeatherApiResponse): WeatherData {
   return {
     current: {
-      temperature: response.current.temperature_2m,
+      temperature: response.current_weather.temperature,
       weatherCode: response.current_weather.weathercode,
       windSpeed: response.current_weather.windspeed,
       windDirection: response.current_weather.winddirection,
-      humidity: response.current.relativehumidity_2m,
-      pressure: response.current.surface_pressure,
-      visibility: response.current.visibility,
-      uvIndex: response.current.uv_index,
+      humidity: response.current?.relativehumidity_2m || 0,
+      pressure: response.current?.surface_pressure || 0,
+      visibility: response.current?.visibility || 0,
+      uvIndex: response.current?.uv_index || 0,
       time: response.current_weather.time,
     },
     hourly: {
@@ -56,7 +56,7 @@ export async function fetchWeatherData(location: WeatherLocation): Promise<Weath
     longitude: location.longitude.toString(),
     current_weather: 'true',
     timezone: location.timezone,
-    current: ['temperature_2m', 'relativehumidity_2m', 'surface_pressure', 'visibility', 'uv_index'].join(','),
+    current: ['relativehumidity_2m', 'surface_pressure', 'visibility', 'uv_index'].join(','),
     hourly: ['temperature_2m', 'weathercode', 'relativehumidity_2m', 'precipitation', 'windspeed_10m'].join(','),
     daily: [
       'temperature_2m_max',
@@ -71,21 +71,35 @@ export async function fetchWeatherData(location: WeatherLocation): Promise<Weath
   });
 
   try {
-    const response = await fetch(`${OPEN_METEO_BASE_URL}/forecast?${params}`);
+    const url = `${OPEN_METEO_BASE_URL}/forecast?${params}`;
+    console.log('Fetching weather data from:', url);
+
+    const response = await fetch(url);
 
     if (!response.ok) {
       throw new WeatherApiError(`Failed to fetch weather data: ${response.statusText}`, response.status);
     }
 
     const data: WeatherApiResponse = await response.json();
+    console.log('Weather API response:', data);
 
     // Validate essential data exists
-    if (!data.current_weather || !data.hourly || !data.daily) {
-      throw new WeatherApiError('Invalid weather data received from API');
+    if (!data.current_weather) {
+      throw new WeatherApiError('Invalid weather data received from API - missing current_weather');
+    }
+
+    if (!data.hourly) {
+      throw new WeatherApiError('Invalid weather data received from API - missing hourly');
+    }
+
+    if (!data.daily) {
+      throw new WeatherApiError('Invalid weather data received from API - missing daily');
     }
 
     return transformApiResponse(data);
   } catch (error) {
+    console.error('Weather API error:', error);
+
     if (error instanceof WeatherApiError) {
       throw error;
     }
