@@ -69,16 +69,14 @@ export function WeatherApp() {
             onLocationChange={handleLocationChange}
             loading={loading}
           />
-          <Alert
-            type="error"
-            header="Failed to load weather data"
-            action={{
-              children: 'Retry',
-              onClick: handleRetry,
-            }}
-          >
-            {error}
-          </Alert>
+          <SpaceBetween size="m">
+            <Alert type="error" header="Failed to load weather data">
+              {error}
+            </Alert>
+            <Button onClick={handleRetry} variant="primary">
+              Retry
+            </Button>
+          </SpaceBetween>
         </SpaceBetween>
       );
     }
