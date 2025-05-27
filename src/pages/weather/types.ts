@@ -73,8 +73,7 @@ export interface WeatherApiResponse {
     sunrise: string[];
     sunset: string[];
   };
-  current: {
-    temperature_2m: number;
+  current?: {
     relativehumidity_2m: number;
     surface_pressure: number;
     visibility: number;
