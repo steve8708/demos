@@ -1,0 +1,91 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+.weather-metric-card {
+  padding: 16px;
+  background-color: var(--color-background-container-content);
+  border: 1px solid var(--color-border-divider-default);
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-border-control-default);
+    box-shadow: var(--color-shadow-default);
+  }
+}
+
+.weather-loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  text-align: center;
+}
+
+.location-search-results {
+  padding: 12px;
+  background-color: var(--color-background-layout-panel-content);
+  border: 1px solid var(--color-border-divider-default);
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.daily-forecast-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 8px 4px 16px 4px;
+  margin: 0 -4px;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-background-layout-panel-content);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-background-control-default);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--color-background-control-checked);
+    }
+  }
+}
+
+.daily-forecast-card {
+  min-width: 100px;
+  padding: 16px 12px;
+  background-color: var(--color-background-container-content);
+  border: 1px solid var(--color-border-divider-default);
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    border-color: var(--color-border-control-default);
+    box-shadow: var(--color-shadow-default);
+    transform: translateY(-2px);
+  }
+
+  &:first-child {
+    border-color: var(--color-border-status-info);
+    background-color: var(--color-background-status-info);
+  }
+}
+
+.weather-emoji {
+  font-size: 32px;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40px;
+}
