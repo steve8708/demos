@@ -51,7 +51,8 @@ export function WeatherCard({ weatherData, location }: WeatherCardProps) {
               </Box>
               <Box variant="small">
                 <StatusIndicator type="success">
-                  <Icon name={weatherInfo.icon} /> {weatherInfo.description}
+                  <span style={{ marginRight: '6px', fontSize: '16px' }}>{weatherInfo.emoji}</span>
+                  {weatherInfo.description}
                 </StatusIndicator>
               </Box>
             </SpaceBetween>

@@ -161,15 +161,9 @@ export function App() {
                 <>
                   <WeatherCard weatherData={weatherData} location={location} />
 
-                  <Grid
-                    gridDefinition={[
-                      { colspan: { default: 12, l: 6, xl: 6 } },
-                      { colspan: { default: 12, l: 6, xl: 6 } },
-                    ]}
-                  >
-                    <HourlyForecast weatherData={weatherData} />
-                    <DailyForecast weatherData={weatherData} />
-                  </Grid>
+                  <DailyForecast weatherData={weatherData} />
+
+                  <HourlyForecast weatherData={weatherData} />
                 </>
               )}
 

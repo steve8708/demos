@@ -78,7 +78,8 @@ export function HourlyForecast({ weatherData }: HourlyForecastProps) {
               const weather = getWeatherDescription(item.weatherCode);
               return (
                 <Badge color="blue">
-                  <Icon name={weather.icon} /> {weather.description}
+                  <span style={{ marginRight: '6px' }}>{weather.emoji}</span>
+                  {weather.description}
                 </Badge>
               );
             },

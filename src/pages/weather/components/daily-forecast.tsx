@@ -4,10 +4,7 @@
 import React from 'react';
 import Container from '@cloudscape-design/components/container';
 import Header from '@cloudscape-design/components/header';
-import Cards from '@cloudscape-design/components/cards';
 import Box from '@cloudscape-design/components/box';
-import Badge from '@cloudscape-design/components/badge';
-import Icon from '@cloudscape-design/components/icon';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 
 import { WeatherData, getWeatherDescription } from '../weather-api';
@@ -50,6 +47,21 @@ export function DailyForecast({ weatherData }: DailyForecastProps) {
     }
   };
 
+  const formatShortDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    if (date.toDateString() === today.toDateString()) {
+      return 'Today';
+    } else if (date.toDateString() === tomorrow.toDateString()) {
+      return 'Tomorrow';
+    } else {
+      return date.toLocaleDateString([], { weekday: 'short' });
+    }
+  };
+
   return (
     <Container
       header={
@@ -58,80 +70,48 @@ export function DailyForecast({ weatherData }: DailyForecastProps) {
         </Header>
       }
     >
-      <Cards
-        cardDefinition={{
-          header: (item: DailyItem) => (
-            <Box variant="h3" fontWeight="bold">
-              {formatDate(item.date)}
-            </Box>
-          ),
-          sections: [
-            {
-              id: 'weather',
-              content: (item: DailyItem) => {
-                const weather = getWeatherDescription(item.weatherCode);
-                return (
-                  <SpaceBetween size="xs">
-                    <Badge color="blue">
-                      <Icon name={weather.icon} /> {weather.description}
-                    </Badge>
-                  </SpaceBetween>
-                );
-              },
-            },
-            {
-              id: 'temperature',
-              content: (item: DailyItem) => (
-                <SpaceBetween direction="horizontal" size="xs">
-                  <Box variant="span">
-                    <Box variant="small" color="text-status-inactive">
-                      High:{' '}
-                    </Box>
-                    <Box variant="span" color="text-status-success" fontWeight="bold">
-                      {item.temperatureMax}°C
-                    </Box>
+      <div className="daily-forecast-scroll">
+        {dailyItems.map((item, index) => {
+          const weather = getWeatherDescription(item.weatherCode);
+          return (
+            <div key={item.date} className="daily-forecast-card">
+              <SpaceBetween size="xs" alignItems="center">
+                <Box variant="span" fontSize="body-s" fontWeight="bold" textAlign="center">
+                  {formatShortDate(item.date)}
+                </Box>
+
+                <div className="weather-emoji" title={weather.description}>
+                  {weather.emoji}
+                </div>
+
+                <SpaceBetween size="xxs" alignItems="center">
+                  <Box variant="span" color="text-status-success" fontWeight="bold" textAlign="center">
+                    {item.temperatureMax}°
                   </Box>
-                  <Box variant="span">
-                    <Box variant="small" color="text-status-inactive">
-                      Low:{' '}
-                    </Box>
-                    <Box variant="span" color="text-body-secondary" fontWeight="bold">
-                      {item.temperatureMin}°C
-                    </Box>
+                  <Box variant="span" color="text-body-secondary" fontSize="body-s" textAlign="center">
+                    {item.temperatureMin}°
                   </Box>
                 </SpaceBetween>
-              ),
-            },
-            {
-              id: 'wind',
-              content: (item: DailyItem) => (
-                <Box variant="small">
-                  <Icon name="arrow-right" /> Wind: {item.windSpeed} km/h
+
+                <Box variant="span" fontSize="body-s" color="text-status-inactive" textAlign="center">
+                  {item.windSpeed} km/h
                 </Box>
-              ),
-            },
-          ],
-        }}
-        cardsPerRow={[
-          { cards: 1, minWidth: 0 },
-          { cards: 2, minWidth: 600 },
-          { cards: 3, minWidth: 900 },
-          { cards: 4, minWidth: 1200 },
-        ]}
-        items={dailyItems}
-        loadingText="Loading forecast"
-        trackBy="date"
-        empty={
-          <Box textAlign="center" color="inherit">
-            <Box variant="strong" textAlign="center" color="inherit">
-              No forecast data available
-            </Box>
-            <Box variant="p" padding={{ bottom: 's' }} color="inherit">
-              Unable to load daily forecast data.
-            </Box>
+              </SpaceBetween>
+            </div>
+          );
+        })}
+      </div>
+
+      {dailyItems.length === 0 && (
+        <Box textAlign="center" color="inherit" padding="l">
+          <Box variant="strong" textAlign="center" color="inherit">
+            No forecast data available
           </Box>
-        }
-      />
+          <Box variant="p" padding={{ bottom: 's' }} color="inherit">
+            Unable to load daily forecast data.
+          </Box>
+        </Box>
+      )}
     </Container>
   );
 }

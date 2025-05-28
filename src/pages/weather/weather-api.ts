@@ -32,39 +32,39 @@ export interface LocationData {
   country: string;
 }
 
-const WEATHER_CODE_DESCRIPTIONS: Record<number, { description: string; icon: string }> = {
-  0: { description: 'Clear sky', icon: 'weather-sunny' },
-  1: { description: 'Mainly clear', icon: 'weather-sunny' },
-  2: { description: 'Partly cloudy', icon: 'weather-partly-cloudy' },
-  3: { description: 'Overcast', icon: 'weather-cloudy' },
-  45: { description: 'Fog', icon: 'weather-fog' },
-  48: { description: 'Depositing rime fog', icon: 'weather-fog' },
-  51: { description: 'Light drizzle', icon: 'weather-drizzle' },
-  53: { description: 'Moderate drizzle', icon: 'weather-drizzle' },
-  55: { description: 'Dense drizzle', icon: 'weather-drizzle' },
-  56: { description: 'Light freezing drizzle', icon: 'weather-drizzle' },
-  57: { description: 'Dense freezing drizzle', icon: 'weather-drizzle' },
-  61: { description: 'Slight rain', icon: 'weather-rain' },
-  63: { description: 'Moderate rain', icon: 'weather-rain' },
-  65: { description: 'Heavy rain', icon: 'weather-rain' },
-  66: { description: 'Light freezing rain', icon: 'weather-rain' },
-  67: { description: 'Heavy freezing rain', icon: 'weather-rain' },
-  71: { description: 'Slight snow fall', icon: 'weather-snow' },
-  73: { description: 'Moderate snow fall', icon: 'weather-snow' },
-  75: { description: 'Heavy snow fall', icon: 'weather-snow' },
-  77: { description: 'Snow grains', icon: 'weather-snow' },
-  80: { description: 'Slight rain showers', icon: 'weather-rain' },
-  81: { description: 'Moderate rain showers', icon: 'weather-rain' },
-  82: { description: 'Violent rain showers', icon: 'weather-rain' },
-  85: { description: 'Slight snow showers', icon: 'weather-snow' },
-  86: { description: 'Heavy snow showers', icon: 'weather-snow' },
-  95: { description: 'Thunderstorm', icon: 'weather-thunderstorm' },
-  96: { description: 'Thunderstorm with slight hail', icon: 'weather-thunderstorm' },
-  99: { description: 'Thunderstorm with heavy hail', icon: 'weather-thunderstorm' },
+const WEATHER_CODE_DESCRIPTIONS: Record<number, { description: string; icon: string; emoji: string }> = {
+  0: { description: 'Clear sky', icon: 'weather-sunny', emoji: '☀️' },
+  1: { description: 'Mainly clear', icon: 'weather-sunny', emoji: '🌤️' },
+  2: { description: 'Partly cloudy', icon: 'weather-partly-cloudy', emoji: '⛅' },
+  3: { description: 'Overcast', icon: 'weather-cloudy', emoji: '☁️' },
+  45: { description: 'Fog', icon: 'weather-fog', emoji: '🌫️' },
+  48: { description: 'Depositing rime fog', icon: 'weather-fog', emoji: '🌫️' },
+  51: { description: 'Light drizzle', icon: 'weather-drizzle', emoji: '🌦️' },
+  53: { description: 'Moderate drizzle', icon: 'weather-drizzle', emoji: '🌦️' },
+  55: { description: 'Dense drizzle', icon: 'weather-drizzle', emoji: '🌧️' },
+  56: { description: 'Light freezing drizzle', icon: 'weather-drizzle', emoji: '🌨️' },
+  57: { description: 'Dense freezing drizzle', icon: 'weather-drizzle', emoji: '🌨️' },
+  61: { description: 'Slight rain', icon: 'weather-rain', emoji: '🌧️' },
+  63: { description: 'Moderate rain', icon: 'weather-rain', emoji: '🌧️' },
+  65: { description: 'Heavy rain', icon: 'weather-rain', emoji: '⛈️' },
+  66: { description: 'Light freezing rain', icon: 'weather-rain', emoji: '🌨️' },
+  67: { description: 'Heavy freezing rain', icon: 'weather-rain', emoji: '🌨️' },
+  71: { description: 'Slight snow fall', icon: 'weather-snow', emoji: '🌨️' },
+  73: { description: 'Moderate snow fall', icon: 'weather-snow', emoji: '❄️' },
+  75: { description: 'Heavy snow fall', icon: 'weather-snow', emoji: '🌨️' },
+  77: { description: 'Snow grains', icon: 'weather-snow', emoji: '❄️' },
+  80: { description: 'Slight rain showers', icon: 'weather-rain', emoji: '🌦️' },
+  81: { description: 'Moderate rain showers', icon: 'weather-rain', emoji: '🌧️' },
+  82: { description: 'Violent rain showers', icon: 'weather-rain', emoji: '⛈️' },
+  85: { description: 'Slight snow showers', icon: 'weather-snow', emoji: '🌨️' },
+  86: { description: 'Heavy snow showers', icon: 'weather-snow', emoji: '❄️' },
+  95: { description: 'Thunderstorm', icon: 'weather-thunderstorm', emoji: '⛈️' },
+  96: { description: 'Thunderstorm with slight hail', icon: 'weather-thunderstorm', emoji: '⛈️' },
+  99: { description: 'Thunderstorm with heavy hail', icon: 'weather-thunderstorm', emoji: '⛈️' },
 };
 
-export function getWeatherDescription(code: number): { description: string; icon: string } {
-  return WEATHER_CODE_DESCRIPTIONS[code] || { description: 'Unknown', icon: 'status-info' };
+export function getWeatherDescription(code: number): { description: string; icon: string; emoji: string } {
+  return WEATHER_CODE_DESCRIPTIONS[code] || { description: 'Unknown', icon: 'status-info', emoji: '❓' };
 }
 
 export async function getCurrentLocation(): Promise<LocationData> {
