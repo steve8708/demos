@@ -16,37 +16,15 @@ import { WeatherCard } from './components/weather-card';
 import { HourlyForecast } from './components/hourly-forecast';
 import { DailyForecast } from './components/daily-forecast';
 import { LocationSearch } from './components/location-search';
+import { WeatherHelpContent } from './components/weather-help-content';
 import { WeatherData, LocationData, fetchWeatherData, getCurrentLocation } from './weather-api';
-
-const WEATHER_HELP_CONTENT = (
-  <div>
-    <h2>About Weather Dashboard</h2>
-    <p>
-      This weather dashboard provides current conditions and forecasts using data from Open-Meteo, a free weather API
-      service.
-    </p>
-    <h3>Features</h3>
-    <ul>
-      <li>Current weather conditions</li>
-      <li>24-hour hourly forecast</li>
-      <li>7-day daily forecast</li>
-      <li>Location search and geolocation support</li>
-    </ul>
-    <h3>Data Source</h3>
-    <p>
-      Weather data is provided by <strong>Open-Meteo</strong>, which offers free access to weather APIs without
-      requiring an API key.
-    </p>
-  </div>
-);
-
 export function App() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [location, setLocation] = useState<LocationData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [toolsOpen, setToolsOpen] = useState(false);
-  const [toolsContent, setToolsContent] = useState<React.ReactNode>(() => WEATHER_HELP_CONTENT);
+  const [toolsContent, setToolsContent] = useState<React.ReactNode>(() => <WeatherHelpContent />);
   const appLayout = useRef<AppLayoutProps.Ref>(null);
 
   const handleToolsContentChange = (content: React.ReactNode) => {
@@ -121,7 +99,7 @@ export function App() {
                       <Button
                         variant="primary"
                         iconName="status-info"
-                        onClick={() => handleToolsContentChange(WEATHER_HELP_CONTENT)}
+                        onClick={() => handleToolsContentChange(<WeatherHelpContent />)}
                       >
                         About
                       </Button>
