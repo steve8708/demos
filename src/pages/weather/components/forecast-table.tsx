@@ -2,8 +2,10 @@
 // SPDX-License-Identifier: MIT-0
 import React from 'react';
 
+import Box from '@cloudscape-design/components/box';
 import Container from '@cloudscape-design/components/container';
 import Header from '@cloudscape-design/components/header';
+import SpaceBetween from '@cloudscape-design/components/space-between';
 import Table from '@cloudscape-design/components/table';
 import Tabs from '@cloudscape-design/components/tabs';
 
@@ -88,49 +90,63 @@ export function ForecastTable({ weather }: ForecastTableProps) {
             label: 'Daily (7 days)',
             id: 'daily',
             content: (
-              <Table
-                columnDefinitions={[
-                  {
-                    id: 'date',
-                    header: 'Date',
-                    cell: item => formatDate(item.date),
-                    sortingField: 'date',
-                  },
-                  {
-                    id: 'weather',
-                    header: 'Weather',
-                    cell: item => (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '1.2em' }}>{WeatherService.getWeatherIcon(item.weatherCode)}</span>
-                        <span>{WeatherService.getWeatherDescription(item.weatherCode)}</span>
-                      </div>
-                    ),
-                  },
-                  {
-                    id: 'temperatureMax',
-                    header: 'High',
-                    cell: item => `${item.temperatureMax}°C`,
-                    sortingField: 'temperatureMax',
-                  },
-                  {
-                    id: 'temperatureMin',
-                    header: 'Low',
-                    cell: item => `${item.temperatureMin}°C`,
-                    sortingField: 'temperatureMin',
-                  },
-                  {
-                    id: 'precipitation',
-                    header: 'Precipitation',
-                    cell: item => `${item.precipitationSum} mm`,
-                    sortingField: 'precipitationSum',
-                  },
-                ]}
-                items={weather.daily}
-                loadingText="Loading forecast"
-                trackBy="date"
-                empty="No forecast data available"
-                sortingDisabled={false}
-              />
+              <div
+                style={{
+                  overflowX: 'auto',
+                  padding: '8px 0',
+                }}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '16px',
+                    minWidth: 'max-content',
+                    paddingBottom: '8px',
+                  }}
+                >
+                  {weather.daily.map((day, index) => (
+                    <div
+                      key={day.date}
+                      style={{
+                        minWidth: '160px',
+                        padding: '16px',
+                        border: '1px solid #e0e0e0',
+                        borderRadius: '8px',
+                        backgroundColor: '#fafafa',
+                        textAlign: 'center',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <SpaceBetween size="xs">
+                        <Box variant="h4" fontWeight="bold">
+                          {index === 0 ? 'Today' : formatDate(day.date)}
+                        </Box>
+
+                        <Box fontSize="heading-xl">{WeatherService.getWeatherIcon(day.weatherCode)}</Box>
+
+                        <Box fontSize="body-s" color="text-status-info">
+                          {WeatherService.getWeatherDescription(day.weatherCode)}
+                        </Box>
+
+                        <SpaceBetween size="xxs">
+                          <Box fontSize="heading-s" fontWeight="bold">
+                            {day.temperatureMax}°C
+                          </Box>
+                          <Box fontSize="body-s" color="text-body-secondary">
+                            {day.temperatureMin}°C
+                          </Box>
+                        </SpaceBetween>
+
+                        {day.precipitationSum > 0 && (
+                          <Box fontSize="body-s" color="text-status-info">
+                            💧 {day.precipitationSum} mm
+                          </Box>
+                        )}
+                      </SpaceBetween>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ),
           },
         ]}
