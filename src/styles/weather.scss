@@ -1,0 +1,33 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+.weather-metric-card {
+  padding: 16px;
+  background-color: var(--color-background-container-content);
+  border: 1px solid var(--color-border-divider-default);
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-border-control-default);
+    box-shadow: var(--color-shadow-default);
+  }
+}
+
+.weather-loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  text-align: center;
+}
+
+.location-search-results {
+  padding: 12px;
+  background-color: var(--color-background-layout-panel-content);
+  border: 1px solid var(--color-border-divider-default);
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}

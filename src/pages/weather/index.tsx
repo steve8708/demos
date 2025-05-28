@@ -5,6 +5,7 @@ import React from 'react';
 import { App } from './app';
 
 import '../../styles/base.scss';
+import '../../styles/weather.scss';
 
 export default function WeatherDashboard() {
   return <App />;
