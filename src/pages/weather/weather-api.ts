@@ -53,7 +53,7 @@ export class WeatherAPI {
 
     try {
       const response = await fetch(
-        `${this.GEOCODING_URL}/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`,
+        `${API_CONFIG.GEOCODING_URL}/search?name=${encodeURIComponent(query)}&count=${API_CONFIG.SEARCH_LIMIT}&language=${API_CONFIG.LANGUAGE}&format=${API_CONFIG.FORMAT}`,
       );
 
       if (!response.ok) {
