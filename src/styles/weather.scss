@@ -1,6 +1,95 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
+.daily-forecast-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: var(--space-scaled-xs) 0;
+  padding-bottom: var(--space-scaled-xs);
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-background-container-content);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-divider-default);
+    border-radius: 3px;
+
+    &:hover {
+      background: var(--color-border-input-default);
+    }
+  }
+}
+
+.daily-forecast-container {
+  display: flex;
+  gap: var(--space-scaled-m);
+  min-width: fit-content;
+  padding: var(--space-scaled-xs) 0;
+}
+
+.daily-forecast-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 120px;
+  max-width: 140px;
+  padding: var(--space-scaled-m);
+  border: 1px solid var(--color-border-divider-default);
+  border-radius: var(--border-radius-container);
+  background-color: var(--color-background-container-content);
+  transition: all 0.15s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-background-item-selected);
+    border-color: var(--color-border-item-selected);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-container);
+  }
+
+  .forecast-day {
+    margin-bottom: var(--space-scaled-s);
+    text-align: center;
+    min-height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .forecast-icon {
+    margin-bottom: var(--space-scaled-s);
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  .forecast-temps {
+    margin-bottom: var(--space-scaled-s);
+    min-height: 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .forecast-details {
+    text-align: center;
+    min-height: 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--space-scaled-xxs);
+  }
+}
+
 .daily-forecast-item {
   border-bottom: 1px solid var(--color-border-divider-default);
 
