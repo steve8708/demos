@@ -115,6 +115,9 @@ export function ForecastWidget({ dailyForecast, hourlyForecast }: ForecastWidget
         }
       >
         <div className="daily-forecast-scroll">
+          <Box variant="small" color="text-body-secondary" margin={{ bottom: 's' }}>
+            Scroll horizontally to view all days →
+          </Box>
           <div className="daily-forecast-container">
             {dailyForecast.map((day, index) => {
               const condition = WEATHER_CONDITIONS[day.weatherCode] || {

@@ -97,11 +97,20 @@
   background: var(--color-background-container-content);
   text-align: center;
   transition: all 0.2s ease;
+  cursor: pointer;
 
   &:hover {
     border-color: var(--color-border-divider-secondary);
     box-shadow: var(--shadow-container);
     transform: translateY(-2px);
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 1rem;
   }
 
   .forecast-day {
