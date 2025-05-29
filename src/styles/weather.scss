@@ -182,6 +182,36 @@
   .temperature-display {
     font-size: var(--font-size-display-m);
   }
+
+  .daily-forecast-card {
+    min-width: 100px;
+    max-width: 120px;
+    padding: var(--space-scaled-s);
+
+    .forecast-day {
+      margin-bottom: var(--space-scaled-xs);
+      min-height: 32px;
+    }
+
+    .forecast-icon {
+      margin-bottom: var(--space-scaled-xs);
+      min-height: 40px;
+      font-size: 2rem;
+    }
+
+    .forecast-temps {
+      margin-bottom: var(--space-scaled-xs);
+      min-height: 30px;
+    }
+
+    .forecast-details {
+      min-height: 30px;
+    }
+  }
+
+  .daily-forecast-container {
+    gap: var(--space-scaled-s);
+  }
 }
 
 // Weather condition specific styling
