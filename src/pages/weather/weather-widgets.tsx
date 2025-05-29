@@ -10,6 +10,7 @@ import KeyValuePairs from '@cloudscape-design/components/key-value-pairs';
 import ColumnLayout from '@cloudscape-design/components/column-layout';
 import LineChart from '@cloudscape-design/components/line-chart';
 import { WeatherData, WeatherAPI } from './weather-api';
+import { WEATHER_EMOJI_MAP } from './weather-config';
 
 interface CurrentWeatherProps {
   data: WeatherData;
