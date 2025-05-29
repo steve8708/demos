@@ -96,6 +96,42 @@ interface DailyForecastProps {
   data: WeatherData;
 }
 
+// Weather emoji mapping function
+function getWeatherEmoji(weatherCode: number): string {
+  const emojiMap: { [key: number]: string } = {
+    0: '☀️', // Clear sky
+    1: '🌤️', // Mainly clear
+    2: '⛅', // Partly cloudy
+    3: '☁️', // Overcast
+    45: '🌫️', // Fog
+    48: '🌫️', // Depositing rime fog
+    51: '🌦️', // Light drizzle
+    53: '🌦️', // Moderate drizzle
+    55: '🌧️', // Dense drizzle
+    56: '🌨️', // Light freezing drizzle
+    57: '🌨️', // Dense freezing drizzle
+    61: '🌧️', // Slight rain
+    63: '🌧️', // Moderate rain
+    65: '🌧️', // Heavy rain
+    66: '🌨️', // Light freezing rain
+    67: '🌨️', // Heavy freezing rain
+    71: '❄️', // Slight snow fall
+    73: '❄️', // Moderate snow fall
+    75: '🌨️', // Heavy snow fall
+    77: '❄️', // Snow grains
+    80: '🌦️', // Slight rain showers
+    81: '🌧️', // Moderate rain showers
+    82: '⛈️', // Violent rain showers
+    85: '🌨️', // Slight snow showers
+    86: '🌨️', // Heavy snow showers
+    95: '⛈️', // Thunderstorm
+    96: '⛈️', // Thunderstorm with slight hail
+    99: '⛈️', // Thunderstorm with heavy hail
+  };
+
+  return emojiMap[weatherCode] || '🌥️';
+}
+
 export function DailyForecastWidget({ data }: DailyForecastProps) {
   const { daily } = data;
 
@@ -111,6 +147,8 @@ export function DailyForecastWidget({ data }: DailyForecastProps) {
       conditions: WeatherAPI.getWeatherDescription(daily.weather_code[index]),
       precipitation: WeatherAPI.formatPrecipitation(daily.precipitation_sum[index]),
       wind: WeatherAPI.formatWindSpeed(daily.wind_speed_10m_max[index]),
+      emoji: getWeatherEmoji(daily.weather_code[index]),
+      weatherCode: daily.weather_code[index],
     };
   });
 
@@ -122,40 +160,49 @@ export function DailyForecastWidget({ data }: DailyForecastProps) {
         </Header>
       }
     >
-      <SpaceBetween size="s">
-        {forecastItems.map((item, index) => (
-          <Box key={index} padding={{ vertical: 's', horizontal: 'm' }} className="daily-forecast-item">
-            <ColumnLayout columns={6} variant="text-grid">
-              <div>
-                <Box fontWeight="bold">{item.day}</Box>
+      <div className="daily-forecast-scroll">
+        <div className="daily-forecast-container">
+          {forecastItems.map((item, index) => (
+            <div key={index} className="daily-forecast-card">
+              <div className="forecast-day">
+                <Box fontWeight="bold" fontSize="body-s">
+                  {item.day}
+                </Box>
                 <Box variant="small" color="text-status-info">
                   {item.date}
                 </Box>
               </div>
-              <div>
-                <Box fontWeight="bold">{item.high}</Box>
-                <Box variant="small" color="text-status-info">
+
+              <div className="forecast-icon">
+                <Box fontSize="heading-l" textAlign="center">
+                  {item.emoji}
+                </Box>
+              </div>
+
+              <div className="forecast-temps">
+                <Box fontWeight="bold" fontSize="body-m" textAlign="center">
+                  {item.high}
+                </Box>
+                <Box variant="small" color="text-status-info" textAlign="center">
                   {item.low}
                 </Box>
               </div>
-              <div>
-                <Box variant="small">{item.conditions}</Box>
+
+              <div className="forecast-details">
+                <Box variant="small" textAlign="center">
+                  {item.conditions}
+                </Box>
+                <Box variant="small" color="text-status-info" textAlign="center">
+                  {item.precipitation}
+                </Box>
               </div>
-              <div>
-                <Box variant="small">Rain: {item.precipitation}</Box>
-              </div>
-              <div>
-                <Box variant="small">Wind: {item.wind}</Box>
-              </div>
-              <div />
-            </ColumnLayout>
-          </Box>
-        ))}
-      </SpaceBetween>
+            </div>
+          ))}
+        </div>
+      </div>
     </Container>
   );
 }
-
 interface HourlyChartProps {
   data: WeatherData;
 }
