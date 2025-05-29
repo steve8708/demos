@@ -1,0 +1,66 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+.current-weather-main {
+  .temperature-display {
+    text-align: center;
+
+    h1 {
+      margin-bottom: 0.5rem;
+      color: var(--color-text-accent);
+    }
+  }
+}
+
+.weather-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .metric-label {
+    font-size: var(--font-size-body-s);
+    color: var(--color-text-body-secondary);
+    font-weight: var(--font-weight-normal);
+  }
+
+  .metric-value {
+    font-size: var(--font-size-body-m);
+    color: var(--color-text-body-default);
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+.forecast-table {
+  .temperature-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .high-temp {
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-accent);
+    }
+
+    .low-temp {
+      color: var(--color-text-body-secondary);
+    }
+  }
+}
+
+.weather-dashboard {
+  .location-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .current-weather-main {
+    .temperature-display h1 {
+      font-size: 3rem;
+    }
+  }
+}
