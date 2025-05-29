@@ -1,6 +1,8 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
+import { WEATHER_CODES, API_CONFIG } from './weather-config';
+
 export interface WeatherData {
   current: {
     time: string;
