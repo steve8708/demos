@@ -1,0 +1,127 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+.daily-forecast-item {
+  border-bottom: 1px solid var(--color-border-divider-default);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: var(--color-background-item-selected);
+  }
+}
+
+.weather-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-scaled-s);
+
+  .metric-value {
+    font-size: var(--font-size-display-s);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-display-s);
+    margin-bottom: var(--space-scaled-xxs);
+  }
+
+  .metric-label {
+    font-size: var(--font-size-body-s);
+    color: var(--color-text-status-info);
+  }
+}
+
+.weather-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: var(--space-scaled-xs);
+}
+
+.temperature-display {
+  font-size: var(--font-size-display-l);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-display-l);
+}
+
+.weather-description {
+  font-size: var(--font-size-body-m);
+  color: var(--color-text-body-secondary);
+  margin-top: var(--space-scaled-xxs);
+}
+
+.weather-chart-container {
+  .awsui-line-chart {
+    .recharts-cartesian-axis-tick-value {
+      font-size: var(--font-size-body-s);
+    }
+
+    .recharts-tooltip-wrapper {
+      .recharts-default-tooltip {
+        background-color: var(--color-background-dropdown-item-default);
+        border: 1px solid var(--color-border-divider-default);
+        border-radius: var(--border-radius-item);
+        box-shadow: var(--shadow-drop-down);
+      }
+    }
+  }
+}
+
+.location-search-container {
+  .awsui-autosuggest {
+    .awsui-autosuggest-option {
+      &:hover {
+        background-color: var(--color-background-item-selected);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .weather-metric {
+    padding: var(--space-scaled-xs);
+
+    .metric-value {
+      font-size: var(--font-size-heading-m);
+    }
+  }
+
+  .temperature-display {
+    font-size: var(--font-size-display-m);
+  }
+}
+
+// Weather condition specific styling
+.weather-condition-clear {
+  .weather-icon {
+    color: var(--color-text-status-warning);
+  }
+}
+
+.weather-condition-cloudy {
+  .weather-icon {
+    color: var(--color-text-body-secondary);
+  }
+}
+
+.weather-condition-rain {
+  .weather-icon {
+    color: var(--color-text-status-info);
+  }
+}
+
+.weather-condition-snow {
+  .weather-icon {
+    color: var(--color-text-interactive-default);
+  }
+}
+
+.weather-condition-storm {
+  .weather-icon {
+    color: var(--color-text-status-error);
+  }
+}
