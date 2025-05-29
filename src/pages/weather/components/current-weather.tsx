@@ -69,7 +69,6 @@ export function CurrentWeatherWidget({ weather, location }: CurrentWeatherProps)
               </Box>
               <StatusIndicator type={condition.icon as any}>{condition.description}</StatusIndicator>
             </div>
-
             <div>
               <SpaceBetween size="s">
                 <div>
