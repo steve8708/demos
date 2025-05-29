@@ -1,6 +1,7 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 @use '@cloudscape-design/design-tokens' as cs;
+@import './weather.scss';
 
 body {
   background: cs.$color-background-layout-main;
