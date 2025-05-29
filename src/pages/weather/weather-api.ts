@@ -95,10 +95,10 @@ export class WeatherAPI {
         ].join(','),
         hourly: ['temperature_2m', 'precipitation', 'weather_code', 'wind_speed_10m'].join(','),
         timezone: 'auto',
-        forecast_days: '7',
+        forecast_days: API_CONFIG.DEFAULT_FORECAST_DAYS,
       });
 
-      const response = await fetch(`${this.BASE_URL}/forecast?${params}`);
+      const response = await fetch(`${API_CONFIG.BASE_URL}/forecast?${params}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
