@@ -9,7 +9,7 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 import Table from '@cloudscape-design/components/table';
 
-import { DailyWeather, HourlyWeather, WEATHER_CONDITIONS } from '../types';
+import { DailyWeather, HourlyWeather, WEATHER_CONDITIONS, getWeatherEmoji } from '../types';
 
 interface ForecastWidgetProps {
   dailyForecast: DailyWeather[];
@@ -28,7 +28,7 @@ export function ForecastWidget({ dailyForecast, hourlyForecast }: ForecastWidget
     } else if (date.toDateString() === tomorrow.toDateString()) {
       return 'Tomorrow';
     } else {
-      return date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+      return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     }
   };
 
@@ -60,46 +60,6 @@ export function ForecastWidget({ dailyForecast, hourlyForecast }: ForecastWidget
     return directions[index];
   };
 
-  const dailyColumns = [
-    {
-      id: 'date',
-      header: 'Date',
-      cell: (item: DailyWeather) => formatDate(item.date),
-    },
-    {
-      id: 'condition',
-      header: 'Condition',
-      cell: (item: DailyWeather) => {
-        const condition = WEATHER_CONDITIONS[item.weatherCode] || { description: 'Unknown', icon: 'status-info' };
-        return <StatusIndicator type={condition.icon as any}>{condition.description}</StatusIndicator>;
-      },
-    },
-    {
-      id: 'temperature',
-      header: 'Temperature',
-      cell: (item: DailyWeather) => (
-        <div>
-          <Box variant="strong">{item.maxTemperature}°</Box> / {item.minTemperature}°
-        </div>
-      ),
-    },
-    {
-      id: 'precipitation',
-      header: 'Precipitation',
-      cell: (item: DailyWeather) => `${item.precipitation} mm`,
-    },
-    {
-      id: 'wind',
-      header: 'Wind',
-      cell: (item: DailyWeather) => `${item.windSpeed} km/h ${getWindDirection(item.windDirection)}`,
-    },
-    {
-      id: 'uv',
-      header: 'UV Index',
-      cell: (item: DailyWeather) => Math.round(item.uvIndex * 10) / 10,
-    },
-  ];
-
   const hourlyColumns = [
     {
       id: 'time',
@@ -110,8 +70,17 @@ export function ForecastWidget({ dailyForecast, hourlyForecast }: ForecastWidget
       id: 'condition',
       header: 'Condition',
       cell: (item: HourlyWeather) => {
-        const condition = WEATHER_CONDITIONS[item.weatherCode] || { description: 'Unknown', icon: 'status-info' };
-        return <StatusIndicator type={condition.icon as any}>{condition.description}</StatusIndicator>;
+        const condition = WEATHER_CONDITIONS[item.weatherCode] || {
+          description: 'Unknown',
+          icon: 'status-info',
+          emoji: '❓',
+        };
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '1.2em' }}>{condition.emoji}</span>
+            <StatusIndicator type={condition.icon as any}>{condition.description}</StatusIndicator>
+          </div>
+        );
       },
     },
     {
@@ -145,20 +114,67 @@ export function ForecastWidget({ dailyForecast, hourlyForecast }: ForecastWidget
           </Header>
         }
       >
-        <Table
-          columnDefinitions={dailyColumns}
-          items={dailyForecast}
-          loadingText="Loading forecast..."
-          trackBy="date"
-          empty={
-            <Box textAlign="center" color="inherit">
-              <b>No forecast data available</b>
-              <Box variant="p" color="inherit">
-                Unable to load daily forecast.
-              </Box>
-            </Box>
-          }
-        />
+        <div className="daily-forecast-scroll">
+          <div className="daily-forecast-container">
+            {dailyForecast.map((day, index) => {
+              const condition = WEATHER_CONDITIONS[day.weatherCode] || {
+                description: 'Unknown',
+                icon: 'status-info',
+                emoji: '❓',
+              };
+
+              return (
+                <div key={day.date} className="daily-forecast-card">
+                  <div className="forecast-day">
+                    <Box variant="h3" textAlign="center">
+                      {formatDate(day.date)}
+                    </Box>
+                  </div>
+
+                  <div className="forecast-icon">
+                    <div className="weather-emoji">{condition.emoji}</div>
+                    <Box variant="small" textAlign="center" color="text-body-secondary">
+                      {condition.description}
+                    </Box>
+                  </div>
+
+                  <div className="forecast-temperatures">
+                    <div className="temperature-range">
+                      <Box variant="strong" fontSize="body-l">
+                        {day.maxTemperature}°
+                      </Box>
+                      <Box variant="span" color="text-body-secondary">
+                        {day.minTemperature}°
+                      </Box>
+                    </div>
+                  </div>
+
+                  <div className="forecast-details">
+                    <SpaceBetween size="xs">
+                      {day.precipitation > 0 && (
+                        <div className="detail-item">
+                          <Box variant="small" color="text-body-secondary">
+                            💧 {day.precipitation}mm
+                          </Box>
+                        </div>
+                      )}
+                      <div className="detail-item">
+                        <Box variant="small" color="text-body-secondary">
+                          💨 {day.windSpeed} km/h
+                        </Box>
+                      </div>
+                      <div className="detail-item">
+                        <Box variant="small" color="text-body-secondary">
+                          ☀️ UV {Math.round(day.uvIndex * 10) / 10}
+                        </Box>
+                      </div>
+                    </SpaceBetween>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </Container>
 
       <Container

@@ -56,11 +56,131 @@
   }
 }
 
+.daily-forecast-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-background-layout-panel-content);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-divider-default);
+    border-radius: 3px;
+
+    &:hover {
+      background: var(--color-border-divider-secondary);
+    }
+  }
+}
+
+.daily-forecast-container {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  min-width: max-content;
+}
+
+.daily-forecast-card {
+  flex: 0 0 auto;
+  width: 140px;
+  padding: 1rem;
+  border: 1px solid var(--color-border-divider-default);
+  border-radius: var(--border-radius-container);
+  background: var(--color-background-container-content);
+  text-align: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-border-divider-secondary);
+    box-shadow: var(--shadow-container);
+    transform: translateY(-2px);
+  }
+
+  .forecast-day {
+    margin-bottom: 0.75rem;
+
+    h3 {
+      margin: 0;
+      font-size: var(--font-size-body-m);
+      font-weight: var(--font-weight-bold);
+    }
+  }
+
+  .forecast-icon {
+    margin-bottom: 1rem;
+
+    .weather-emoji {
+      font-size: 2.5rem;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+  }
+
+  .forecast-temperatures {
+    margin-bottom: 1rem;
+
+    .temperature-range {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+
+      span:first-child {
+        color: var(--color-text-accent);
+      }
+    }
+  }
+
+  .forecast-details {
+    .detail-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
 // Responsive adjustments
 @media (max-width: 768px) {
   .current-weather-main {
     .temperature-display h1 {
       font-size: 3rem;
     }
+  }
+
+  .daily-forecast-card {
+    width: 120px;
+    padding: 0.75rem;
+
+    .weather-emoji {
+      font-size: 2rem !important;
+    }
+  }
+
+  .daily-forecast-container {
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .daily-forecast-card {
+    width: 100px;
+    padding: 0.5rem;
+
+    .weather-emoji {
+      font-size: 1.75rem !important;
+    }
+  }
+
+  .daily-forecast-container {
+    gap: 0.5rem;
   }
 }
