@@ -9,7 +9,7 @@ import Header from '@cloudscape-design/components/header';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 
-import { CurrentWeather, Location, WEATHER_CONDITIONS } from '../types';
+import { CurrentWeather, Location, WEATHER_CONDITIONS, getWeatherEmoji } from '../types';
 
 interface CurrentWeatherProps {
   weather: CurrentWeather;
@@ -20,6 +20,7 @@ export function CurrentWeatherWidget({ weather, location }: CurrentWeatherProps)
   const condition = WEATHER_CONDITIONS[weather.weatherCode] || {
     description: 'Unknown',
     icon: 'status-info' as const,
+    emoji: '❓',
   };
 
   const getWindDirection = (degrees: number): string => {
@@ -67,7 +68,18 @@ export function CurrentWeatherWidget({ weather, location }: CurrentWeatherProps)
               <Box variant="small" color="text-status-info">
                 Feels like {weather.apparentTemperature}°C
               </Box>
-              <StatusIndicator type={condition.icon as any}>{condition.description}</StatusIndicator>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  marginTop: '0.5rem',
+                }}
+              >
+                <span style={{ fontSize: '1.5em' }}>{condition.emoji}</span>
+                <StatusIndicator type={condition.icon as any}>{condition.description}</StatusIndicator>
+              </div>
             </div>
             <div>
               <SpaceBetween size="s">
