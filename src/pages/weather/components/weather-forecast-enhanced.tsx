@@ -7,6 +7,7 @@ import Container from '@cloudscape-design/components/container';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 
 import { ForecastData } from '../types';
+import styles from './weather-forecast-scroll.module.scss';
 
 interface WeatherForecastProps {
   forecast: ForecastData;
@@ -98,42 +99,22 @@ export function WeatherForecast({ forecast }: WeatherForecastProps) {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        overflowX: 'auto',
-        gap: '16px',
-        padding: '8px 0',
-        scrollbarWidth: 'thin',
-        scrollbarColor: '#888 #f1f1f1',
-      }}
-    >
+    <div className={styles['forecast-scroll-container']}>
       {forecastItems.map((item, index) => (
-        <Container
-          key={item.date}
-          style={{
-            minWidth: '180px',
-            maxWidth: '180px',
-            flexShrink: 0,
-          }}
-        >
+        <Container key={item.date} className={styles['forecast-card']}>
           <SpaceBetween size="s">
             <Box textAlign="center" variant="awsui-key-label">
               {formatDate(item.date)}
             </Box>
 
-            <Box textAlign="center" fontSize="heading-xl">
-              {getWeatherIcon(item.weatherCode)}
+            <Box textAlign="center">
+              <span className={styles['weather-icon']}>{getWeatherIcon(item.weatherCode)}</span>
             </Box>
 
             <Box textAlign="center">
               <SpaceBetween size="xxs">
-                <Box variant="h3" margin="none">
-                  {Math.round(item.maxTemp)}°C
-                </Box>
-                <Box variant="small" color="text-status-inactive">
-                  {Math.round(item.minTemp)}°C
-                </Box>
+                <div className={styles['temperature-main']}>{Math.round(item.maxTemp)}°C</div>
+                <div className={styles['temperature-sub']}>{Math.round(item.minTemp)}°C</div>
               </SpaceBetween>
             </Box>
 
