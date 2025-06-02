@@ -97,33 +97,41 @@ export function WeatherForecast({ forecast }: WeatherForecastProps) {
     return weatherCodes[code] || `Weather code ${code}`;
   };
 
+  const scrollContainerStyle: React.CSSProperties = {
+    display: 'flex',
+    overflowX: 'auto',
+    gap: '16px',
+    padding: '8px 0 16px 0',
+    scrollBehavior: 'smooth',
+    WebkitOverflowScrolling: 'touch',
+    scrollbarWidth: 'thin' as const,
+    scrollbarColor: '#888 #f1f1f1',
+  };
+
+  const cardStyle: React.CSSProperties = {
+    minWidth: '180px',
+    maxWidth: '180px',
+    flexShrink: 0,
+    transition: 'transform 0.2s ease-in-out',
+  };
+
+  const weatherIconStyle: React.CSSProperties = {
+    fontSize: '48px',
+    lineHeight: 1,
+    display: 'block',
+  };
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        overflowX: 'auto',
-        gap: '16px',
-        padding: '8px 0',
-        scrollbarWidth: 'thin',
-        scrollbarColor: '#888 #f1f1f1',
-      }}
-    >
+    <div style={scrollContainerStyle}>
       {forecastItems.map((item, index) => (
-        <Container
-          key={item.date}
-          style={{
-            minWidth: '180px',
-            maxWidth: '180px',
-            flexShrink: 0,
-          }}
-        >
+        <Container key={item.date} style={cardStyle}>
           <SpaceBetween size="s">
             <Box textAlign="center" variant="awsui-key-label">
               {formatDate(item.date)}
             </Box>
 
-            <Box textAlign="center" fontSize="heading-xl">
-              {getWeatherIcon(item.weatherCode)}
+            <Box textAlign="center">
+              <span style={weatherIconStyle}>{getWeatherIcon(item.weatherCode)}</span>
             </Box>
 
             <Box textAlign="center">
