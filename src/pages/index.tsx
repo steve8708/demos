@@ -22,6 +22,12 @@ import Link from '@cloudscape-design/components/link';
 // Demo definitions with category information
 const demos = [
   { route: '/cards', title: 'Card View', description: 'Demo of Cloudscape Cards component.', category: 'Components' },
+  {
+    route: '/weather',
+    title: 'Weather Dashboard',
+    description: 'Real-time weather information and forecasts using Open Meteo API.',
+    category: 'Applications',
+  },
   { route: '/chat', title: 'Chat', description: 'Chat UI demo.', category: 'Applications' },
   {
     route: '/configurable-dashboard',
