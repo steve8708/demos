@@ -6,7 +6,7 @@ import { WeatherData, ForecastData } from '../types';
 const BASE_URL = 'https://api.open-meteo.com/v1';
 
 export async function getCurrentWeather(latitude: number, longitude: number): Promise<WeatherData> {
-  const url = new URL(`${BASE_URL}/current`);
+  const url = new URL(`${BASE_URL}/forecast`);
   url.searchParams.set('latitude', latitude.toString());
   url.searchParams.set('longitude', longitude.toString());
   url.searchParams.set(
