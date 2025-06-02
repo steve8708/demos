@@ -190,25 +190,25 @@ export function WeatherDashboard() {
                 title="Temperature"
                 value={`${currentWeather.temperature}°C`}
                 description={`Feels like ${currentWeather.apparent_temperature}°C`}
-                icon="status-positive"
+                emoji="🌡️"
               />
               <WeatherCard
                 title="Humidity"
                 value={`${currentWeather.humidity}%`}
                 description="Relative humidity"
-                icon="status-info"
+                emoji="💧"
               />
               <WeatherCard
                 title="Wind Speed"
                 value={`${currentWeather.wind_speed} km/h`}
                 description={`Direction: ${currentWeather.wind_direction}°`}
-                icon="status-warning"
+                emoji="💨"
               />
               <WeatherCard
-                title="Weather Code"
+                title="Current Weather"
                 value={currentWeather.weather_code.toString()}
                 description="WMO Weather interpretation"
-                icon="status-pending"
+                weatherCode={currentWeather.weather_code}
               />
             </Grid>
           </SpaceBetween>
