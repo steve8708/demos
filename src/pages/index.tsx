@@ -126,6 +126,12 @@ const demos = [
     description: 'Table with select filter.',
     category: 'Tables',
   },
+  {
+    route: '/weather',
+    title: 'Weather Dashboard',
+    description: 'Real-time weather information and 7-day forecasts powered by Open Meteo.',
+    category: 'Applications',
+  },
   { route: '/wizard', title: 'Wizard', description: 'Multi-step wizard demo.', category: 'Forms' },
   { route: '/write-to-s3', title: 'Write to S3', description: 'Write data to Amazon S3.', category: 'Integration' },
 ];
