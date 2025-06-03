@@ -41,10 +41,10 @@ export function LocationSearch({ onLocationSelect, value = '', loading = false }
     }
   }, []);
 
-  const handleSelect = (option: { value?: string; detail?: LocationData }) => {
-    if (option.detail) {
-      onLocationSelect(option.detail);
-      setSearchValue(getLocationDisplayName(option.detail));
+  const handleSelect = (option: { selectedOption: { value?: string; detail?: LocationData } }) => {
+    if (option.selectedOption.detail) {
+      onLocationSelect(option.selectedOption.detail);
+      setSearchValue(getLocationDisplayName(option.selectedOption.detail));
       setSuggestions([]);
     }
   };
