@@ -116,7 +116,7 @@ export default function WeatherDashboard() {
         {weatherData && (
           <SpaceBetween direction="vertical" size="l">
             <WeatherCard weatherData={weatherData} location={currentLocation} />
-            <ForecastTable weatherData={weatherData} />
+            <ForecastCards weatherData={weatherData} />
           </SpaceBetween>
         )}
 
