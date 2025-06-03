@@ -1,0 +1,1 @@
+class r{async getData(t){const a=await fetch(`/${t}.json`);if(!a.ok)throw new Error(`Response error: ${a.status}`);return await a.json()}async getDataWithDates(t){return(await this.getData(t)).map(e=>({...e,date:new Date(e.date)}))}}export{r as default};

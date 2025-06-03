@@ -1,0 +1,1 @@
+import{r as e}from"./index-D7GDf1UU.js";function r(){const[t,o]=e.useState(window.location.hash.substring(1));return e.useEffect(()=>{const n=()=>o(window.location.hash.substring(1));return window.addEventListener("hashchange",n),()=>window.removeEventListener("hashchange",n)},[]),e.useEffect(()=>{window.scrollTo({top:0})},[t]),t}export{r as default};
