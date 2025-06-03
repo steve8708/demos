@@ -10,7 +10,7 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import { WeatherData, WEATHER_CODES } from '../types';
 import { formatTemperature, formatWindSpeed, formatDate } from '../utils/weather-api';
 
-interface ForecastTableProps {
+interface ForecastCardsProps {
   weatherData: WeatherData;
 }
 
@@ -24,7 +24,7 @@ interface ForecastDay {
   windSpeed: number;
 }
 
-export function ForecastTable({ weatherData }: ForecastTableProps) {
+export function ForecastCards({ weatherData }: ForecastCardsProps) {
   const forecastData: ForecastDay[] = weatherData.daily.time.map((date, index) => ({
     date,
     formattedDate: formatDate(date),
