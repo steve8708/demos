@@ -15,7 +15,7 @@ import { LocationData, WeatherData } from './types';
 import { fetchWeatherData, getLocationDisplayName } from './utils/weather-api';
 import { LocationSearch } from './components/location-search';
 import { WeatherCard } from './components/weather-card';
-import { ForecastTable } from './components/forecast-table';
+import { ForecastCards } from './components/forecast-table';
 
 // Default location: London
 const DEFAULT_LOCATION: LocationData = {
