@@ -41,10 +41,10 @@ export function LocationSearch({ onLocationSelect, value = '', loading = false }
     }
   }, []);
 
-  const handleSelect = (option: { selectedOption: { value?: string; detail?: LocationData } }) => {
-    if (option.selectedOption.detail) {
-      onLocationSelect(option.selectedOption.detail);
-      setSearchValue(getLocationDisplayName(option.selectedOption.detail));
+  const handleSelect = (detail: { selectedOption: { value?: string; detail?: LocationData } }) => {
+    if (detail.selectedOption.detail) {
+      onLocationSelect(detail.selectedOption.detail);
+      setSearchValue(getLocationDisplayName(detail.selectedOption.detail));
       setSuggestions([]);
     }
   };
@@ -66,7 +66,7 @@ export function LocationSearch({ onLocationSelect, value = '', loading = false }
           setSearchValue(detail.value);
           handleSearch(detail.value);
         }}
-        onSelect={({ detail }) => handleSelect({ selectedOption: detail.selectedOption })}
+        onSelect={({ detail }) => handleSelect(detail)}
         value={searchValue}
         options={suggestionOptions}
         placeholder="Enter city name (e.g., London, New York, Tokyo)"
