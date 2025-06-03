@@ -66,7 +66,7 @@ export function LocationSearch({ onLocationSelect, value = '', loading = false }
           setSearchValue(detail.value);
           handleSearch(detail.value);
         }}
-        onSelect={({ detail }) => handleSelect(detail.selectedOption)}
+        onSelect={({ detail }) => handleSelect({ selectedOption: detail.selectedOption })}
         value={searchValue}
         options={suggestionOptions}
         placeholder="Enter city name (e.g., London, New York, Tokyo)"
