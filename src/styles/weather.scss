@@ -1,0 +1,65 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+.weather-current-display {
+  .weather-temperature-section {
+    text-align: center;
+    min-width: 150px;
+  }
+
+  .weather-conditions-section {
+    text-align: center;
+    min-width: 120px;
+  }
+}
+
+.weather-details-grid {
+  .weather-detail-item {
+    text-align: center;
+    min-width: 100px;
+  }
+}
+
+.forecast-conditions {
+  display: flex;
+  align-items: center;
+
+  .weather-icon {
+    font-size: 1.2em;
+    margin-right: 8px;
+  }
+}
+
+.temperature-high {
+  color: var(--color-text-status-error, #d13212);
+  font-weight: bold;
+}
+
+.temperature-low {
+  color: var(--color-text-status-info, #0073bb);
+  font-weight: bold;
+}
+
+.forecast-empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-body-secondary, #5f6b7a);
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .weather-current-display {
+    .weather-temperature-section,
+    .weather-conditions-section {
+      min-width: auto;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .weather-details-grid {
+    .weather-detail-item {
+      min-width: auto;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
