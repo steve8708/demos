@@ -1,0 +1,1 @@
+import{j as e}from"./index-D7GDf1UU.js";import{A as o}from"./index-GgDZoIRm.js";import"./internal-D9lY1pv7.js";const i=()=>e.jsxDEV(o,{statusIconAriaLabel:"Info",children:"This page illustrates the use of the one-click delete pattern."},void 0,!1,{fileName:"/app/code/src/pages/delete-one-click/components/info.tsx",lineNumber:8,columnNumber:3},void 0);export{i as Info};

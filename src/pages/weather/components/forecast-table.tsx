@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: MIT-0
 import React from 'react';
 
+import Box from '@cloudscape-design/components/box';
 import Container from '@cloudscape-design/components/container';
 import Header from '@cloudscape-design/components/header';
-import Table from '@cloudscape-design/components/table';
+import SpaceBetween from '@cloudscape-design/components/space-between';
 
 import { WeatherData, WEATHER_CODES } from '../types';
 import { formatTemperature, formatWindSpeed, formatDate } from '../utils/weather-api';
@@ -34,78 +35,85 @@ export function ForecastTable({ weatherData }: ForecastTableProps) {
     windSpeed: weatherData.daily.wind_speed_10m_max[index],
   }));
 
+  if (forecastData.length === 0) {
+    return (
+      <Container
+        header={
+          <Header variant="h2" description="7-day weather forecast">
+            Weekly Forecast
+          </Header>
+        }
+      >
+        <div className="forecast-empty-state">
+          <span>No forecast data available</span>
+        </div>
+      </Container>
+    );
+  }
+
   return (
     <Container
       header={
-        <Header variant="h2" description="7-day weather forecast">
+        <Header variant="h2" description="Scroll horizontally to view more days">
           Weekly Forecast
         </Header>
       }
     >
-      <Table
-        columnDefinitions={[
-          {
-            id: 'date',
-            header: 'Date',
-            cell: (item: ForecastDay) => item.formattedDate,
-            sortingField: 'date',
-            width: 120,
-          },
-          {
-            id: 'conditions',
-            header: 'Conditions',
-            cell: (item: ForecastDay) => {
-              const weatherCode = WEATHER_CODES[item.weatherCode] || { description: 'Unknown', icon: '❓' };
-              return (
-                <div className="forecast-conditions">
-                  <span className="weather-icon" style={{ marginRight: '8px' }}>
-                    {weatherCode.icon}
-                  </span>
-                  {weatherCode.description}
-                </div>
-              );
-            },
-            width: 200,
-          },
-          {
-            id: 'tempHigh',
-            header: 'High',
-            cell: (item: ForecastDay) => <span className="temperature-high">{formatTemperature(item.tempMax)}</span>,
-            sortingField: 'tempMax',
-            width: 80,
-          },
-          {
-            id: 'tempLow',
-            header: 'Low',
-            cell: (item: ForecastDay) => <span className="temperature-low">{formatTemperature(item.tempMin)}</span>,
-            sortingField: 'tempMin',
-            width: 80,
-          },
-          {
-            id: 'precipitation',
-            header: 'Precipitation',
-            cell: (item: ForecastDay) => `${item.precipitation.toFixed(1)} mm`,
-            sortingField: 'precipitation',
-            width: 120,
-          },
-          {
-            id: 'windSpeed',
-            header: 'Max Wind',
-            cell: (item: ForecastDay) => formatWindSpeed(item.windSpeed),
-            sortingField: 'windSpeed',
-            width: 100,
-          },
-        ]}
-        items={forecastData}
-        loadingText="Loading forecast data"
-        sortingDisabled={false}
-        variant="embedded"
-        empty={
-          <div className="forecast-empty-state">
-            <span>No forecast data available</span>
-          </div>
-        }
-      />
+      <div className="forecast-scroll-container">
+        <div className="forecast-cards-wrapper">
+          {forecastData.map(day => {
+            const weatherCode = WEATHER_CODES[day.weatherCode] || { description: 'Unknown', icon: '❓' };
+
+            return (
+              <div key={day.date} className="forecast-card">
+                <SpaceBetween direction="vertical" size="s">
+                  <Box variant="h4" textAlign="center" color="text-body-secondary">
+                    {day.formattedDate}
+                  </Box>
+
+                  <div className="forecast-icon-section">
+                    <Box fontSize="heading-xl" textAlign="center">
+                      {weatherCode.icon}
+                    </Box>
+                  </div>
+
+                  <Box variant="small" textAlign="center">
+                    {weatherCode.description}
+                  </Box>
+
+                  <div className="forecast-temperatures">
+                    <SpaceBetween direction="horizontal" size="xs" alignItems="center">
+                      <Box variant="h4" className="temperature-high">
+                        {formatTemperature(day.tempMax)}
+                      </Box>
+                      <Box variant="small" color="text-body-secondary">
+                        /
+                      </Box>
+                      <Box variant="h4" className="temperature-low">
+                        {formatTemperature(day.tempMin)}
+                      </Box>
+                    </SpaceBetween>
+                  </div>
+
+                  <SpaceBetween direction="vertical" size="xxs">
+                    <div className="forecast-detail-item">
+                      <Box variant="small" color="text-body-secondary">
+                        💧 {day.precipitation.toFixed(1)} mm
+                      </Box>
+                    </div>
+
+                    <div className="forecast-detail-item">
+                      <Box variant="small" color="text-body-secondary">
+                        💨 {formatWindSpeed(day.windSpeed)}
+                      </Box>
+                    </div>
+                  </SpaceBetween>
+                </SpaceBetween>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </Container>
   );
 }

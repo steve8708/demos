@@ -1,0 +1,1 @@
+import{j as e}from"./index-D7GDf1UU.js";import{B as r}from"./index-CqlHI4IQ.js";import{b as a}from"./breadcrumbs-ncC75ksv.js";const i=()=>e.jsxDEV(r,{items:a,expandAriaLabel:"Show path",ariaLabel:"Breadcrumbs"},void 0,!1,{fileName:"/app/code/src/pages/details/components/breadcrumbs.tsx",lineNumber:10,columnNumber:3},void 0);export{i as Breadcrumbs};
