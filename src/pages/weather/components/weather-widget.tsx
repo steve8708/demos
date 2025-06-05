@@ -7,7 +7,6 @@ import Box from '@cloudscape-design/components/box';
 import ColumnLayout from '@cloudscape-design/components/column-layout';
 import Container from '@cloudscape-design/components/container';
 import Header from '@cloudscape-design/components/header';
-import Icon from '@cloudscape-design/components/icon';
 import KeyValuePairs from '@cloudscape-design/components/key-value-pairs';
 import LineChart from '@cloudscape-design/components/line-chart';
 import SpaceBetween from '@cloudscape-design/components/space-between';
@@ -37,6 +36,7 @@ export function WeatherWidget({ data, locationName, isLoading }: WeatherWidgetPr
   const currentCondition = WEATHER_CONDITIONS[parseInt(current.condition)] || {
     description: 'Unknown',
     icon: 'status-info',
+    emoji: '❓',
   };
 
   const formatTemperature = (temp: number) => `${Math.round(temp)}°C`;
@@ -79,7 +79,10 @@ export function WeatherWidget({ data, locationName, isLoading }: WeatherWidgetPr
                 <Box fontSize="display-l" fontWeight="bold">
                   {formatTemperature(current.temperature)}
                 </Box>
-                <StatusIndicator type={currentCondition.icon as any}>{currentCondition.description}</StatusIndicator>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Box fontSize="display-s">{currentCondition.emoji}</Box>
+                  <StatusIndicator type={currentCondition.icon as any}>{currentCondition.description}</StatusIndicator>
+                </div>
               </div>
 
               <Box variant="small" color="text-body-secondary">
@@ -100,6 +103,82 @@ export function WeatherWidget({ data, locationName, isLoading }: WeatherWidgetPr
             ]}
           />
         </ColumnLayout>
+      </Container>
+
+      {/* 7-Day Forecast with Horizontal Scroll */}
+      <Container
+        header={
+          <Header variant="h2" counter={`(${forecast.length})`}>
+            7-day forecast
+          </Header>
+        }
+      >
+        <div
+          style={{
+            display: 'flex',
+            overflowX: 'auto',
+            gap: '16px',
+            padding: '8px',
+            scrollbarWidth: 'thin',
+          }}
+        >
+          {forecast.map((day, index) => {
+            const condition = WEATHER_CONDITIONS[parseInt(day.condition)] || {
+              description: 'Unknown',
+              icon: 'status-info',
+              emoji: '❓',
+            };
+
+            const isToday = index === 0;
+
+            return (
+              <div
+                key={day.date}
+                style={{
+                  minWidth: '140px',
+                  padding: '16px',
+                  border: '1px solid var(--awsui-color-border-divider-default)',
+                  borderRadius: '8px',
+                  backgroundColor: isToday
+                    ? 'var(--awsui-color-background-container-content)'
+                    : 'var(--awsui-color-background-container-header)',
+                  textAlign: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <SpaceBetween size="xs">
+                  <Box variant="h3" fontSize="body-s" fontWeight="bold">
+                    {isToday ? 'Today' : formatDate(day.date)}
+                  </Box>
+
+                  <div style={{ fontSize: '32px', lineHeight: '1' }}>{condition.emoji}</div>
+
+                  <Box variant="small" color="text-body-secondary">
+                    {condition.description}
+                  </Box>
+
+                  <SpaceBetween size="xxs">
+                    <Box fontSize="body-m" fontWeight="bold">
+                      {formatTemperature(day.maxTemp)}
+                    </Box>
+                    <Box fontSize="body-s" color="text-body-secondary">
+                      {formatTemperature(day.minTemp)}
+                    </Box>
+                  </SpaceBetween>
+
+                  <SpaceBetween size="xxs">
+                    <Box fontSize="body-s" color="text-body-secondary">
+                      Rain: {day.precipitationProbability}%
+                    </Box>
+                    <Box fontSize="body-s" color="text-body-secondary">
+                      Wind: {day.windSpeed} km/h
+                    </Box>
+                  </SpaceBetween>
+                </SpaceBetween>
+              </div>
+            );
+          })}
+        </div>
       </Container>
 
       {/* 24-Hour Temperature Chart */}
@@ -141,62 +220,6 @@ export function WeatherWidget({ data, locationName, isLoading }: WeatherWidgetPr
           hideFilter
           hideLegend
           xScaleType="time"
-        />
-      </Container>
-
-      {/* 7-Day Forecast */}
-      <Container
-        header={
-          <Header variant="h2" counter={`(${forecast.length})`}>
-            7-day forecast
-          </Header>
-        }
-      >
-        <Table
-          columnDefinitions={[
-            {
-              id: 'date',
-              header: 'Date',
-              cell: item => formatDate(item.date),
-              sortingField: 'date',
-            },
-            {
-              id: 'condition',
-              header: 'Condition',
-              cell: item => {
-                const condition = WEATHER_CONDITIONS[parseInt(item.condition)] || {
-                  description: 'Unknown',
-                  icon: 'status-info',
-                };
-                return <StatusIndicator type={condition.icon as any}>{condition.description}</StatusIndicator>;
-              },
-            },
-            {
-              id: 'temperature',
-              header: 'Temperature',
-              cell: item => (
-                <SpaceBetween direction="horizontal" size="xs">
-                  <Badge color="blue">{formatTemperature(item.maxTemp)}</Badge>
-                  <Box color="text-body-secondary">/</Box>
-                  <Badge color="grey">{formatTemperature(item.minTemp)}</Badge>
-                </SpaceBetween>
-              ),
-            },
-            {
-              id: 'precipitation',
-              header: 'Rain chance',
-              cell: item => `${item.precipitationProbability}%`,
-            },
-            {
-              id: 'wind',
-              header: 'Wind speed',
-              cell: item => `${item.windSpeed} km/h`,
-            },
-          ]}
-          items={forecast}
-          loadingText="Loading forecast..."
-          trackBy="date"
-          variant="embedded"
         />
       </Container>
 
