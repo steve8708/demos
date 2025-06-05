@@ -38,10 +38,9 @@ export class WeatherApiService {
           }
           reject(new Error(errorMessage));
         },
-        { timeout: 5000, enableHighAccuracy: false, maximumAge: 300000 }
+        { timeout: 5000, enableHighAccuracy: false, maximumAge: 300000 },
       );
     });
-  }
   }
 
   static async searchLocations(query: string): Promise<GeocodeResult[]> {
@@ -65,7 +64,8 @@ export class WeatherApiService {
   static async getWeatherData(location: WeatherLocation): Promise<WeatherData> {
     try {
       // Simplified parameter construction
-      const url = `${OPEN_METEO_BASE_URL}/forecast` +
+      const url =
+        `${OPEN_METEO_BASE_URL}/forecast` +
         `?latitude=${location.latitude}` +
         `&longitude=${location.longitude}` +
         `&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,relative_humidity_2m,surface_pressure,uv_index` +
@@ -133,7 +133,6 @@ export class WeatherApiService {
       }
       throw new Error('Unknown error occurred while fetching weather data');
     }
-  }
   }
 
   static async getReverseGeocode(latitude: number, longitude: number): Promise<string> {
