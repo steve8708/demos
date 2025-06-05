@@ -6,8 +6,7 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import Grid from '@cloudscape-design/components/grid';
 import Box from '@cloudscape-design/components/box';
 import Badge from '@cloudscape-design/components/badge';
-import Table from '@cloudscape-design/components/table';
-import Header from '@cloudscape-design/components/header';
+
 import LineChart from '@cloudscape-design/components/line-chart';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 import Alert from '@cloudscape-design/components/alert';
@@ -16,6 +15,7 @@ import Button from '@cloudscape-design/components/button';
 
 import { WeatherCard, WeatherMetricsGrid } from './weather-card';
 import { LocationSearch } from './location-search';
+import { DailyForecastCards } from './daily-forecast-cards';
 import { WeatherData, WeatherLocation, WEATHER_CODES } from '../types';
 import { WeatherApiService } from '../services/weather-api';
 import { TestWeather } from '../test-weather';
@@ -128,6 +128,10 @@ export function WeatherDashboard() {
     return WEATHER_CODES[code]?.icon || 'status-info';
   };
 
+  const getWeatherEmoji = (code: number) => {
+    return WEATHER_CODES[code]?.emoji || '☁️';
+  };
+
   const formatTime = (timeString: string) => {
     return new Date(timeString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
@@ -147,19 +151,18 @@ export function WeatherDashboard() {
       }))
     : [];
 
-  const dailyTableItems = weatherData
+  const dailyForecastItems = weatherData
     ? weatherData.daily.time.map((time, index) => ({
-        date: formatDate(time),
+        date: time,
         weather: getWeatherDescription(weatherData.daily.weatherCode[index]),
         tempMax: `${Math.round(weatherData.daily.temperatureMax[index])}°C`,
         tempMin: `${Math.round(weatherData.daily.temperatureMin[index])}°C`,
         precipitation: `${weatherData.daily.precipitation[index]}mm`,
         windSpeed: `${Math.round(weatherData.daily.windSpeedMax[index])}km/h`,
-        uvIndex: weatherData.daily.uvIndexMax[index],
-        weatherIcon: getWeatherIcon(weatherData.daily.weatherCode[index]),
+        uvIndex: Math.round(weatherData.daily.uvIndexMax[index]),
+        weatherCode: weatherData.daily.weatherCode[index],
       }))
     : [];
-
   if (error && !weatherData) {
     return (
       <SpaceBetween size="l">
@@ -212,9 +215,8 @@ export function WeatherDashboard() {
               <SpaceBetween size="s">
                 <Box fontSize="display-l">{Math.round(weatherData.current.temperature)}°C</Box>
                 <SpaceBetween direction="horizontal" size="xs" alignItems="center">
-                  <StatusIndicator type={getWeatherIcon(weatherData.current.weatherCode) as any}>
-                    {getWeatherDescription(weatherData.current.weatherCode)}
-                  </StatusIndicator>
+                  <Box fontSize="heading-m">{getWeatherEmoji(weatherData.current.weatherCode)}</Box>
+                  <Box variant="p">{getWeatherDescription(weatherData.current.weatherCode)}</Box>
                 </SpaceBetween>
                 <Box variant="small" color="text-body-secondary">
                   Last updated: {formatTime(weatherData.current.time)}
@@ -269,63 +271,15 @@ export function WeatherDashboard() {
 
           {/* 7-Day Forecast */}
           <WeatherCard title="7-Day Forecast" icon="status-info">
-            <Table
-              columnDefinitions={[
-                {
-                  id: 'date',
-                  header: 'Date',
-                  cell: item => item.date,
-                  sortingField: 'date',
-                },
-                {
-                  id: 'weather',
-                  header: 'Weather',
-                  cell: item => (
-                    <SpaceBetween direction="horizontal" size="xs" alignItems="center">
-                      <StatusIndicator type={item.weatherIcon as any} />
-                      {item.weather}
-                    </SpaceBetween>
-                  ),
-                },
-                {
-                  id: 'temperature',
-                  header: 'Temperature',
-                  cell: item => (
-                    <SpaceBetween direction="horizontal" size="xs">
-                      <Badge color="red">{item.tempMax}</Badge>
-                      <Badge color="blue">{item.tempMin}</Badge>
-                    </SpaceBetween>
-                  ),
-                },
-                {
-                  id: 'precipitation',
-                  header: 'Precipitation',
-                  cell: item => item.precipitation,
-                },
-                {
-                  id: 'wind',
-                  header: 'Wind',
-                  cell: item => item.windSpeed,
-                },
-                {
-                  id: 'uv',
-                  header: 'UV Index',
-                  cell: item => (
-                    <Badge color={item.uvIndex > 7 ? 'red' : item.uvIndex > 5 ? 'blue' : 'green'}>{item.uvIndex}</Badge>
-                  ),
-                },
-              ]}
-              items={dailyTableItems}
-              loadingText="Loading forecast"
-              empty={
-                <Box textAlign="center" color="inherit">
-                  <Box variant="strong" textAlign="center" color="inherit">
-                    No forecast data available
-                  </Box>
+            {dailyForecastItems.length > 0 ? (
+              <DailyForecastCards items={dailyForecastItems} />
+            ) : (
+              <Box textAlign="center" color="inherit" padding="xl">
+                <Box variant="strong" textAlign="center" color="inherit">
+                  No forecast data available
                 </Box>
-              }
-              header={<Header>Daily Forecast</Header>}
-            />
+              </Box>
+            )}
           </WeatherCard>
         </SpaceBetween>
       )}
