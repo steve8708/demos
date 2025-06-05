@@ -18,6 +18,7 @@ import { WeatherCard, WeatherMetricsGrid } from './weather-card';
 import { LocationSearch } from './location-search';
 import { WeatherData, WeatherLocation, WEATHER_CODES } from '../types';
 import { WeatherApiService } from '../services/weather-api';
+import { TestWeather } from '../test-weather';
 
 export function WeatherDashboard() {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
@@ -177,6 +178,7 @@ export function WeatherDashboard() {
 
   return (
     <SpaceBetween size="l">
+      <TestWeather />
       <LocationSearch onLocationSelect={handleLocationSelect} isLoading={isLoading} />
 
       {isLoading && !weatherData && (
