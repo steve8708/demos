@@ -27,24 +27,48 @@ export function WeatherDashboard() {
   const [error, setError] = useState<string | null>(null);
 
   const loadWeatherData = async (newLocation: WeatherLocation) => {
+    console.log('loadWeatherData called with:', newLocation);
     setIsLoading(true);
     setError(null);
 
     try {
+      console.log('Calling WeatherApiService.getWeatherData...');
       const data = await WeatherApiService.getWeatherData(newLocation);
+      console.log('Weather data received:', data);
       setWeatherData(data);
       setLocation(newLocation);
 
       if (!newLocation.city) {
+        console.log('Getting location name for coordinates...');
         const name = await WeatherApiService.getReverseGeocode(newLocation.latitude, newLocation.longitude);
         setLocationName(name);
       } else {
         setLocationName(newLocation.city + (newLocation.country ? `, ${newLocation.country}` : ''));
       }
+      console.log('Weather data loading completed successfully');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load weather data');
+      console.error('Error in loadWeatherData:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load weather data';
+      setError(errorMessage);
+      throw err; // Re-throw to be caught by the calling function
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const testDirectAPI = async () => {
+    try {
+      const testUrl =
+        'https://api.open-meteo.com/v1/forecast?latitude=51.5074&longitude=-0.1278&current=temperature_2m&timezone=auto';
+      console.log('Testing direct API call:', testUrl);
+      const response = await fetch(testUrl);
+      console.log('API Response status:', response.status);
+      const data = await response.json();
+      console.log('API Response data:', data);
+      return data;
+    } catch (error) {
+      console.error('Direct API test failed:', error);
+      throw error;
     }
   };
 
@@ -52,10 +76,19 @@ export function WeatherDashboard() {
     try {
       setIsLoading(true);
       setError(null);
+
+      // First test if the API is accessible at all
+      console.log('Testing direct API access...');
+      await testDirectAPI();
+      console.log('Direct API test successful');
+
+      // Try to get current location
+      console.log('Attempting to get current location...');
       const currentLocation = await WeatherApiService.getCurrentPosition();
+      console.log('Got current location:', currentLocation);
       await loadWeatherData(currentLocation);
     } catch (err) {
-      console.warn('Geolocation failed, using default location:', err);
+      console.warn('Geolocation failed, trying default location:', err);
       // Fallback to a default location (London, UK) when geolocation fails
       const defaultLocation: WeatherLocation = {
         latitude: 51.5074,
@@ -65,10 +98,14 @@ export function WeatherDashboard() {
       };
 
       try {
+        console.log('Loading weather data for default location:', defaultLocation);
         await loadWeatherData(defaultLocation);
         setError('Unable to get your location. Showing weather for London. Please search for your city.');
       } catch (fallbackErr) {
-        setError('Unable to load weather data. Please check your internet connection and try again.');
+        console.error('Fallback location also failed:', fallbackErr);
+        setError(
+          `Unable to load weather data: ${fallbackErr instanceof Error ? fallbackErr.message : 'Unknown error'}`,
+        );
         setIsLoading(false);
       }
     }
