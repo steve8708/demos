@@ -211,24 +211,19 @@ export function App() {
               </Alert>
             )}
 
-            <ColumnLayout columns={3} borders="vertical">
-              <div style={{ gridColumn: '1' }}>
-                <Container>
-                  <LocationSelector
-                    currentLocation={currentLocation}
-                    onLocationChange={handleLocationChange}
-                    isLoading={isLoading}
-                  />
-                </Container>
-              </div>
+            {/* Location Selector at the top */}
+            <Container>
+              <LocationSelector
+                currentLocation={currentLocation}
+                onLocationChange={handleLocationChange}
+                isLoading={isLoading}
+              />
+            </Container>
 
-              <div style={{ gridColumn: '2 / 4' }}>
-                {weatherData && (
-                  <WeatherWidget data={weatherData} locationName={currentLocation.name} isLoading={isLoading} />
-                )}
-              </div>
-            </ColumnLayout>
-
+            {/* Weather data displayed vertically below */}
+            {weatherData && (
+              <WeatherWidget data={weatherData} locationName={currentLocation.name} isLoading={isLoading} />
+            )}
             {!weatherData && !error && !isLoading && (
               <Container>
                 <Alert statusIconAriaLabel="Info" type="info" header="Welcome to Weather Dashboard">
