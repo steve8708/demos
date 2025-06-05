@@ -85,6 +85,44 @@ export function WeatherForecastCard({ dailyWeather }: WeatherForecastCardProps) 
     };
   });
 
+  const scrollContainerStyle: React.CSSProperties = {
+    display: 'flex',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    gap: '20px',
+    padding: '20px 16px',
+    scrollBehavior: 'smooth',
+    WebkitOverflowScrolling: 'touch',
+    scrollbarWidth: 'thin',
+    scrollbarColor: '#cccccc transparent',
+  };
+
+  const tileStyle = (isToday: boolean): React.CSSProperties => ({
+    minWidth: '180px',
+    width: '180px',
+    height: '280px',
+    backgroundColor: isToday ? '#e6f3ff' : '#ffffff',
+    border: isToday ? '2px solid #0073e6' : '1px solid #e0e0e0',
+    borderRadius: '12px',
+    padding: '24px 16px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
+    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+    transition: 'all 0.3s ease',
+    cursor: 'pointer',
+    position: 'relative',
+    flexShrink: 0,
+  });
+
+  const emojiStyle: React.CSSProperties = {
+    fontSize: '64px',
+    lineHeight: '1',
+    margin: '16px 0',
+    userSelect: 'none',
+  };
+
   return (
     <Container
       header={
@@ -93,113 +131,108 @@ export function WeatherForecastCard({ dailyWeather }: WeatherForecastCardProps) 
         </Header>
       }
     >
-      <Box
-        margin={{ vertical: 'm' }}
-        style={{
-          overflowX: 'auto',
-          overflowY: 'hidden',
-          scrollbarWidth: 'thin',
-          WebkitOverflowScrolling: 'touch',
-        }}
-      >
-        <Box
-          style={{
-            display: 'flex',
-            gap: '16px',
-            paddingBottom: '8px',
-            minWidth: 'fit-content',
-          }}
-        >
-          {forecastDays.map((day, index) => {
-            const weatherEmoji = WEATHER_EMOJIS[day.weatherCode] || '❓';
-            const weatherInfo = WEATHER_CODE_DESCRIPTIONS[day.weatherCode] || {
-              description: 'Unknown',
-              icon: 'help',
-            };
+      <div style={scrollContainerStyle}>
+        {forecastDays.map((day, index) => {
+          const weatherEmoji = WEATHER_EMOJIS[day.weatherCode] || '❓';
+          const weatherInfo = WEATHER_CODE_DESCRIPTIONS[day.weatherCode] || {
+            description: 'Unknown',
+            icon: 'help',
+          };
+          const isToday = index === 0;
 
-            return (
+          return (
+            <div
+              key={day.date}
+              style={tileStyle(isToday)}
+              onMouseEnter={e => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.15)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+              }}
+            >
+              {/* Day Label */}
               <Box
-                key={day.date}
-                style={{
-                  minWidth: '140px',
-                  maxWidth: '140px',
-                  padding: '16px',
-                  borderRadius: '8px',
-                  border: '1px solid #e0e0e0',
-                  backgroundColor: index === 0 ? '#f0f8ff' : '#ffffff',
-                  textAlign: 'center',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-                }}
+                fontSize="heading-s"
+                fontWeight={isToday ? 'bold' : 'normal'}
+                color={isToday ? 'text-status-info' : 'text-body-secondary'}
+                margin={{ bottom: 'xs' }}
               >
-                <Box
-                  fontSize="body-s"
-                  fontWeight={index === 0 ? 'bold' : 'normal'}
-                  color={index === 0 ? 'text-status-info' : 'text-body-secondary'}
-                  margin={{ bottom: 'xs' }}
-                >
-                  {day.dayName}
+                {day.dayName}
+              </Box>
+
+              {/* Date */}
+              <Box fontSize="body-s" color="text-body-secondary" margin={{ bottom: 'm' }}>
+                {new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </Box>
+
+              {/* Weather Emoji */}
+              <div style={emojiStyle} title={weatherInfo.description}>
+                {weatherEmoji}
+              </div>
+
+              {/* Weather Description */}
+              <Box fontSize="body-m" color="text-body-secondary" margin={{ bottom: 'm' }}>
+                {weatherInfo.description}
+              </Box>
+
+              {/* Temperature */}
+              <Box margin={{ bottom: 'm' }}>
+                <Box display="inline" fontWeight="bold" fontSize="display-l" color="text-status-error">
+                  {day.maxTemp}°
                 </Box>
-
-                <Box fontSize="body-s" color="text-body-secondary" margin={{ bottom: 's' }}>
-                  {new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                <Box display="inline" margin={{ horizontal: 'xs' }} color="text-body-secondary">
+                  /
                 </Box>
-
-                <Box
-                  style={{
-                    fontSize: '48px',
-                    lineHeight: '1',
-                    margin: '12px 0',
-                  }}
-                  title={weatherInfo.description}
-                >
-                  {weatherEmoji}
-                </Box>
-
-                <Box fontSize="body-s" color="text-body-secondary" margin={{ bottom: 's' }}>
-                  {weatherInfo.description}
-                </Box>
-
-                <Box margin={{ bottom: 's' }}>
-                  <Box display="inline" fontWeight="bold" fontSize="heading-s" color="text-status-error">
-                    {day.maxTemp}°
-                  </Box>
-                  <Box display="inline" margin={{ horizontal: 'xs' }} color="text-body-secondary">
-                    /
-                  </Box>
-                  <Box display="inline" fontSize="body-m" color="text-status-info">
-                    {day.minTemp}°
-                  </Box>
-                </Box>
-
-                {day.precipitation > 0 && (
-                  <Box margin={{ bottom: 'xs' }}>
-                    <Badge color={day.precipitation > 5 ? 'red' : day.precipitation > 1 ? 'blue' : 'grey'}>
-                      💧 {day.precipitation}mm
-                    </Badge>
-                  </Box>
-                )}
-
-                <Box fontSize="body-s" color="text-body-secondary">
-                  🌬️ {day.windSpeed} km/h
+                <Box display="inline" fontSize="heading-m" color="text-status-info">
+                  {day.minTemp}°
                 </Box>
               </Box>
-            );
-          })}
-        </Box>
+
+              {/* Precipitation Badge */}
+              {day.precipitation > 0 && (
+                <Box margin={{ bottom: 'xs' }}>
+                  <Badge color={day.precipitation > 5 ? 'red' : day.precipitation > 1 ? 'blue' : 'grey'}>
+                    💧 {day.precipitation}mm
+                  </Badge>
+                </Box>
+              )}
+
+              {/* Wind Speed */}
+              <Box fontSize="body-s" color="text-body-secondary">
+                🌬️ {day.windSpeed} km/h
+              </Box>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Scroll Hint */}
+      <Box fontSize="body-s" color="text-body-secondary" textAlign="center" margin={{ top: 'm' }}>
+        ← Scroll horizontally to see all days →
       </Box>
 
-      <Box fontSize="body-s" color="text-body-secondary" textAlign="center" margin={{ top: 's' }}>
-        Scroll horizontally to see all days
-      </Box>
+      {/* Custom scrollbar styles */}
+      <style>
+        {`
+          .weather-forecast-container::-webkit-scrollbar {
+            height: 8px;
+          }
+          .weather-forecast-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+          }
+          .weather-forecast-container::-webkit-scrollbar-thumb {
+            background: #cccccc;
+            border-radius: 4px;
+          }
+          .weather-forecast-container::-webkit-scrollbar-thumb:hover {
+            background: #999999;
+          }
+        `}
+      </style>
     </Container>
   );
 }
