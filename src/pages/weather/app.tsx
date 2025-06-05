@@ -11,7 +11,8 @@ import ContentLayout from '@cloudscape-design/components/content-layout';
 import Header from '@cloudscape-design/components/header';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 
-import { CustomAppLayout, Navigation } from '../commons';
+import { Navigation } from '../commons';
+import { CustomAppLayout } from '../commons/common-components';
 import { LocationSelector } from './components/location-selector';
 import { WeatherWidget } from './components/weather-widget';
 import { WeatherLocation, OpenMeteoResponse, WeatherDisplayData, WeatherError, WEATHER_CONDITIONS } from './types';
