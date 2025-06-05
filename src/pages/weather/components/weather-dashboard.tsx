@@ -51,11 +51,26 @@ export function WeatherDashboard() {
   const initializeWithCurrentLocation = async () => {
     try {
       setIsLoading(true);
+      setError(null);
       const currentLocation = await WeatherApiService.getCurrentPosition();
       await loadWeatherData(currentLocation);
     } catch (err) {
-      setError('Unable to get your location. Please search for a city manually.');
-      setIsLoading(false);
+      console.warn('Geolocation failed, using default location:', err);
+      // Fallback to a default location (London, UK) when geolocation fails
+      const defaultLocation: WeatherLocation = {
+        latitude: 51.5074,
+        longitude: -0.1278,
+        city: 'London',
+        country: 'United Kingdom',
+      };
+
+      try {
+        await loadWeatherData(defaultLocation);
+        setError('Unable to get your location. Showing weather for London. Please search for your city.');
+      } catch (fallbackErr) {
+        setError('Unable to load weather data. Please check your internet connection and try again.');
+        setIsLoading(false);
+      }
     }
   };
 
