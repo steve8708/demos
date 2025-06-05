@@ -7,6 +7,7 @@ import Header from '@cloudscape-design/components/header';
 import Box from '@cloudscape-design/components/box';
 import Badge from '@cloudscape-design/components/badge';
 import { DailyWeather, WEATHER_CODE_DESCRIPTIONS } from '../types';
+import styles from './weather-forecast.module.scss';
 
 interface WeatherForecastCardProps {
   dailyWeather: DailyWeather;
@@ -85,44 +86,6 @@ export function WeatherForecastCard({ dailyWeather }: WeatherForecastCardProps) 
     };
   });
 
-  const scrollContainerStyle: React.CSSProperties = {
-    display: 'flex',
-    overflowX: 'auto',
-    overflowY: 'hidden',
-    gap: '20px',
-    padding: '20px 16px',
-    scrollBehavior: 'smooth',
-    WebkitOverflowScrolling: 'touch',
-    scrollbarWidth: 'thin',
-    scrollbarColor: '#cccccc transparent',
-  };
-
-  const tileStyle = (isToday: boolean): React.CSSProperties => ({
-    minWidth: '180px',
-    width: '180px',
-    height: '280px',
-    backgroundColor: isToday ? '#e6f3ff' : '#ffffff',
-    border: isToday ? '2px solid #0073e6' : '1px solid #e0e0e0',
-    borderRadius: '12px',
-    padding: '24px 16px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center',
-    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-    transition: 'all 0.3s ease',
-    cursor: 'pointer',
-    position: 'relative',
-    flexShrink: 0,
-  });
-
-  const emojiStyle: React.CSSProperties = {
-    fontSize: '64px',
-    lineHeight: '1',
-    margin: '16px 0',
-    userSelect: 'none',
-  };
-
   return (
     <Container
       header={
@@ -131,7 +94,7 @@ export function WeatherForecastCard({ dailyWeather }: WeatherForecastCardProps) 
         </Header>
       }
     >
-      <div style={scrollContainerStyle}>
+      <div className={styles['forecast-container']}>
         {forecastDays.map((day, index) => {
           const weatherEmoji = WEATHER_EMOJIS[day.weatherCode] || '❓';
           const weatherInfo = WEATHER_CODE_DESCRIPTIONS[day.weatherCode] || {
@@ -141,18 +104,7 @@ export function WeatherForecastCard({ dailyWeather }: WeatherForecastCardProps) 
           const isToday = index === 0;
 
           return (
-            <div
-              key={day.date}
-              style={tileStyle(isToday)}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.15)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-              }}
-            >
+            <div key={day.date} className={`${styles['weather-tile']} ${isToday ? styles.today : ''}`}>
               {/* Day Label */}
               <Box
                 fontSize="heading-s"
@@ -169,7 +121,7 @@ export function WeatherForecastCard({ dailyWeather }: WeatherForecastCardProps) 
               </Box>
 
               {/* Weather Emoji */}
-              <div style={emojiStyle} title={weatherInfo.description}>
+              <div className={styles['weather-emoji']} title={weatherInfo.description}>
                 {weatherEmoji}
               </div>
 
@@ -213,26 +165,6 @@ export function WeatherForecastCard({ dailyWeather }: WeatherForecastCardProps) 
       <Box fontSize="body-s" color="text-body-secondary" textAlign="center" margin={{ top: 'm' }}>
         ← Scroll horizontally to see all days →
       </Box>
-
-      {/* Custom scrollbar styles */}
-      <style>
-        {`
-          .weather-forecast-container::-webkit-scrollbar {
-            height: 8px;
-          }
-          .weather-forecast-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-          }
-          .weather-forecast-container::-webkit-scrollbar-thumb {
-            background: #cccccc;
-            border-radius: 4px;
-          }
-          .weather-forecast-container::-webkit-scrollbar-thumb:hover {
-            background: #999999;
-          }
-        `}
-      </style>
     </Container>
   );
 }
