@@ -59,7 +59,6 @@ export class WeatherApiService {
           'wind_direction_10m',
           'relative_humidity_2m',
           'surface_pressure',
-          'visibility',
           'uv_index',
         ].join(','),
         hourly: ['temperature_2m', 'relative_humidity_2m', 'precipitation', 'wind_speed_10m', 'weather_code'].join(','),
@@ -75,60 +74,75 @@ export class WeatherApiService {
         forecast_days: '7',
       });
 
+      console.log('Weather API URL:', `${OPEN_METEO_BASE_URL}/forecast?${params}`);
+
       const response = await fetch(`${OPEN_METEO_BASE_URL}/forecast?${params}`);
 
       if (!response.ok) {
-        throw new Error(`Weather API error: ${response.status}`);
+        const errorText = await response.text();
+        console.error('Weather API error response:', errorText);
+        throw new Error(`Weather API error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
+      console.log('Weather API response:', data);
+
+      // Check if we have the expected data structure
+      if (!data.current || !data.hourly || !data.daily) {
+        throw new Error('Invalid response structure from weather API');
+      }
 
       return {
         current: {
-          temperature: data.current.temperature_2m,
-          weatherCode: data.current.weather_code,
-          windSpeed: data.current.wind_speed_10m,
-          windDirection: data.current.wind_direction_10m,
-          humidity: data.current.relative_humidity_2m,
-          pressure: data.current.surface_pressure,
-          visibility: data.current.visibility,
-          uvIndex: data.current.uv_index,
-          time: data.current.time,
+          temperature: data.current.temperature_2m || 0,
+          weatherCode: data.current.weather_code || 0,
+          windSpeed: data.current.wind_speed_10m || 0,
+          windDirection: data.current.wind_direction_10m || 0,
+          humidity: data.current.relative_humidity_2m || 0,
+          pressure: data.current.surface_pressure || 0,
+          visibility: data.current.visibility || 0,
+          uvIndex: data.current.uv_index || 0,
+          time: data.current.time || new Date().toISOString(),
         },
         hourly: {
-          time: data.hourly.time.slice(0, 24), // Next 24 hours
-          temperature: data.hourly.temperature_2m.slice(0, 24),
-          humidity: data.hourly.relative_humidity_2m.slice(0, 24),
-          precipitation: data.hourly.precipitation.slice(0, 24),
-          windSpeed: data.hourly.wind_speed_10m.slice(0, 24),
-          weatherCode: data.hourly.weather_code.slice(0, 24),
+          time: (data.hourly.time || []).slice(0, 24), // Next 24 hours
+          temperature: (data.hourly.temperature_2m || []).slice(0, 24),
+          humidity: (data.hourly.relative_humidity_2m || []).slice(0, 24),
+          precipitation: (data.hourly.precipitation || []).slice(0, 24),
+          windSpeed: (data.hourly.wind_speed_10m || []).slice(0, 24),
+          weatherCode: (data.hourly.weather_code || []).slice(0, 24),
         },
         daily: {
-          time: data.daily.time,
-          temperatureMax: data.daily.temperature_2m_max,
-          temperatureMin: data.daily.temperature_2m_min,
-          precipitation: data.daily.precipitation_sum,
-          windSpeedMax: data.daily.wind_speed_10m_max,
-          weatherCode: data.daily.weather_code,
-          uvIndexMax: data.daily.uv_index_max,
+          time: data.daily.time || [],
+          temperatureMax: data.daily.temperature_2m_max || [],
+          temperatureMin: data.daily.temperature_2m_min || [],
+          precipitation: data.daily.precipitation_sum || [],
+          windSpeedMax: data.daily.wind_speed_10m_max || [],
+          weatherCode: data.daily.weather_code || [],
+          uvIndexMax: data.daily.uv_index_max || [],
         },
-        timezone: data.timezone,
+        timezone: data.timezone || 'UTC',
         location,
       };
     } catch (error) {
       console.error('Failed to fetch weather data:', error);
-      throw error;
+      if (error instanceof Error) {
+        throw new Error(`Weather data fetch failed: ${error.message}`);
+      }
+      throw new Error('Unknown error occurred while fetching weather data');
     }
   }
 
   static async getReverseGeocode(latitude: number, longitude: number): Promise<string> {
     try {
+      // Use a different approach - search for the nearest place using a small radius
       const response = await fetch(
-        `${GEOCODING_BASE_URL}/search?latitude=${latitude}&longitude=${longitude}&count=1&language=en&format=json`,
+        `${GEOCODING_BASE_URL}/search?name=&latitude=${latitude}&longitude=${longitude}&count=1&language=en&format=json`,
       );
 
       if (!response.ok) {
-        throw new Error(`Reverse geocoding error: ${response.status}`);
+        console.warn(`Reverse geocoding failed: ${response.status}`);
+        return `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
       }
 
       const data = await response.json();
@@ -140,7 +154,7 @@ export class WeatherApiService {
 
       return `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
     } catch (error) {
-      console.error('Failed to reverse geocode:', error);
+      console.warn('Failed to reverse geocode:', error);
       return `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
     }
   }
