@@ -1,14 +1,14 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@cloudscape-design/components/box';
 import Button from '@cloudscape-design/components/button';
 import FormField from '@cloudscape-design/components/form-field';
 import Input from '@cloudscape-design/components/input';
 import SpaceBetween from '@cloudscape-design/components/space-between';
-import Popover from '@cloudscape-design/components/popover';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
+import Container from '@cloudscape-design/components/container';
 
 import { Location, Coordinates } from '../types';
 import { WeatherService } from '../weather-service';
@@ -26,6 +26,7 @@ export function LocationSearch({ onLocationSelect, currentLocationName, loading 
   const [searchError, setSearchError] = useState<string | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [geoLocationLoading, setGeoLocationLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const delayedSearch = setTimeout(() => {
@@ -34,11 +35,24 @@ export function LocationSearch({ onLocationSelect, currentLocationName, loading 
       } else {
         setSearchResults([]);
         setShowResults(false);
+        setSearchError(null);
       }
     }, 500);
 
     return () => clearTimeout(delayedSearch);
   }, [searchValue]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
+        setShowResults(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSearch = async () => {
     if (!searchValue || searchValue.length < 2) return;
@@ -64,10 +78,12 @@ export function LocationSearch({ onLocationSelect, currentLocationName, loading 
     setSearchValue('');
     setShowResults(false);
     setSearchResults([]);
+    setSearchError(null);
   };
 
   const handleCurrentLocation = async () => {
     setGeoLocationLoading(true);
+    setSearchError(null);
     try {
       const coordinates = await WeatherService.getCurrentLocation();
       onLocationSelect(coordinates, 'Current Location');
@@ -78,76 +94,94 @@ export function LocationSearch({ onLocationSelect, currentLocationName, loading 
     }
   };
 
+  const handleInputFocus = () => {
+    if (searchValue.length >= 2 && searchResults.length > 0) {
+      setShowResults(true);
+    }
+  };
+
   const renderSearchResults = () => {
-    if (searchLoading) {
-      return (
-        <Box padding="s">
-          <StatusIndicator type="loading">Searching locations...</StatusIndicator>
-        </Box>
-      );
-    }
-
-    if (searchError) {
-      return (
-        <Box padding="s">
-          <StatusIndicator type="error">{searchError}</StatusIndicator>
-        </Box>
-      );
-    }
-
-    if (searchResults.length === 0) {
-      return (
-        <Box padding="s">
-          <Box variant="span" color="text-body-secondary">
-            No locations found
-          </Box>
-        </Box>
-      );
-    }
+    if (!showResults) return null;
 
     return (
-      <Box>
-        {searchResults.map((location, index) => (
-          <Box
-            key={index}
-            padding="s"
-            onClick={() => handleLocationSelect(location)}
-            className="clickable-location-item"
-            data-testid={`location-${index}`}
-          >
-            <Box variant="span" fontWeight="bold">
-              {location.name}
-            </Box>
-            <Box variant="span" color="text-body-secondary" margin={{ left: 'xs' }}>
-              {location.country}
+      <Container
+        variant="embedded"
+        style={{
+          position: 'absolute',
+          top: '100%',
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+          maxHeight: '300px',
+          overflowY: 'auto',
+          border: '1px solid var(--color-border-control-default)',
+          borderRadius: '4px',
+          backgroundColor: 'var(--color-background-container-content)',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        }}
+      >
+        {searchLoading ? (
+          <Box padding="s">
+            <StatusIndicator type="loading">Searching locations...</StatusIndicator>
+          </Box>
+        ) : searchError ? (
+          <Box padding="s">
+            <StatusIndicator type="error">{searchError}</StatusIndicator>
+          </Box>
+        ) : searchResults.length === 0 ? (
+          <Box padding="s">
+            <Box variant="span" color="text-body-secondary">
+              No locations found
             </Box>
           </Box>
-        ))}
-      </Box>
+        ) : (
+          <Box>
+            {searchResults.map((location, index) => (
+              <Box
+                key={index}
+                padding="s"
+                onClick={() => handleLocationSelect(location)}
+                style={{
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  transition: 'background-color 0.15s ease',
+                }}
+                onMouseEnter={e => {
+                  (e.target as HTMLElement).style.backgroundColor = 'var(--color-background-control-default)';
+                }}
+                onMouseLeave={e => {
+                  (e.target as HTMLElement).style.backgroundColor = 'transparent';
+                }}
+                data-testid={`location-${index}`}
+              >
+                <Box variant="span" fontWeight="bold">
+                  {location.name}
+                </Box>
+                <Box variant="span" color="text-body-secondary" margin={{ left: 'xs' }}>
+                  {location.country}
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </Container>
     );
   };
 
   return (
     <SpaceBetween size="m">
       <SpaceBetween direction="horizontal" size="s">
-        <Box flex="1">
+        <Box flex="1" style={{ position: 'relative' }} ref={inputRef}>
           <FormField label="Search for a city">
-            <Popover
-              dismissButton={false}
-              position="bottom-left"
-              size="large"
-              triggerType="custom"
-              content={renderSearchResults()}
-              renderWithPortal={true}
-            >
-              <Input
-                value={searchValue}
-                onChange={({ detail }) => setSearchValue(detail.value)}
-                placeholder="Enter city name..."
-                ariaLabel="Search for a city"
-                disabled={loading}
-              />
-            </Popover>
+            <Input
+              value={searchValue}
+              onChange={({ detail }) => setSearchValue(detail.value)}
+              onFocus={handleInputFocus}
+              placeholder="Enter city name..."
+              ariaLabel="Search for a city"
+              disabled={loading}
+            />
+            {renderSearchResults()}
           </FormField>
         </Box>
         <Box alignSelf="end">
@@ -171,17 +205,11 @@ export function LocationSearch({ onLocationSelect, currentLocationName, loading 
         </Box>
       )}
 
-      <style jsx>{`
-        .clickable-location-item {
-          cursor: pointer;
-          border-radius: 4px;
-          transition: background-color 0.15s ease;
-        }
-
-        .clickable-location-item:hover {
-          background-color: var(--color-background-control-default);
-        }
-      `}</style>
+      {searchError && !showResults && (
+        <Box>
+          <StatusIndicator type="error">{searchError}</StatusIndicator>
+        </Box>
+      )}
     </SpaceBetween>
   );
 }
