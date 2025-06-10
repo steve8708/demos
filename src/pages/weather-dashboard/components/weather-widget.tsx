@@ -154,8 +154,7 @@ export function WeatherWidget({ weatherData, location }: WeatherWidgetProps) {
         >
           <div className={styles['forecast-scroll']}>
             {forecastData.map((day, index) => (
-                className={`${styles['forecast-card']} ${index === 0 ? styles.today : ''}`}
-              <div key={index} className={`${styles.forecastCard} ${index === 0 ? styles.today : ''}`}>
+              <div key={index} className={`${styles['forecast-card']} ${index === 0 ? styles.today : ''}`}>
                 <SpaceBetween size="xs">
                   <Box variant="strong" color={index === 0 ? 'text-status-info' : 'inherit'}>
                     {index === 0 ? 'Today' : day.day}
@@ -163,8 +162,7 @@ export function WeatherWidget({ weatherData, location }: WeatherWidgetProps) {
                   <Box variant="small" color="text-body-secondary">
                     {day.date}
                   </Box>
-                  <div className={styles['emoji-large']}>
-                  <div className={styles.emojiLarge}>{day.emoji}</div>
+                  <div className={styles['emoji-large']}>{day.emoji}</div>
                   <Box variant="small" color="text-body-secondary">
                     {getWeatherDescription(day.weatherCode)}
                   </Box>
