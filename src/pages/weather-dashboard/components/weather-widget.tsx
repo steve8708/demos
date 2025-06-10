@@ -8,9 +8,9 @@ import Container from '@cloudscape-design/components/container';
 import Header from '@cloudscape-design/components/header';
 import Icon from '@cloudscape-design/components/icon';
 import KeyValuePairs from '@cloudscape-design/components/key-value-pairs';
+import LineChart from '@cloudscape-design/components/line-chart';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
-import Table from '@cloudscape-design/components/table';
 
 import { WeatherData, WeatherLocation, WEATHER_CODES } from '../types';
 
@@ -19,9 +19,11 @@ interface WeatherWidgetProps {
   location: WeatherLocation;
 }
 
-interface ForecastItem {
+interface ForecastDay {
   day: string;
+  date: string;
   weatherCode: number;
+  emoji: string;
   maxTemp: number;
   minTemp: number;
   precipitation: number;
@@ -29,21 +31,34 @@ interface ForecastItem {
 }
 
 export function WeatherWidget({ weatherData, location }: WeatherWidgetProps) {
-  const { current, daily } = weatherData;
+  const { current, daily, hourly } = weatherData;
 
-  // Prepare forecast data for table
-  const forecastData: ForecastItem[] = daily
-    ? daily.time.map((time, index) => ({
-        day: new Date(time).toLocaleDateString('en-US', {
-          weekday: 'long',
-          month: 'short',
-          day: 'numeric',
-        }),
-        weatherCode: daily.weather_code[index],
-        maxTemp: daily.temperature_2m_max[index],
-        minTemp: daily.temperature_2m_min[index],
-        precipitation: daily.precipitation_sum[index],
-        windSpeed: daily.wind_speed_10m_max[index],
+  // Prepare forecast data
+  const forecastData: ForecastDay[] = daily
+    ? daily.time.map((time, index) => {
+        const date = new Date(time);
+        const weather = WEATHER_CODES[daily.weather_code[index]] || WEATHER_CODES[0];
+        return {
+          day: date.toLocaleDateString('en-US', { weekday: 'short' }),
+          date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+          weatherCode: daily.weather_code[index],
+          emoji: weather.emoji,
+          maxTemp: daily.temperature_2m_max[index],
+          minTemp: daily.temperature_2m_min[index],
+          precipitation: daily.precipitation_sum[index],
+          windSpeed: daily.wind_speed_10m_max[index],
+        };
+      })
+    : [];
+
+  // Prepare chart data for next 48 hours
+  const chartData = hourly
+    ? hourly.time.slice(0, 48).map((time, index) => ({
+        x: new Date(time),
+        temperature: hourly.temperature_2m[index],
+        humidity: hourly.relative_humidity_2m[index],
+        precipitation: hourly.precipitation_probability[index],
+        windSpeed: hourly.wind_speed_10m[index],
       }))
     : [];
 
@@ -64,6 +79,11 @@ export function WeatherWidget({ weatherData, location }: WeatherWidgetProps) {
     return weather.description;
   };
 
+  const getWeatherEmoji = (code: number) => {
+    const weather = WEATHER_CODES[code] || WEATHER_CODES[0];
+    return weather.emoji;
+  };
+
   return (
     <SpaceBetween size="l">
       {/* Current Weather */}
@@ -82,6 +102,7 @@ export function WeatherWidget({ weatherData, location }: WeatherWidgetProps) {
                   {formatTemperature(current.temperature_2m)}
                 </Box>
                 <SpaceBetween size="xs" direction="horizontal" alignItems="center">
+                  <Box fontSize="heading-xl">{getWeatherEmoji(current.weather_code)}</Box>
                   <Icon name={getWeatherIcon(current.weather_code)} />
                   <Box variant="h3">{getWeatherDescription(current.weather_code)}</Box>
                 </SpaceBetween>
@@ -121,71 +142,173 @@ export function WeatherWidget({ weatherData, location }: WeatherWidgetProps) {
         </Container>
       )}
 
-      {/* 7-Day Forecast */}
-      {daily && forecastData.length > 0 && (
+      {/* 7-Day Forecast - Horizontal Scroll */}
+      {forecastData.length > 0 && (
         <Container
           header={
-            <Header variant="h2" description="Extended weather forecast">
+            <Header variant="h2" description="Swipe or scroll horizontally to see all days">
               7-Day Forecast
             </Header>
           }
         >
-          <Table
-            columnDefinitions={[
-              {
-                id: 'day',
-                header: 'Day',
-                cell: (item: ForecastItem) => item.day,
-                width: 150,
-              },
-              {
-                id: 'weather',
-                header: 'Weather',
-                cell: (item: ForecastItem) => (
-                  <SpaceBetween size="xs" direction="horizontal" alignItems="center">
-                    <Icon name={getWeatherIcon(item.weatherCode)} />
-                    <Box>{getWeatherDescription(item.weatherCode)}</Box>
+          <div
+            style={{
+              overflowX: 'auto',
+              overflowY: 'hidden',
+              padding: '16px 0',
+              display: 'flex',
+              gap: '16px',
+              minHeight: '180px',
+            }}
+          >
+            {forecastData.map((day, index) => (
+              <div
+                key={index}
+                style={{
+                  minWidth: '140px',
+                  flexShrink: 0,
+                  textAlign: 'center',
+                  padding: '16px',
+                  border: '1px solid var(--awsui-color-border-divider-default)',
+                  borderRadius: '8px',
+                  backgroundColor: index === 0 ? 'var(--awsui-color-background-layout-panel-content)' : 'transparent',
+                }}
+              >
+                <SpaceBetween size="xs">
+                  <Box variant="strong" color={index === 0 ? 'text-status-info' : 'inherit'}>
+                    {index === 0 ? 'Today' : day.day}
+                  </Box>
+                  <Box variant="small" color="text-body-secondary">
+                    {day.date}
+                  </Box>
+                  <Box
+                    fontSize="heading-xl"
+                    style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    {day.emoji}
+                  </Box>
+                  <Box variant="small" color="text-body-secondary">
+                    {getWeatherDescription(day.weatherCode)}
+                  </Box>
+                  <SpaceBetween size="xxs">
+                    <Box variant="strong">{formatTemperature(day.maxTemp)}</Box>
+                    <Box variant="small" color="text-body-secondary">
+                      {formatTemperature(day.minTemp)}
+                    </Box>
                   </SpaceBetween>
-                ),
-                width: 200,
-              },
-              {
-                id: 'temperature',
-                header: 'Temperature',
-                cell: (item: ForecastItem) => (
-                  <SpaceBetween size="xs" direction="horizontal">
-                    <Box variant="strong">{formatTemperature(item.maxTemp)}</Box>
-                    <Box color="text-body-secondary">{formatTemperature(item.minTemp)}</Box>
-                  </SpaceBetween>
-                ),
-                width: 120,
-              },
-              {
-                id: 'precipitation',
-                header: 'Rain',
-                cell: (item: ForecastItem) => `${item.precipitation} mm`,
-                width: 80,
-              },
-              {
-                id: 'wind',
-                header: 'Wind',
-                cell: (item: ForecastItem) => formatWind(item.windSpeed),
-                width: 100,
-              },
-            ]}
-            items={forecastData}
-            loadingText="Loading forecast"
-            trackBy="day"
-            empty={
-              <Box textAlign="center" color="inherit">
-                <Box variant="strong" textAlign="center" color="inherit">
-                  No forecast data available
-                </Box>
-              </Box>
-            }
-            variant="borderless"
-          />
+                  {day.precipitation > 0 && (
+                    <Box variant="small" color="text-status-info">
+                      💧 {day.precipitation}mm
+                    </Box>
+                  )}
+                  <Box variant="small" color="text-body-secondary">
+                    💨 {Math.round(day.windSpeed)} km/h
+                  </Box>
+                </SpaceBetween>
+              </div>
+            ))}
+          </div>
         </Container>
+      )}
+
+      {/* Weather Charts */}
+      {chartData.length > 0 && (
+        <ColumnLayout columns={2}>
+          {/* Temperature and Humidity Chart */}
+          <Container
+            header={
+              <Header variant="h3" description="48-hour temperature and humidity forecast">
+                Temperature & Humidity Trends
+              </Header>
+            }
+          >
+            <LineChart
+              series={[
+                {
+                  title: 'Temperature (°C)',
+                  type: 'line',
+                  data: chartData.map(d => ({ x: d.x, y: d.temperature })),
+                  color: '#ff6b6b',
+                },
+                {
+                  title: 'Humidity (%)',
+                  type: 'line',
+                  data: chartData.map(d => ({ x: d.x, y: d.humidity })),
+                  color: '#4ecdc4',
+                  yAxis: 'right',
+                },
+              ]}
+              xDomain={[chartData[0]?.x, chartData[chartData.length - 1]?.x]}
+              yDomain={[
+                Math.min(...chartData.map(d => d.temperature)) - 5,
+                Math.max(...chartData.map(d => d.temperature)) + 5,
+              ]}
+              yScaleType="linear"
+              xScaleType="time"
+              xTitle="Time"
+              yTitle="Temperature (°C)"
+              height={300}
+              hideFilter
+              hideLegend={false}
+              statusType="finished"
+              empty={
+                <Box textAlign="center" color="inherit">
+                  <Box variant="strong" textAlign="center" color="inherit">
+                    No chart data available
+                  </Box>
+                </Box>
+              }
+              ariaLabel="Temperature and humidity chart"
+              ariaDescription="Chart showing temperature and humidity trends for the next 48 hours"
+            />
+          </Container>
+
+          {/* Precipitation and Wind Chart */}
+          <Container
+            header={
+              <Header variant="h3" description="48-hour precipitation probability and wind speed">
+                Precipitation & Wind Trends
+              </Header>
+            }
+          >
+            <LineChart
+              series={[
+                {
+                  title: 'Precipitation (%)',
+                  type: 'line',
+                  data: chartData.map(d => ({ x: d.x, y: d.precipitation })),
+                  color: '#45b7d1',
+                },
+                {
+                  title: 'Wind Speed (km/h)',
+                  type: 'line',
+                  data: chartData.map(d => ({ x: d.x, y: d.windSpeed })),
+                  color: '#96ceb4',
+                  yAxis: 'right',
+                },
+              ]}
+              xDomain={[chartData[0]?.x, chartData[chartData.length - 1]?.x]}
+              yDomain={[0, 100]}
+              yScaleType="linear"
+              xScaleType="time"
+              xTitle="Time"
+              yTitle="Precipitation Probability (%)"
+              height={300}
+              hideFilter
+              hideLegend={false}
+              statusType="finished"
+              empty={
+                <Box textAlign="center" color="inherit">
+                  <Box variant="strong" textAlign="center" color="inherit">
+                    No chart data available
+                  </Box>
+                </Box>
+              }
+              ariaLabel="Precipitation and wind chart"
+              ariaDescription="Chart showing precipitation probability and wind speed for the next 48 hours"
+            />
+          </Container>
+        </ColumnLayout>
       )}
     </SpaceBetween>
   );
