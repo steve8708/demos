@@ -73,10 +73,7 @@ export function WeeklyForecastWidget({ data, loading, error }: WeeklyForecastWid
     >
       <SpaceBetween size="m">
         {weeklyData.map((day, index) => {
-          const weatherCondition = WEATHER_CODES[day.weatherCode] || {
-            description: 'Unknown',
-            icon: 'status-info',
-          };
+          const weatherCondition = getWeatherIcon(day.weatherCode, true); // Default to day icon for daily forecast
 
           const isToday = index === 0;
           const dayLabel = isToday ? 'Today' : formatDate(day.date);
@@ -94,11 +91,7 @@ export function WeeklyForecastWidget({ data, loading, error }: WeeklyForecastWid
               <ColumnLayout columns={4} variant="text-grid">
                 <div>
                   <Box variant="awsui-key-label">{dayLabel}</Box>
-                  <SpaceBetween direction="horizontal" size="xs" alignItems="center">
-                    <StatusIndicator type={weatherCondition.icon.replace('status-', '') as any}>
-                      {weatherCondition.description}
-                    </StatusIndicator>
-                  </SpaceBetween>
+                  <WeatherIcon condition={weatherCondition} size="medium" showDescription={true} />
                 </div>
                 <div>
                   <Box variant="awsui-key-label">Temperature</Box>
