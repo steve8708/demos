@@ -45,7 +45,7 @@ export interface GeocodingResult {
 
 export interface WeatherCodeInfo {
   description: string;
-  icon: string;
+  iconName: 'status-positive' | 'status-warning' | 'status-info' | 'status-stopped' | 'refresh';
 }
 
 export const WEATHER_CODES: Record<number, WeatherCodeInfo> = {
