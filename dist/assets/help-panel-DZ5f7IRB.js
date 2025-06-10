@@ -1,0 +1,1 @@
+import{r}from"./index-DLMN1afU.js";const t=r.createContext(null),o=t.Provider;function l(){const e=r.useContext(t);if(!e)throw new Error("Missing HelpPanelProvider");return e}export{o as HelpPanelProvider,l as useHelpPanel};

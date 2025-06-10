@@ -1,0 +1,1 @@
+import{_ as o,u as p,R as c,b as n,c as i}from"./index-DLMN1afU.js";function u(t){var{type:e="success",wrapText:a=!0}=t,r=o(t,["type","wrapText"]);const s=p("StatusIndicator",{props:{colorOverride:r.colorOverride,type:e,wrapText:a}});return c.createElement(n,Object.assign({type:e,wrapText:a},r,s))}i(u,"StatusIndicator");export{u as S};

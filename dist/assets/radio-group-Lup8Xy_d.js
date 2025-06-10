@@ -1,0 +1,1 @@
+import{r as f}from"./index-DLMN1afU.js";function d(n,u,e){const t=f.useRef(null),o=u&&i(u,r=>r.value===e);return f.useImperativeHandle(n,()=>({focus(){var r;(r=t.current)===null||r===void 0||r.focus()}})),[t,o!==void 0&&o!==-1?o:0]}function i(n,u){for(let e=0;e<n.length;e++)if(u(n[e]))return e;return-1}export{d as u};

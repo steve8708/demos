@@ -1,0 +1,1 @@
+import{i}from"./is-development-CxJkH8d1.js";import{w as d}from"./index-DLMN1afU.js";function p(n,o,r,e,t){r!==void 0&&t===void 0&&i&&d(n,`You provided \`${o}\` prop without an \`${e}\` handler. This will render a read-only component. If the component should be mutable, set an \`${e}\` handler.`)}export{p as c};

@@ -11,7 +11,8 @@ import StatusIndicator from '@cloudscape-design/components/status-indicator';
 
 import { Breadcrumbs, Notifications } from '../commons';
 import { CustomAppLayout } from '../commons/common-components';
-import { WeatherDashboardHeader, WeatherDashboardContent } from './components';
+import { WeatherDashboardHeader } from './components/header';
+import { WeatherDashboardContent } from './components/content';
 import { WeatherService } from './weather-service';
 import { DEFAULT_LOCATIONS, LocationData, WeatherApiResponse } from './types';
 
