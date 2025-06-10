@@ -44,9 +44,9 @@ export function WeatherForecast({ forecast }: WeatherForecastProps) {
         </Header>
       }
     >
-      <ColumnLayout columns={{ default: 1, s: 2, m: 3, l: 4 }}>
+      <ColumnLayout columns={4}>
         {forecastDays.map((day, index) => (
-          <Container key={index} variant="embedded">
+          <Container key={index}>
             <SpaceBetween size="s">
               <Box>
                 <Box variant="h4">{day.dayName}</Box>
