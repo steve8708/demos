@@ -5,11 +5,13 @@ import React from 'react';
 import Grid from '@cloudscape-design/components/grid';
 
 import { WeatherApiResponse, LocationData } from '../types';
-import { CurrentWeatherWidget } from './widgets/current-weather';
-import { DailyForecastWidget } from './widgets/daily-forecast';
-import { HourlyForecastWidget } from './widgets/hourly-forecast';
-import { WeatherStatsWidget } from './widgets/weather-stats';
-import { TemperatureTrendWidget } from './widgets/temperature-trend';
+import {
+  CurrentWeatherWidget,
+  DailyForecastWidget,
+  HourlyForecastWidget,
+  WeatherStatsWidget,
+  TemperatureTrendWidget,
+} from './index';
 
 interface WeatherDashboardContentProps {
   weatherData: WeatherApiResponse | null;
