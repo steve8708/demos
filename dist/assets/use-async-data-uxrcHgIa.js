@@ -1,0 +1,1 @@
+import{r as e}from"./index-WOunTE3s.js";function c(s){const[r,n]=e.useState([]),[a,o]=e.useState(!0);return e.useEffect(()=>{let t=!0;return s().then(u=>{t&&(n(u),o(!1))}),()=>{t=!1}},[]),[r,a]}export{c as useAsyncData};

@@ -1,0 +1,1 @@
+function r(t,n){for(;t.length<n;)t=`0${t}`;return t}function $(t,n="day"){const e=t.getFullYear(),o=r(`${t.getMonth()+1}`,2);if(n==="month")return`${e}-${o}`;const a=r(`${t.getDate()}`,2);return`${e}-${o}-${a}`}export{$ as f,r as p};

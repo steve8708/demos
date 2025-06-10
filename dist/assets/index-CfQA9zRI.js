@@ -1,0 +1,1 @@
+import{R as a,u as o,t as l,c as r}from"./index-WOunTE3s.js";import{I as c}from"./internal-DUavjgoB.js";const i=a.forwardRef((e,t)=>{const s=o("Tiles",{props:{columns:e.columns,readOnly:e.readOnly}}),n={name:"awsui.Tiles",label:{root:"self"}};return a.createElement(c,Object.assign({ref:t},e,s,l({component:n})))});r(i,"Tiles");export{i as T};
