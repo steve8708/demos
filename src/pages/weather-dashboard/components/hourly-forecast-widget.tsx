@@ -70,10 +70,9 @@ export function HourlyForecastWidget({ data, loading, error }: HourlyForecastWid
       <div style={{ overflowX: 'auto', marginBottom: '8px' }}>
         <div style={{ display: 'flex', gap: '16px', minWidth: 'max-content', padding: '8px 0' }}>
           {next24Hours.map((hour, index) => {
-            const weatherCondition = WEATHER_CODES[hour.weatherCode] || {
-              description: 'Unknown',
-              icon: 'status-info',
-            };
+            const currentTime = new Date(hour.time);
+            const isDay = currentTime.getHours() >= 6 && currentTime.getHours() < 20; // Simple day/night logic
+            const weatherCondition = getWeatherIcon(hour.weatherCode, isDay);
 
             return (
               <div
@@ -91,7 +90,7 @@ export function HourlyForecastWidget({ data, loading, error }: HourlyForecastWid
                     {formatTime(hour.time)}
                   </Box>
                   <Box fontSize="heading-s">{formatTemperature(hour.temperature)}</Box>
-                  <StatusIndicator type={weatherCondition.icon.replace('status-', '') as any} />
+                  <SimpleWeatherIcon condition={weatherCondition} size="medium" />
                   <Box variant="small">{weatherCondition.description}</Box>
                   {hour.precipitation > 0 && (
                     <Box variant="small" color="text-status-info">
