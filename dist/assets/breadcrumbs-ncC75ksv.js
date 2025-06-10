@@ -1,0 +1,1 @@
+const r=[{text:"Service",href:"#"},{text:"Distributions",href:"#"}],e=[...r,{text:"SLCCSMWOHOFUY0",href:"#"}],t=[...e,{text:"Manage tags",href:"#"}],s=[...e,{text:"Edit",href:"#"}],a=[...r,{text:"Create distribution",href:"#"}],c=[...e,{text:"Run simulation",href:"#"}],o=[...e,{text:"Create simulation",href:"#"}];export{t as a,e as b,s as c,a as d,c as e,r,o as w};
