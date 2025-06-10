@@ -1,0 +1,1 @@
+import{_ as o,u as r,R as p,K as m,c as v}from"./index-WOunTE3s.js";function g(e){var{assertive:a=!1,hidden:s=!1,tagName:t="div"}=e,i=o(e,["assertive","hidden","tagName"]);const n=r("LiveRegion",{props:{assertive:a,hidden:s}});return p.createElement(m,Object.assign({assertive:a,hidden:s,tagName:t},n,i))}v(g,"LiveRegion");export{g as L};

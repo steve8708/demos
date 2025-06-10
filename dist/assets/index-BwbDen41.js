@@ -1,0 +1,1 @@
+import{_ as c,u as r,n as p,p as l,R as i,c as m}from"./index-WOunTE3s.js";const x={"text-content":"awsui_text-content_6absk_bpcho_146"};function _(t){var{children:s}=t,n=c(t,["children"]);const{__internalRootRef:a}=r("TextContent"),e=p(n),o=l(e.className,x["text-content"]);return i.createElement("div",Object.assign({},e,{className:o,ref:a}),s)}m(_,"TextContent");export{_ as T};

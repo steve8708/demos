@@ -1,0 +1,1 @@
+import{i}from"./_cacheHas-C1FQTHMJ.js";function t(n){return function(r){return n(r)}}var b=t,e=9007199254740991;function s(n){return typeof n=="number"&&n>-1&&n%1==0&&n<=e}var o=s,a=i,c=o;function u(n){return n!=null&&c(n.length)&&!a(n)}var L=u;function f(n){return n!=null&&typeof n=="object"}var y=f;export{b as _,L as a,o as b,y as i};
