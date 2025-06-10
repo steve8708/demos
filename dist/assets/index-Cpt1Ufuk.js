@@ -1,0 +1,1 @@
+import{am as n,_ as c,an as m,u,R as t,ao as p,c as i}from"./index-DWytQeHI.js";const b=n();function l(r){var{items:e=[]}=r,a=c(r,["items"]);const s=m(Object.assign({items:e},a)),o=u("BreadcrumbGroup");return s?t.createElement(p,{items:e}):t.createElement(b,Object.assign({items:e},a,o,{__injectAnalyticsComponentMetadata:!0}))}i(l,"BreadcrumbGroup");export{l as B};

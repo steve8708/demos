@@ -1,0 +1,1 @@
+const e={id:"SLCCSMWOHOFUY0",domainName:"abcdef01234567890.cloudfront.net",priceClass:"Use only US, Canada, Europe, and Asia",sslCertificate:"Default CloudFront SSL certificate",deliveryMethod:"Web",origin:"EXAMPLE-BUCKET-1.s3.amazon",logging:"Off",tags:{environment:["development"],department:["support"]},date:new Date};export{e as DEMO_DISTRIBUTION};

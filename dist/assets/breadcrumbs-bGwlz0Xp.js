@@ -1,0 +1,1 @@
+import{j as r}from"./index-DWytQeHI.js";import{B as a}from"./index-Cpt1Ufuk.js";function o({items:e}){return r.jsxDEV(a,{items:[{text:"Service",href:"#"},...e],expandAriaLabel:"Show path",ariaLabel:"Breadcrumbs"},void 0,!1,{fileName:"/app/code/src/pages/commons/breadcrumbs.tsx",lineNumber:9,columnNumber:5},this)}export{o as Breadcrumbs};
