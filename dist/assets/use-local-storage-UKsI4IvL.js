@@ -1,0 +1,1 @@
+import{r as t}from"./index-DWytQeHI.js";import{l as n,r,s as i}from"./local-storage-JknLDoWi.js";function f(a,e){const[l,o]=t.useState(()=>n(a)??e),u=t.useCallback(s=>{if(s===void 0){r(a);return}o(s),i(a,s)},[a]),c=t.useCallback(s=>{o(s),r(a)},[a]);return[l,u,c]}export{f as useLocalStorage};
