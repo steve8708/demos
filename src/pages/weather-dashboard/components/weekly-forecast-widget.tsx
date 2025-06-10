@@ -144,15 +144,16 @@ export function WeeklyForecastWidget({ data, loading, error }: WeeklyForecastWid
 
               <div style={{ marginTop: '12px' }}>
                 <ColumnLayout columns={2} variant="text-grid">
-                <div>
-                  <Box variant="awsui-key-label">Sunrise</Box>
-                  <Box variant="small">{formatTime(day.sunrise)}</Box>
-                </div>
-                <div>
-                  <Box variant="awsui-key-label">Sunset</Box>
-                  <Box variant="small">{formatTime(day.sunset)}</Box>
-                </div>
-              </ColumnLayout>
+                  <div>
+                    <Box variant="awsui-key-label">Sunrise</Box>
+                    <Box variant="small">{formatTime(day.sunrise)}</Box>
+                  </div>
+                  <div>
+                    <Box variant="awsui-key-label">Sunset</Box>
+                    <Box variant="small">{formatTime(day.sunset)}</Box>
+                  </div>
+                </ColumnLayout>
+              </div>
             </div>
           );
         })}
