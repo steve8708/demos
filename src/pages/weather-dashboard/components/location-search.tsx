@@ -104,8 +104,7 @@ export function LocationSearch({ onLocationSelect, currentLocationName, loading 
     if (!showResults) return null;
 
     return (
-      <Container
-        variant="embedded"
+      <div
         style={{
           position: 'absolute',
           top: '100%',
@@ -120,58 +119,60 @@ export function LocationSearch({ onLocationSelect, currentLocationName, loading 
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
         }}
       >
-        {searchLoading ? (
-          <Box padding="s">
-            <StatusIndicator type="loading">Searching locations...</StatusIndicator>
-          </Box>
-        ) : searchError ? (
-          <Box padding="s">
-            <StatusIndicator type="error">{searchError}</StatusIndicator>
-          </Box>
-        ) : searchResults.length === 0 ? (
-          <Box padding="s">
-            <Box variant="span" color="text-body-secondary">
-              No locations found
+        <Container>
+          {searchLoading ? (
+            <Box padding="s">
+              <StatusIndicator type="loading">Searching locations...</StatusIndicator>
             </Box>
-          </Box>
-        ) : (
-          <Box>
-            {searchResults.map((location, index) => (
-              <Box
-                key={index}
-                padding="s"
-                onClick={() => handleLocationSelect(location)}
-                style={{
-                  cursor: 'pointer',
-                  borderRadius: '4px',
-                  transition: 'background-color 0.15s ease',
-                }}
-                onMouseEnter={e => {
-                  (e.target as HTMLElement).style.backgroundColor = 'var(--color-background-control-default)';
-                }}
-                onMouseLeave={e => {
-                  (e.target as HTMLElement).style.backgroundColor = 'transparent';
-                }}
-                data-testid={`location-${index}`}
-              >
-                <Box variant="span" fontWeight="bold">
-                  {location.name}
-                </Box>
-                <Box variant="span" color="text-body-secondary" margin={{ left: 'xs' }}>
-                  {location.country}
-                </Box>
+          ) : searchError ? (
+            <Box padding="s">
+              <StatusIndicator type="error">{searchError}</StatusIndicator>
+            </Box>
+          ) : searchResults.length === 0 ? (
+            <Box padding="s">
+              <Box variant="span" color="text-body-secondary">
+                No locations found
               </Box>
-            ))}
-          </Box>
-        )}
-      </Container>
+            </Box>
+          ) : (
+            <Box>
+              {searchResults.map((location, index) => (
+                <div
+                  key={index}
+                  style={{
+                    padding: '12px',
+                    cursor: 'pointer',
+                    borderRadius: '4px',
+                    transition: 'background-color 0.15s ease',
+                  }}
+                  onClick={() => handleLocationSelect(location)}
+                  onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+                    (e.target as HTMLElement).style.backgroundColor = 'var(--color-background-control-default)';
+                  }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+                    (e.target as HTMLElement).style.backgroundColor = 'transparent';
+                  }}
+                  data-testid={`location-${index}`}
+                >
+                  <Box variant="span" fontWeight="bold">
+                    {location.name}
+                  </Box>
+                  <Box variant="span" color="text-body-secondary" margin={{ left: 'xs' }}>
+                    {location.country}
+                  </Box>
+                </div>
+              ))}
+            </Box>
+          )}
+        </Container>
+      </div>
     );
   };
 
   return (
     <SpaceBetween size="m">
       <SpaceBetween direction="horizontal" size="s">
-        <Box flex="1" style={{ position: 'relative' }} ref={inputRef}>
+        <div style={{ flex: 1, position: 'relative' }} ref={inputRef}>
           <FormField label="Search for a city">
             <Input
               value={searchValue}
@@ -183,8 +184,8 @@ export function LocationSearch({ onLocationSelect, currentLocationName, loading 
             />
             {renderSearchResults()}
           </FormField>
-        </Box>
-        <Box alignSelf="end">
+        </div>
+        <div style={{ alignSelf: 'end' }}>
           <Button
             variant="normal"
             iconName="status-positive"
@@ -194,7 +195,7 @@ export function LocationSearch({ onLocationSelect, currentLocationName, loading 
           >
             Use current location
           </Button>
-        </Box>
+        </div>
       </SpaceBetween>
 
       {currentLocationName && (
