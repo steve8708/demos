@@ -97,9 +97,12 @@ export function CurrentWeatherWidget({ data, loading, error, locationName }: Cur
           </div>
           <div>
             <Box variant="awsui-key-label">Wind</Box>
-            <Box fontSize="heading-m">
-              {formatSpeed(current.wind_speed_10m)} {getWindDirection(current.wind_direction_10m)}
-            </Box>
+            <SpaceBetween direction="horizontal" size="xs" alignItems="center">
+              <Box fontSize="heading-m">
+                {formatSpeed(current.wind_speed_10m)} {getWindDirection(current.wind_direction_10m)}
+              </Box>
+              <Box>💨</Box>
+            </SpaceBetween>
             {current.wind_gusts_10m > 0 && (
               <Box variant="small" color="text-status-info">
                 Gusts {formatSpeed(current.wind_gusts_10m)}
