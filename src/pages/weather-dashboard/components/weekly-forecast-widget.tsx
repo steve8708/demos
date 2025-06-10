@@ -142,7 +142,8 @@ export function WeeklyForecastWidget({ data, loading, error }: WeeklyForecastWid
                 </div>
               </ColumnLayout>
 
-              <ColumnLayout columns={2} variant="text-grid" style={{ marginTop: '12px' }}>
+              <div style={{ marginTop: '12px' }}>
+                <ColumnLayout columns={2} variant="text-grid">
                 <div>
                   <Box variant="awsui-key-label">Sunrise</Box>
                   <Box variant="small">{formatTime(day.sunrise)}</Box>
