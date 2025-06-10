@@ -56,7 +56,7 @@ export function WeatherWidget({ weatherData, location }: WeatherWidgetProps) {
 
   const getWeatherIcon = (code: number) => {
     const weather = WEATHER_CODES[code] || WEATHER_CODES[0];
-    return weather.icon;
+    return weather.iconName;
   };
 
   const getWeatherDescription = (code: number) => {
