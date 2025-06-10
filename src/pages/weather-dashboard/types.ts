@@ -1,0 +1,119 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+export interface WeatherLocation {
+  name: string;
+  latitude: number;
+  longitude: number;
+  timezone: string;
+}
+
+export interface CurrentWeatherData {
+  time: string;
+  temperature_2m: number;
+  relative_humidity_2m: number;
+  apparent_temperature: number;
+  is_day: number;
+  precipitation: number;
+  rain: number;
+  weather_code: number;
+  cloud_cover: number;
+  pressure_msl: number;
+  surface_pressure: number;
+  wind_speed_10m: number;
+  wind_direction_10m: number;
+  wind_gusts_10m: number;
+}
+
+export interface HourlyWeatherData {
+  time: string[];
+  temperature_2m: number[];
+  relative_humidity_2m: number[];
+  precipitation_probability: number[];
+  precipitation: number[];
+  weather_code: number[];
+  cloud_cover: number[];
+  wind_speed_10m: number[];
+  wind_direction_10m: number[];
+}
+
+export interface DailyWeatherData {
+  time: string[];
+  weather_code: number[];
+  temperature_2m_max: number[];
+  temperature_2m_min: number[];
+  apparent_temperature_max: number[];
+  apparent_temperature_min: number[];
+  sunrise: string[];
+  sunset: string[];
+  uv_index_max: number[];
+  precipitation_sum: number[];
+  rain_sum: number[];
+  precipitation_hours: number[];
+  precipitation_probability_max: number[];
+  wind_speed_10m_max: number[];
+  wind_gusts_10m_max: number[];
+  wind_direction_10m_dominant: number[];
+}
+
+export interface WeatherApiResponse {
+  latitude: number;
+  longitude: number;
+  generationtime_ms: number;
+  utc_offset_seconds: number;
+  timezone: string;
+  timezone_abbreviation: string;
+  elevation: number;
+  current_units: Record<string, string>;
+  current: CurrentWeatherData;
+  hourly_units: Record<string, string>;
+  hourly: HourlyWeatherData;
+  daily_units: Record<string, string>;
+  daily: DailyWeatherData;
+}
+
+export interface WeatherCondition {
+  code: number;
+  description: string;
+  icon: string;
+}
+
+export const WEATHER_CODES: Record<number, WeatherCondition> = {
+  0: { code: 0, description: 'Clear sky', icon: 'status-positive' },
+  1: { code: 1, description: 'Mainly clear', icon: 'status-positive' },
+  2: { code: 2, description: 'Partly cloudy', icon: 'status-info' },
+  3: { code: 3, description: 'Overcast', icon: 'status-warning' },
+  45: { code: 45, description: 'Fog', icon: 'status-warning' },
+  48: { code: 48, description: 'Depositing rime fog', icon: 'status-warning' },
+  51: { code: 51, description: 'Light drizzle', icon: 'status-info' },
+  53: { code: 53, description: 'Moderate drizzle', icon: 'status-info' },
+  55: { code: 55, description: 'Dense drizzle', icon: 'status-warning' },
+  56: { code: 56, description: 'Light freezing drizzle', icon: 'status-warning' },
+  57: { code: 57, description: 'Dense freezing drizzle', icon: 'status-negative' },
+  61: { code: 61, description: 'Slight rain', icon: 'status-info' },
+  63: { code: 63, description: 'Moderate rain', icon: 'status-warning' },
+  65: { code: 65, description: 'Heavy rain', icon: 'status-negative' },
+  66: { code: 66, description: 'Light freezing rain', icon: 'status-warning' },
+  67: { code: 67, description: 'Heavy freezing rain', icon: 'status-negative' },
+  71: { code: 71, description: 'Slight snow fall', icon: 'status-info' },
+  73: { code: 73, description: 'Moderate snow fall', icon: 'status-warning' },
+  75: { code: 75, description: 'Heavy snow fall', icon: 'status-negative' },
+  77: { code: 77, description: 'Snow grains', icon: 'status-warning' },
+  80: { code: 80, description: 'Slight rain showers', icon: 'status-info' },
+  81: { code: 81, description: 'Moderate rain showers', icon: 'status-warning' },
+  82: { code: 82, description: 'Violent rain showers', icon: 'status-negative' },
+  85: { code: 85, description: 'Slight snow showers', icon: 'status-info' },
+  86: { code: 86, description: 'Heavy snow showers', icon: 'status-negative' },
+  95: { code: 95, description: 'Thunderstorm', icon: 'status-negative' },
+  96: { code: 96, description: 'Thunderstorm with slight hail', icon: 'status-negative' },
+  99: { code: 99, description: 'Thunderstorm with heavy hail', icon: 'status-negative' },
+};
+
+export const DEFAULT_LOCATIONS: WeatherLocation[] = [
+  { name: 'London, UK', latitude: 51.5074, longitude: -0.1278, timezone: 'Europe/London' },
+  { name: 'New York, NY', latitude: 40.7128, longitude: -74.006, timezone: 'America/New_York' },
+  { name: 'Tokyo, Japan', latitude: 35.6762, longitude: 139.6503, timezone: 'Asia/Tokyo' },
+  { name: 'Sydney, Australia', latitude: -33.8688, longitude: 151.2093, timezone: 'Australia/Sydney' },
+  { name: 'Paris, France', latitude: 48.8566, longitude: 2.3522, timezone: 'Europe/Paris' },
+  { name: 'San Francisco, CA', latitude: 37.7749, longitude: -122.4194, timezone: 'America/Los_Angeles' },
+];
