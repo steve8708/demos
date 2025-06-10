@@ -13,6 +13,7 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 
 import { WeatherData, WeatherLocation, WEATHER_CODES } from '../types';
+import styles from '../styles.module.scss';
 
 interface WeatherWidgetProps {
   weatherData: WeatherData;
@@ -151,29 +152,9 @@ export function WeatherWidget({ weatherData, location }: WeatherWidgetProps) {
             </Header>
           }
         >
-          <div
-            style={{
-              overflowX: 'auto',
-              overflowY: 'hidden',
-              padding: '16px 0',
-              display: 'flex',
-              gap: '16px',
-              minHeight: '180px',
-            }}
-          >
+          <div className={styles.forecastScroll}>
             {forecastData.map((day, index) => (
-              <div
-                key={index}
-                style={{
-                  minWidth: '140px',
-                  flexShrink: 0,
-                  textAlign: 'center',
-                  padding: '16px',
-                  border: '1px solid var(--awsui-color-border-divider-default)',
-                  borderRadius: '8px',
-                  backgroundColor: index === 0 ? 'var(--awsui-color-background-layout-panel-content)' : 'transparent',
-                }}
-              >
+              <div key={index} className={`${styles.forecastCard} ${index === 0 ? styles.today : ''}`}>
                 <SpaceBetween size="xs">
                   <Box variant="strong" color={index === 0 ? 'text-status-info' : 'inherit'}>
                     {index === 0 ? 'Today' : day.day}
@@ -181,12 +162,7 @@ export function WeatherWidget({ weatherData, location }: WeatherWidgetProps) {
                   <Box variant="small" color="text-body-secondary">
                     {day.date}
                   </Box>
-                  <Box
-                    fontSize="heading-xl"
-                    style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                  >
-                    {day.emoji}
-                  </Box>
+                  <div className={styles.emojiLarge}>{day.emoji}</div>
                   <Box variant="small" color="text-body-secondary">
                     {getWeatherDescription(day.weatherCode)}
                   </Box>
@@ -197,12 +173,14 @@ export function WeatherWidget({ weatherData, location }: WeatherWidgetProps) {
                     </Box>
                   </SpaceBetween>
                   {day.precipitation > 0 && (
-                    <Box variant="small" color="text-status-info">
-                      💧 {day.precipitation}mm
+                    <Box variant="small" color="text-status-info" className={styles.weatherMetric}>
+                      <span>💧</span>
+                      <span>{day.precipitation}mm</span>
                     </Box>
                   )}
-                  <Box variant="small" color="text-body-secondary">
-                    💨 {Math.round(day.windSpeed)} km/h
+                  <Box variant="small" color="text-body-secondary" className={styles.weatherMetric}>
+                    <span>💨</span>
+                    <span>{Math.round(day.windSpeed)} km/h</span>
                   </Box>
                 </SpaceBetween>
               </div>

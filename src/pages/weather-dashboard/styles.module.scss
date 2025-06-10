@@ -1,0 +1,78 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+.forecast-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 16px 0;
+  display: flex;
+  gap: 16px;
+  min-height: 180px;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--awsui-color-background-layout-panel-content);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--awsui-color-border-divider-default);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--awsui-color-border-control-default);
+    }
+  }
+}
+
+.forecast-card {
+  min-width: 140px;
+  flex-shrink: 0;
+  text-align: center;
+  padding: 16px;
+  border: 1px solid var(--awsui-color-border-divider-default);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--awsui-color-border-control-default);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  &.today {
+    background-color: var(--awsui-color-background-layout-panel-content);
+    border-color: var(--awsui-color-border-item-selected);
+  }
+}
+
+.emoji-large {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.weather-metric {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+@media (max-width: 768px) {
+  .forecast-card {
+    min-width: 120px;
+    padding: 12px;
+  }
+
+  .emoji-large {
+    height: 32px;
+    font-size: 24px;
+  }
+}
