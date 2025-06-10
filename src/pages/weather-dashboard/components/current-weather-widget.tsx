@@ -9,7 +9,15 @@ import Box from '@cloudscape-design/components/box';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import { WeatherApiResponse, getWeatherIcon } from '../types';
-import { formatTemperature, formatSpeed, formatPressure, formatPercentage, getWindDirection } from '../api';
+import {
+  formatTemperature,
+  formatSpeed,
+  formatPressure,
+  formatPercentage,
+  getWindDirection,
+  getTemperatureEmoji,
+  getHumidityEmoji,
+} from '../api';
 import { WeatherIcon } from './weather-icon';
 
 interface CurrentWeatherWidgetProps {
