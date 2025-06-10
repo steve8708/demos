@@ -117,3 +117,27 @@ export function formatDate(dateString: string): string {
     day: 'numeric',
   });
 }
+
+export function getTemperatureEmoji(temperature: number): string {
+  if (temperature >= 35) return '🔥'; // Very hot
+  if (temperature >= 25) return '🌡️'; // Warm
+  if (temperature >= 15) return '🌤️'; // Mild
+  if (temperature >= 5) return '🌬️'; // Cool
+  if (temperature >= -5) return '❄️'; // Cold
+  return '🧊'; // Freezing
+}
+
+export function getHumidityEmoji(humidity: number): string {
+  if (humidity >= 80) return '💧'; // Very humid
+  if (humidity >= 60) return '🌫️'; // Humid
+  if (humidity >= 40) return '💨'; // Moderate
+  return '🏜️'; // Dry
+}
+
+export function getUVIndexEmoji(uvIndex: number): string {
+  if (uvIndex >= 11) return '🟣'; // Extreme
+  if (uvIndex >= 8) return '🔴'; // Very high
+  if (uvIndex >= 6) return '🟠'; // High
+  if (uvIndex >= 3) return '🟡'; // Moderate
+  return '🟢'; // Low
+}
