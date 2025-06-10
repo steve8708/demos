@@ -1,6 +1,36 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
+/**
+ * Weather Dashboard - Types and Interfaces
+ *
+ * This module defines TypeScript types and interfaces for the Weather Dashboard
+ * application that integrates with the Open-Meteo API (https://open-meteo.com/).
+ *
+ * Features:
+ * - Real-time weather data for multiple global locations
+ * - Current weather conditions with detailed metrics
+ * - 24-hour hourly forecast
+ * - 7-day extended forecast
+ * - Weather statistics and analytics
+ * - Responsive design using Cloudscape Design System
+ *
+ * API Information:
+ * - Uses Open-Meteo free weather API (no API key required)
+ * - Supports current, hourly, and daily weather data
+ * - Provides global coverage with high accuracy
+ * - Returns data in JSON format with various weather variables
+ *
+ * Supported Weather Variables:
+ * - Temperature (current, apparent, min/max)
+ * - Humidity, precipitation, rain
+ * - Wind speed, direction, and gusts
+ * - Atmospheric pressure
+ * - Cloud cover and UV index
+ * - Weather conditions and codes
+ * - Sunrise/sunset times
+ */
+
 export interface WeatherLocation {
   name: string;
   latitude: number;
