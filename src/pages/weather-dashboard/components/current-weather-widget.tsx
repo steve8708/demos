@@ -45,10 +45,7 @@ export function CurrentWeatherWidget({ data, loading, error, locationName }: Cur
   }
 
   const current = data.current;
-  const weatherCondition = WEATHER_CODES[current.weather_code] || {
-    description: 'Unknown',
-    icon: 'status-info',
-  };
+  const weatherCondition = getWeatherIcon(current.weather_code, current.is_day === 1);
 
   return (
     <Container
