@@ -71,9 +71,12 @@ export function CurrentWeatherWidget({ data, loading, error, locationName }: Cur
         <ColumnLayout columns={2} variant="text-grid">
           <div>
             <Box variant="awsui-key-label">Temperature</Box>
-            <Box fontSize="display-l" fontWeight="bold">
-              {formatTemperature(current.temperature_2m)}
-            </Box>
+            <SpaceBetween direction="horizontal" size="xs" alignItems="center">
+              <Box fontSize="display-l" fontWeight="bold">
+                {formatTemperature(current.temperature_2m)}
+              </Box>
+              <Box fontSize="heading-l">{getTemperatureEmoji(current.temperature_2m)}</Box>
+            </SpaceBetween>
             <Box variant="small" color="text-status-info">
               Feels like {formatTemperature(current.apparent_temperature)}
             </Box>
@@ -87,7 +90,10 @@ export function CurrentWeatherWidget({ data, loading, error, locationName }: Cur
         <ColumnLayout columns={4} variant="text-grid">
           <div>
             <Box variant="awsui-key-label">Humidity</Box>
-            <Box fontSize="heading-m">{formatPercentage(current.relative_humidity_2m)}</Box>
+            <SpaceBetween direction="horizontal" size="xs" alignItems="center">
+              <Box fontSize="heading-m">{formatPercentage(current.relative_humidity_2m)}</Box>
+              <Box>{getHumidityEmoji(current.relative_humidity_2m)}</Box>
+            </SpaceBetween>
           </div>
           <div>
             <Box variant="awsui-key-label">Wind</Box>
