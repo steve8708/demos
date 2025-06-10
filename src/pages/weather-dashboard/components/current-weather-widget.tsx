@@ -72,11 +72,7 @@ export function CurrentWeatherWidget({ data, loading, error, locationName }: Cur
           </div>
           <div>
             <Box variant="awsui-key-label">Condition</Box>
-            <SpaceBetween direction="horizontal" size="xs" alignItems="center">
-              <StatusIndicator type={weatherCondition.icon.replace('status-', '') as any}>
-                {weatherCondition.description}
-              </StatusIndicator>
-            </SpaceBetween>
+            <WeatherIcon condition={weatherCondition} size="large" showDescription={true} />
           </div>
         </ColumnLayout>
 
