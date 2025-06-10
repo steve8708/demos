@@ -66,7 +66,7 @@ export function HourlyForecastWidget({ data, loading, error }: HourlyForecastWid
         </Header>
       }
     >
-      <div style={{ overflowX: 'auto' }}>
+      <div style={{ overflowX: 'auto', marginBottom: '8px' }}>
         <div style={{ display: 'flex', gap: '16px', minWidth: 'max-content', padding: '8px 0' }}>
           {next24Hours.map((hour, index) => {
             const weatherCondition = WEATHER_CODES[hour.weatherCode] || {
