@@ -111,7 +111,10 @@ export function CurrentWeatherWidget({ data, loading, error, locationName }: Cur
           </div>
           <div>
             <Box variant="awsui-key-label">Pressure</Box>
-            <Box fontSize="heading-m">{formatPressure(current.pressure_msl)}</Box>
+            <SpaceBetween direction="horizontal" size="xs" alignItems="center">
+              <Box fontSize="heading-m">{formatPressure(current.pressure_msl)}</Box>
+              <Box>🔽</Box>
+            </SpaceBetween>
           </div>
           <div>
             <Box variant="awsui-key-label">Cloud Cover</Box>
