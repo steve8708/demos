@@ -1,1 +1,0 @@
-import{_ as p,u as t,R as i,aj as o,c as m}from"./index-DLMN1afU.js";function c(n){var{size:a="normal",variant:e="normal"}=n,r=p(n,["size","variant"]);const s=t("Spinner",{props:{size:a,variant:e}});return i.createElement(o,Object.assign({size:a,variant:e},r,s))}m(c,"Spinner");export{c as S};

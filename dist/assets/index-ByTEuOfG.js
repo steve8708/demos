@@ -1,1 +1,0 @@
-import{R as o,u as r,t as s,c as n}from"./index-DLMN1afU.js";import{I as p}from"./internal-3gyds37u.js";const i=o.forwardRef((a,e)=>{const t=r("RadioGroup",{props:{readOnly:a.readOnly}});return o.createElement(p,Object.assign({ref:e},a,t,s({component:{name:"awsui.RadioGroup",label:{root:"self"}}})))});n(i,"RadioGroup");export{i as R};

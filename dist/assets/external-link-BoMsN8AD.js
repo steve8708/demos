@@ -1,0 +1,1 @@
+import{j as n,L as r}from"./index-BE4yRgP3.js";function t(e){return n.jsxDEV(r,{href:"#",external:!0,externalIconAriaLabel:"Opens in a new tab",...e},void 0,!1,{fileName:"/app/code/src/pages/commons/external-link.tsx",lineNumber:8,columnNumber:10},this)}export{t as ExternalLink};

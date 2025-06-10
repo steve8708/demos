@@ -1,1 +1,0 @@
-import{j as e,L as o}from"./index-DLMN1afU.js";const s=n=>e.jsxDEV(o,{variant:"info",...n,children:"Info"},void 0,!1,{fileName:"/app/code/src/pages/commons/info-link.tsx",lineNumber:13,columnNumber:3},void 0);export{s as InfoLink};
