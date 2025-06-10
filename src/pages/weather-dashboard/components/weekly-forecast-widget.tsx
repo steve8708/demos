@@ -8,8 +8,9 @@ import Box from '@cloudscape-design/components/box';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 import ColumnLayout from '@cloudscape-design/components/column-layout';
 import SpaceBetween from '@cloudscape-design/components/space-between';
-import { WeatherApiResponse, WEATHER_CODES } from '../types';
+import { WeatherApiResponse, getWeatherIcon } from '../types';
 import { formatTemperature, formatSpeed, formatPercentage, formatDate, formatTime, getWindDirection } from '../api';
+import { WeatherIcon } from './weather-icon';
 
 interface WeeklyForecastWidgetProps {
   data: WeatherApiResponse | null;
