@@ -14,36 +14,36 @@ export const DEFAULT_LOCATIONS: LocationData[] = [
   { latitude: 37.7749, longitude: -122.4194, city: 'San Francisco', country: 'United States' },
 ];
 
-// Weather code mappings based on WMO standards
+// Weather code mappings based on WMO standards with emojis
 export const WEATHER_CODES: WeatherCodeMapping = {
-  0: { description: 'Clear sky', icon: 'sunny' },
-  1: { description: 'Mainly clear', icon: 'mostly-sunny' },
-  2: { description: 'Partly cloudy', icon: 'partly-cloudy' },
-  3: { description: 'Overcast', icon: 'cloudy' },
-  45: { description: 'Fog', icon: 'fog' },
-  48: { description: 'Depositing rime fog', icon: 'fog' },
-  51: { description: 'Light drizzle', icon: 'light-rain' },
-  53: { description: 'Moderate drizzle', icon: 'rain' },
-  55: { description: 'Dense drizzle', icon: 'rain' },
-  56: { description: 'Light freezing drizzle', icon: 'sleet' },
-  57: { description: 'Dense freezing drizzle', icon: 'sleet' },
-  61: { description: 'Slight rain', icon: 'light-rain' },
-  63: { description: 'Moderate rain', icon: 'rain' },
-  65: { description: 'Heavy rain', icon: 'heavy-rain' },
-  66: { description: 'Light freezing rain', icon: 'sleet' },
-  67: { description: 'Heavy freezing rain', icon: 'sleet' },
-  71: { description: 'Slight snow fall', icon: 'snow' },
-  73: { description: 'Moderate snow fall', icon: 'snow' },
-  75: { description: 'Heavy snow fall', icon: 'snow' },
-  77: { description: 'Snow grains', icon: 'snow' },
-  80: { description: 'Slight rain showers', icon: 'rain' },
-  81: { description: 'Moderate rain showers', icon: 'rain' },
-  82: { description: 'Violent rain showers', icon: 'heavy-rain' },
-  85: { description: 'Slight snow showers', icon: 'snow' },
-  86: { description: 'Heavy snow showers', icon: 'snow' },
-  95: { description: 'Thunderstorm', icon: 'thunderstorm' },
-  96: { description: 'Thunderstorm with slight hail', icon: 'thunderstorm' },
-  99: { description: 'Thunderstorm with heavy hail', icon: 'thunderstorm' },
+  0: { description: 'Clear sky', icon: '☀️' },
+  1: { description: 'Mainly clear', icon: '🌤️' },
+  2: { description: 'Partly cloudy', icon: '⛅' },
+  3: { description: 'Overcast', icon: '☁️' },
+  45: { description: 'Fog', icon: '🌫️' },
+  48: { description: 'Depositing rime fog', icon: '🌫️' },
+  51: { description: 'Light drizzle', icon: '🌦️' },
+  53: { description: 'Moderate drizzle', icon: '🌧️' },
+  55: { description: 'Dense drizzle', icon: '🌧️' },
+  56: { description: 'Light freezing drizzle', icon: '🌨️' },
+  57: { description: 'Dense freezing drizzle', icon: '🌨️' },
+  61: { description: 'Slight rain', icon: '🌦️' },
+  63: { description: 'Moderate rain', icon: '🌧️' },
+  65: { description: 'Heavy rain', icon: '🌧️' },
+  66: { description: 'Light freezing rain', icon: '🌨️' },
+  67: { description: 'Heavy freezing rain', icon: '🌨️' },
+  71: { description: 'Slight snow fall', icon: '🌨️' },
+  73: { description: 'Moderate snow fall', icon: '❄️' },
+  75: { description: 'Heavy snow fall', icon: '❄️' },
+  77: { description: 'Snow grains', icon: '🌨️' },
+  80: { description: 'Slight rain showers', icon: '🌦️' },
+  81: { description: 'Moderate rain showers', icon: '🌧️' },
+  82: { description: 'Violent rain showers', icon: '⛈️' },
+  85: { description: 'Slight snow showers', icon: '🌨️' },
+  86: { description: 'Heavy snow showers', icon: '❄️' },
+  95: { description: 'Thunderstorm', icon: '⛈️' },
+  96: { description: 'Thunderstorm with slight hail', icon: '⛈️' },
+  99: { description: 'Thunderstorm with heavy hail', icon: '⛈️' },
 };
 
 export async function fetchWeatherData(location: LocationData): Promise<WeatherData> {
@@ -108,8 +108,14 @@ export function getWeatherIcon(weatherCode: number): string {
   return WEATHER_CODES[weatherCode]?.icon || 'sunny';
 }
 
-export function formatTemperature(temp: number, unit: string = '°C'): string {
-  return `${Math.round(temp)}${unit}`;
+export function celsiusToFahrenheit(celsius: number): number {
+  return (celsius * 9) / 5 + 32;
+}
+
+export function formatTemperature(temp: number, unit: string = '°C', convertToFahrenheit: boolean = false): string {
+  const temperature = convertToFahrenheit ? celsiusToFahrenheit(temp) : temp;
+  const displayUnit = convertToFahrenheit ? '°F' : unit;
+  return `${Math.round(temperature)}${displayUnit}`;
 }
 
 export function formatPrecipitation(precipitation: number, unit: string = 'mm'): string {

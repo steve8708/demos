@@ -4,18 +4,18 @@
 import React from 'react';
 import Container from '@cloudscape-design/components/container';
 import Header from '@cloudscape-design/components/header';
-import Table from '@cloudscape-design/components/table';
 import Box from '@cloudscape-design/components/box';
 import Badge from '@cloudscape-design/components/badge';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import { WeatherData, DailyForecast } from '../types';
-import { getWeatherDescription, formatTemperature, formatWindSpeed } from '../api';
+import { getWeatherDescription, getWeatherIcon, formatTemperature, formatWindSpeed } from '../api';
 
 interface DailyForecastProps {
   data: WeatherData;
+  useFahrenheit: boolean;
 }
 
-export function DailyForecastWidget({ data }: DailyForecastProps) {
+export function DailyForecastWidget({ data, useFahrenheit }: DailyForecastProps) {
   const { daily, daily_units } = data;
 
   // Transform data for the next 7 days
@@ -44,7 +44,7 @@ export function DailyForecastWidget({ data }: DailyForecastProps) {
       return 'Tomorrow';
     }
     return date.toLocaleDateString([], {
-      weekday: 'long',
+      weekday: 'short',
       month: 'short',
       day: 'numeric',
     });
@@ -60,7 +60,7 @@ export function DailyForecastWidget({ data }: DailyForecastProps) {
   const getPrecipitationInfo = (sum: number, probability: number) => {
     if (sum > 0) {
       return (
-        <SpaceBetween direction="horizontal" size="xs">
+        <SpaceBetween direction="vertical" size="xxs">
           <Badge color="blue">{sum.toFixed(1)}mm</Badge>
           <Box variant="small" color="text-body-secondary">
             {probability}%
@@ -82,69 +82,72 @@ export function DailyForecastWidget({ data }: DailyForecastProps) {
         </Header>
       }
     >
-      <Table
-        columnDefinitions={[
-          {
-            id: 'date',
-            header: 'Date',
-            cell: item => formatDate(item.date),
-            minWidth: 120,
-          },
-          {
-            id: 'weather',
-            header: 'Weather',
-            cell: item => getWeatherDescription(item.weatherCode),
-            minWidth: 140,
-          },
-          {
-            id: 'temperature',
-            header: 'Temperature',
-            cell: item => (
-              <SpaceBetween direction="horizontal" size="xs">
-                <Box fontWeight="bold">{formatTemperature(item.temperatureMax, daily_units.temperature_2m_max)}</Box>
-                <Box color="text-body-secondary">
-                  {formatTemperature(item.temperatureMin, daily_units.temperature_2m_min)}
+      <Box>
+        <div
+          style={{
+            display: 'flex',
+            overflowX: 'auto',
+            gap: '16px',
+            paddingBottom: '8px',
+            minHeight: '280px',
+          }}
+        >
+          {dailyForecasts.map((forecast, index) => (
+            <div
+              key={index}
+              style={{
+                minWidth: '200px',
+                maxWidth: '200px',
+                border: '1px solid #e9ebed',
+                borderRadius: '8px',
+                padding: '16px',
+                backgroundColor: '#ffffff',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+              }}
+            >
+              <SpaceBetween size="s" direction="vertical" alignItems="center">
+                <Box variant="h4" fontWeight="bold">
+                  {formatDate(forecast.date)}
                 </Box>
+
+                <Box fontSize="display-l" textAlign="center">
+                  {getWeatherIcon(forecast.weatherCode)}
+                </Box>
+
+                <Box variant="small" color="text-body-secondary" textAlign="center">
+                  {getWeatherDescription(forecast.weatherCode)}
+                </Box>
+
+                <SpaceBetween direction="horizontal" size="xs" alignItems="center">
+                  <Box fontWeight="bold" fontSize="heading-m">
+                    {formatTemperature(forecast.temperatureMax, daily_units.temperature_2m_max, useFahrenheit)}
+                  </Box>
+                  <Box color="text-body-secondary" fontSize="body-m">
+                    {formatTemperature(forecast.temperatureMin, daily_units.temperature_2m_min, useFahrenheit)}
+                  </Box>
+                </SpaceBetween>
+
+                <Box textAlign="center">
+                  {getPrecipitationInfo(forecast.precipitationSum, forecast.precipitationProbability)}
+                </Box>
+
+                <Box variant="small" color="text-body-secondary" textAlign="center">
+                  💨 {formatWindSpeed(forecast.windSpeed, daily_units.wind_speed_10m_max)}
+                </Box>
+
+                <SpaceBetween direction="vertical" size="xxs" alignItems="center">
+                  <Box variant="small">🌅 {formatTime(forecast.sunrise)}</Box>
+                  <Box variant="small">🌇 {formatTime(forecast.sunset)}</Box>
+                </SpaceBetween>
               </SpaceBetween>
-            ),
-            minWidth: 120,
-          },
-          {
-            id: 'precipitation',
-            header: 'Precipitation',
-            cell: item => getPrecipitationInfo(item.precipitationSum, item.precipitationProbability),
-            minWidth: 130,
-          },
-          {
-            id: 'wind',
-            header: 'Max Wind',
-            cell: item => formatWindSpeed(item.windSpeed, daily_units.wind_speed_10m_max),
-            minWidth: 100,
-          },
-          {
-            id: 'sun',
-            header: 'Sunrise / Sunset',
-            cell: item => (
-              <SpaceBetween direction="vertical" size="xxs">
-                <Box variant="small">🌅 {formatTime(item.sunrise)}</Box>
-                <Box variant="small">🌇 {formatTime(item.sunset)}</Box>
-              </SpaceBetween>
-            ),
-            minWidth: 140,
-          },
-        ]}
-        items={dailyForecasts}
-        loadingText="Loading forecast..."
-        sortingDisabled
-        empty={
-          <Box textAlign="center" color="inherit">
-            <Box variant="strong" textAlign="center" color="inherit">
-              No daily forecast data available
-            </Box>
-          </Box>
-        }
-        header={<Header>Next 7 days</Header>}
-      />
+            </div>
+          ))}
+        </div>
+      </Box>
     </Container>
   );
 }

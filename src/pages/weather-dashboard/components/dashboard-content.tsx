@@ -12,15 +12,19 @@ import { WeatherData, LocationData } from '../types';
 import { fetchWeatherData, DEFAULT_LOCATIONS } from '../api';
 import { DashboardHeader } from './dashboard-header';
 import { LocationSelector } from './location-selector';
+import { TemperatureToggle } from './temperature-toggle';
 import { CurrentWeather } from './current-weather';
-import { HourlyForecastWidget } from './hourly-forecast';
 import { DailyForecastWidget } from './daily-forecast';
+import { HourlyForecastWidget } from './hourly-forecast';
+import { TemperatureChart } from './temperature-chart';
+import { PrecipitationChart } from './precipitation-chart';
 
 export function DashboardContent() {
   const [selectedLocation, setSelectedLocation] = useState<LocationData>(DEFAULT_LOCATIONS[0]);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [useFahrenheit, setUseFahrenheit] = useState(false);
 
   const loadWeatherData = useCallback(async (location: LocationData) => {
     setLoading(true);
@@ -87,20 +91,36 @@ export function DashboardContent() {
 
     return (
       <SpaceBetween size="l">
-        <Grid gridDefinition={[{ colspan: { default: 12, xs: 12, s: 6, m: 4, l: 4, xl: 3 } }]}>
+        <Grid
+          gridDefinition={[
+            { colspan: { default: 12, xs: 12, s: 6, m: 4, l: 4, xl: 3 } },
+            { colspan: { default: 12, xs: 12, s: 6, m: 4, l: 4, xl: 3 } },
+          ]}
+        >
           <LocationSelector
             locations={DEFAULT_LOCATIONS}
             selectedLocation={selectedLocation}
             onLocationChange={handleLocationChange}
             loading={loading}
           />
+          <TemperatureToggle useFahrenheit={useFahrenheit} onChange={setUseFahrenheit} />
         </Grid>
 
-        <CurrentWeather data={weatherData} location={selectedLocation} />
+        <CurrentWeather data={weatherData} location={selectedLocation} useFahrenheit={useFahrenheit} />
 
-        <HourlyForecastWidget data={weatherData} />
+        <DailyForecastWidget data={weatherData} useFahrenheit={useFahrenheit} />
 
-        <DailyForecastWidget data={weatherData} />
+        <Grid
+          gridDefinition={[
+            { colspan: { default: 12, xs: 12, s: 12, m: 6, l: 6, xl: 6 } },
+            { colspan: { default: 12, xs: 12, s: 12, m: 6, l: 6, xl: 6 } },
+          ]}
+        >
+          <TemperatureChart data={weatherData} useFahrenheit={useFahrenheit} />
+          <PrecipitationChart data={weatherData} />
+        </Grid>
+
+        <HourlyForecastWidget data={weatherData} useFahrenheit={useFahrenheit} />
       </SpaceBetween>
     );
   };

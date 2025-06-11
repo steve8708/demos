@@ -8,10 +8,10 @@ import Header from '@cloudscape-design/components/header';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import KeyValuePairs from '@cloudscape-design/components/key-value-pairs';
 import Badge from '@cloudscape-design/components/badge';
-import Icon from '@cloudscape-design/components/icon';
 import { WeatherData, LocationData } from '../types';
 import {
   getWeatherDescription,
+  getWeatherIcon,
   formatTemperature,
   formatWindSpeed,
   formatWindDirection,
@@ -22,9 +22,10 @@ import {
 interface CurrentWeatherProps {
   data: WeatherData;
   location: LocationData;
+  useFahrenheit: boolean;
 }
 
-export function CurrentWeather({ data, location }: CurrentWeatherProps) {
+export function CurrentWeather({ data, location, useFahrenheit }: CurrentWeatherProps) {
   const { current, current_units } = data;
 
   const formatDateTime = (dateTimeString: string) => {
@@ -51,13 +52,15 @@ export function CurrentWeather({ data, location }: CurrentWeatherProps) {
         <Box textAlign="center">
           <SpaceBetween size="xs">
             <Box fontSize="display-l" fontWeight="bold">
-              {formatTemperature(current.temperature_2m, current_units.temperature_2m)}
+              {formatTemperature(current.temperature_2m, current_units.temperature_2m, useFahrenheit)}
             </Box>
+            <Box fontSize="display-l">{getWeatherIcon(current.weather_code)}</Box>
             <Box variant="h3" color="text-body-secondary">
               {getWeatherDescription(current.weather_code)}
             </Box>
             <Box variant="small" color="text-body-secondary">
-              Feels like {formatTemperature(current.apparent_temperature, current_units.apparent_temperature)}
+              Feels like{' '}
+              {formatTemperature(current.apparent_temperature, current_units.apparent_temperature, useFahrenheit)}
             </Box>
           </SpaceBetween>
         </Box>

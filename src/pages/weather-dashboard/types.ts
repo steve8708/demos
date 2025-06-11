@@ -120,3 +120,14 @@ export interface DailyForecast {
   sunrise: string;
   sunset: string;
 }
+
+export interface TemperatureUnit {
+  celsius: boolean;
+  fahrenheit: boolean;
+}
+
+export interface ChartDataPoint {
+  time: string;
+  value: number;
+  label: string;
+}

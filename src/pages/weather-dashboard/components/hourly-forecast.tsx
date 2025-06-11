@@ -7,14 +7,23 @@ import Header from '@cloudscape-design/components/header';
 import Table from '@cloudscape-design/components/table';
 import Box from '@cloudscape-design/components/box';
 import Badge from '@cloudscape-design/components/badge';
+import SpaceBetween from '@cloudscape-design/components/space-between';
 import { WeatherData, HourlyForecast } from '../types';
-import { getWeatherDescription, formatTemperature, formatWindSpeed, formatWindDirection, formatHumidity } from '../api';
+import {
+  getWeatherDescription,
+  getWeatherIcon,
+  formatTemperature,
+  formatWindSpeed,
+  formatWindDirection,
+  formatHumidity,
+} from '../api';
 
 interface HourlyForecastProps {
   data: WeatherData;
+  useFahrenheit: boolean;
 }
 
-export function HourlyForecastWidget({ data }: HourlyForecastProps) {
+export function HourlyForecastWidget({ data, useFahrenheit }: HourlyForecastProps) {
   const { hourly, hourly_units } = data;
 
   // Transform data for the next 24 hours
@@ -66,14 +75,19 @@ export function HourlyForecastWidget({ data }: HourlyForecastProps) {
           {
             id: 'temperature',
             header: 'Temperature',
-            cell: item => formatTemperature(item.temperature, hourly_units.temperature_2m),
+            cell: item => formatTemperature(item.temperature, hourly_units.temperature_2m, useFahrenheit),
             minWidth: 100,
           },
           {
             id: 'weather',
             header: 'Weather',
-            cell: item => getWeatherDescription(item.weatherCode),
-            minWidth: 140,
+            cell: item => (
+              <SpaceBetween direction="horizontal" size="s" alignItems="center">
+                <Box fontSize="body-l">{getWeatherIcon(item.weatherCode)}</Box>
+                <Box>{getWeatherDescription(item.weatherCode)}</Box>
+              </SpaceBetween>
+            ),
+            minWidth: 180,
           },
           {
             id: 'precipitation',
