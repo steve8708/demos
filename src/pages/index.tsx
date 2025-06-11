@@ -31,6 +31,12 @@ const demos = [
   },
   { route: '/dashboard', title: 'Service Dashboard', description: 'Dashboard layout demo.', category: 'Dashboards' },
   {
+    route: '/weather-dashboard',
+    title: 'Weather Dashboard',
+    description: 'Real-time weather data and forecasts using Open-Meteo API.',
+    category: 'Dashboards',
+  },
+  {
     route: '/delete-one-click',
     title: 'One-click Delete',
     description: 'Delete with a single click.',
