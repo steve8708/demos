@@ -2,7 +2,7 @@
   "name": "@cloudscape-design/demos",
   "version": "3.0.0",
   "scripts": {
-    "typecheck": "tsc",
+    "typecheck": "tsc --noEmit",
     "clean": "rm -rf lib",
     "lint": "eslint --fix --ignore-path .gitignore --ext ts,tsx,js,jsx .",
     "jest": "node --experimental-vm-modules ./node_modules/.bin/jest ./test/**/*.test.ts",
