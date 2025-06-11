@@ -35,7 +35,7 @@ export function LocationSelector({
       <Select
         selectedOption={selectedOption || null}
         onChange={({ detail }) => {
-          if (detail.selectedOption) {
+          if (detail.selectedOption?.value) {
             const [lat, lng] = detail.selectedOption.value.split(',').map(Number);
             const location = locations.find(loc => loc.latitude === lat && loc.longitude === lng);
             if (location) {

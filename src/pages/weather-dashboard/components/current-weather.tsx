@@ -32,15 +32,7 @@ export function CurrentWeather({ data, location }: CurrentWeatherProps) {
   };
 
   const getDayNightBadge = (isDay: number) => {
-    return isDay === 1 ? (
-      <Badge color="blue">
-        <Icon name="sun" /> Day
-      </Badge>
-    ) : (
-      <Badge color="grey">
-        <Icon name="moon" /> Night
-      </Badge>
-    );
+    return isDay === 1 ? <Badge color="blue">☀️ Day</Badge> : <Badge color="grey">🌙 Night</Badge>;
   };
 
   return (

@@ -31,7 +31,7 @@ export function DashboardHeader({ location, onRefresh, loading = false }: Dashbo
       }
       info={
         <SpaceBetween direction="horizontal" size="xs">
-          <Icon name="location" />
+          📍
           <span>
             {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)}
           </span>
