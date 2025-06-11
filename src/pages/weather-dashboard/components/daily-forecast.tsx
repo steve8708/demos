@@ -9,6 +9,7 @@ import Badge from '@cloudscape-design/components/badge';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import { WeatherData, DailyForecast } from '../types';
 import { getWeatherDescription, getWeatherIcon, formatTemperature, formatWindSpeed } from '../api';
+import styles from './daily-forecast.module.scss';
 
 interface DailyForecastProps {
   data: WeatherData;
@@ -83,32 +84,9 @@ export function DailyForecastWidget({ data, useFahrenheit }: DailyForecastProps)
       }
     >
       <Box>
-        <div
-          style={{
-            display: 'flex',
-            overflowX: 'auto',
-            gap: '16px',
-            paddingBottom: '8px',
-            minHeight: '280px',
-          }}
-        >
+        <div className={styles['forecast-scroll-container']}>
           {dailyForecasts.map((forecast, index) => (
-            <div
-              key={index}
-              style={{
-                minWidth: '200px',
-                maxWidth: '200px',
-                border: '1px solid #e9ebed',
-                borderRadius: '8px',
-                padding: '16px',
-                backgroundColor: '#ffffff',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-              }}
-            >
+            <div key={index} className={styles['forecast-card']}>
               <SpaceBetween size="s" direction="vertical" alignItems="center">
                 <Box variant="h4" fontWeight="bold">
                   {formatDate(forecast.date)}

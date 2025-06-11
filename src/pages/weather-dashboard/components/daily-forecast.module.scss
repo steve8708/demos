@@ -1,0 +1,78 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+.forecast-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding-bottom: 8px;
+  min-height: 280px;
+  scroll-behavior: smooth;
+
+  // Custom scrollbar styling
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f3f4;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+}
+
+.forecast-card {
+  min-width: 200px;
+  max-width: 200px;
+  border: 1px solid #e9ebed;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+}
+
+// Dark theme support
+@media (prefers-color-scheme: dark) {
+  .forecast-card {
+    background-color: #232f3e;
+    border-color: #414d5c;
+
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .forecast-scroll-container {
+    &::-webkit-scrollbar-track {
+      background: #414d5c;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #688092;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #879db0;
+    }
+  }
+}
