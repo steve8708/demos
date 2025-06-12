@@ -4,6 +4,7 @@ import { WeatherLocation, WeatherAPIResponse } from '../widgets/interfaces';
 
 export class WeatherAPI {
   private static readonly BASE_URL = 'https://api.open-meteo.com/v1/forecast';
+  private static readonly GEOCODING_URL = 'https://geocoding-api.open-meteo.com/v1/search';
 
   static async getCurrentWeather(location: WeatherLocation): Promise<WeatherAPIResponse> {
     const params = new URLSearchParams({
@@ -132,6 +133,43 @@ export class WeatherAPI {
     };
 
     return weatherCodes[weatherCode] || 'Unknown';
+  }
+
+  static async searchLocations(query: string): Promise<WeatherLocation[]> {
+    if (!query.trim()) {
+      return [];
+    }
+
+    const params = new URLSearchParams({
+      name: query.trim(),
+      count: '10',
+      language: 'en',
+      format: 'json',
+    });
+
+    try {
+      const response = await fetch(`${this.GEOCODING_URL}?${params}`);
+
+      if (!response.ok) {
+        throw new Error(`Geocoding API error: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.results || data.results.length === 0) {
+        return [];
+      }
+
+      return data.results.map((result: any) => ({
+        name: `${result.name}${result.admin1 ? ', ' + result.admin1 : ''}${result.country ? ', ' + result.country : ''}`,
+        latitude: result.latitude,
+        longitude: result.longitude,
+        timezone: result.timezone || 'UTC',
+      }));
+    } catch (error) {
+      console.error('Failed to search locations:', error);
+      return [];
+    }
   }
 
   static getWeatherIcon(weatherCode: number, isDay: boolean = true): string {

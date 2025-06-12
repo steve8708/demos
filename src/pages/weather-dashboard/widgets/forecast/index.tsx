@@ -6,11 +6,12 @@ import Box from '@cloudscape-design/components/box';
 import Header from '@cloudscape-design/components/header';
 import Spinner from '@cloudscape-design/components/spinner';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
-import Cards from '@cloudscape-design/components/cards';
+import Container from '@cloudscape-design/components/container';
 
-import { WeatherAPI, DEFAULT_LOCATIONS } from '../../services/weather-api';
+import { WeatherAPI } from '../../services/weather-api';
 import { WeatherAPIResponse } from '../interfaces';
 import { WeatherWidgetConfig } from '../interfaces';
+import { useWeatherContext } from '../../context/weather-context';
 
 function ForecastHeader() {
   return (
@@ -24,13 +25,14 @@ function ForecastWidget() {
   const [forecastData, setForecastData] = useState<WeatherAPIResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { currentLocation } = useWeatherContext();
 
   useEffect(() => {
     const fetchForecast = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await WeatherAPI.getCurrentWeather(DEFAULT_LOCATIONS[0]); // New York
+        const response = await WeatherAPI.getCurrentWeather(currentLocation);
         setForecastData(response);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch forecast data');
@@ -44,7 +46,7 @@ function ForecastWidget() {
     // Refresh every 30 minutes
     const interval = setInterval(fetchForecast, 30 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [currentLocation]);
 
   if (loading) {
     return (
@@ -90,55 +92,62 @@ function ForecastWidget() {
   });
 
   return (
-    <Cards
-      cardsPerRow={[
-        { cards: 1, minWidth: 0 },
-        { cards: 2, minWidth: 400 },
-        { cards: 3, minWidth: 600 },
-        { cards: 4, minWidth: 800 },
-      ]}
-      cardDefinition={{
-        header: item => (
-          <Box>
-            <Box variant="h3">{item.day}</Box>
-            <Box variant="small" color="text-status-inactive">
-              {item.date}
-            </Box>
-          </Box>
-        ),
-        sections: [
-          {
-            id: 'weather',
-            content: item => (
+    <Box>
+      <div
+        style={{
+          display: 'flex',
+          gap: '16px',
+          overflowX: 'auto',
+          paddingBottom: '16px',
+          scrollBehavior: 'smooth',
+        }}
+      >
+        {dailyForecasts.map(item => (
+          <Container
+            key={item.id}
+            header={
               <Box textAlign="center">
-                <Box fontSize="heading-l" margin={{ bottom: 'xs' }}>
-                  {item.icon}
+                <Box variant="h4" margin={{ bottom: 'xxs' }}>
+                  {item.day}
                 </Box>
-                <Box variant="p">
-                  <strong>{item.maxTemp}°</strong> / {item.minTemp}°
+                <Box variant="small" color="text-status-inactive">
+                  {item.date}
                 </Box>
               </Box>
-            ),
-          },
-          {
-            id: 'details',
-            content: item => (
+            }
+            style={{
+              minWidth: '140px',
+              flexShrink: 0,
+            }}
+          >
+            <Box textAlign="center">
+              <Box fontSize="heading-l" margin={{ bottom: 's' }}>
+                {item.icon}
+              </Box>
+              <Box variant="p" margin={{ bottom: 's' }}>
+                <Box variant="strong" fontSize="heading-m">
+                  {item.maxTemp}°
+                </Box>
+                <Box variant="span" color="text-status-inactive">
+                  {' '}
+                  / {item.minTemp}°
+                </Box>
+              </Box>
               <Box variant="small">
-                <div>Rain: {item.precipitation}mm</div>
-                <div>Wind: {item.windSpeed} km/h</div>
+                <div style={{ marginBottom: '4px' }}>💧 {item.precipitation}mm</div>
+                <div>💨 {item.windSpeed} km/h</div>
               </Box>
-            ),
-          },
-        ],
-      }}
-      items={dailyForecasts}
-      trackBy="id"
-      empty={
-        <Box textAlign="center" color="inherit">
+            </Box>
+          </Container>
+        ))}
+      </div>
+
+      {dailyForecasts.length === 0 && (
+        <Box textAlign="center" color="inherit" padding="l">
           <Box variant="p">No forecast data available</Box>
         </Box>
-      }
-    />
+      )}
+    </Box>
   );
 }
 

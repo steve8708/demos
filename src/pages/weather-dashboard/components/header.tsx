@@ -8,15 +8,31 @@ import HelpPanel from '@cloudscape-design/components/help-panel';
 import Link from '@cloudscape-design/components/link';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 
+import { LocationSearch } from './location-search';
+import { WeatherLocation } from '../widgets/interfaces';
+
 interface WeatherHeaderProps {
   actions?: React.ReactNode;
+  onLocationSelect?: (location: WeatherLocation) => void;
+  searchLoading?: boolean;
 }
 
-export function WeatherHeader({ actions }: WeatherHeaderProps) {
+export function WeatherHeader({ actions, onLocationSelect, searchLoading = false }: WeatherHeaderProps) {
   return (
-    <Header variant="h1" actions={actions} description="Real-time weather data powered by Open-Meteo API">
-      Weather Dashboard
-    </Header>
+    <SpaceBetween size="l">
+      <Header variant="h1" actions={actions} description="Real-time weather data powered by Open-Meteo API">
+        Weather Dashboard
+      </Header>
+
+      {onLocationSelect && (
+        <Box>
+          <Box variant="h3" margin={{ bottom: 's' }}>
+            Search for any location
+          </Box>
+          <LocationSearch onLocationSelect={onLocationSelect} loading={searchLoading} />
+        </Box>
+      )}
+    </SpaceBetween>
   );
 }
 

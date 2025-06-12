@@ -7,9 +7,10 @@ import Header from '@cloudscape-design/components/header';
 import Spinner from '@cloudscape-design/components/spinner';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 
-import { WeatherAPI, DEFAULT_LOCATIONS } from '../../services/weather-api';
+import { WeatherAPI } from '../../services/weather-api';
 import { WeatherAPIResponse } from '../interfaces';
 import { WeatherWidgetConfig } from '../interfaces';
+import { useWeatherContext } from '../../context/weather-context';
 
 function TemperatureHeader() {
   return (
@@ -23,13 +24,14 @@ function TemperatureWidget() {
   const [weatherData, setWeatherData] = useState<WeatherAPIResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { currentLocation } = useWeatherContext();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await WeatherAPI.getCurrentWeather(DEFAULT_LOCATIONS[0]); // New York
+        const response = await WeatherAPI.getCurrentWeather(currentLocation);
         setWeatherData(response);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch temperature data');
@@ -43,7 +45,7 @@ function TemperatureWidget() {
     // Refresh every 30 minutes
     const interval = setInterval(fetchData, 30 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [currentLocation]);
 
   if (loading) {
     return (

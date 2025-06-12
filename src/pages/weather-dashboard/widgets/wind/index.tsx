@@ -8,7 +8,8 @@ import KeyValuePairs from '@cloudscape-design/components/key-value-pairs';
 import Spinner from '@cloudscape-design/components/spinner';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 
-import { WeatherAPI, DEFAULT_LOCATIONS } from '../../services/weather-api';
+import { WeatherAPI } from '../../services/weather-api';
+import { useWeatherContext } from '../../context/weather-context';
 import { CurrentWeatherData } from '../interfaces';
 import { WeatherWidgetConfig } from '../interfaces';
 
@@ -24,13 +25,14 @@ function WindWidget() {
   const [weatherData, setWeatherData] = useState<CurrentWeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { currentLocation } = useWeatherContext();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await WeatherAPI.getCurrentWeather(DEFAULT_LOCATIONS[0]);
+        const response = await WeatherAPI.getCurrentWeather(currentLocation);
         setWeatherData(response.current);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch wind data');
@@ -43,7 +45,7 @@ function WindWidget() {
 
     const interval = setInterval(fetchData, 15 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [currentLocation]);
 
   if (loading) {
     return (

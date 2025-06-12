@@ -8,7 +8,8 @@ import StatusIndicator from '@cloudscape-design/components/status-indicator';
 import Alert from '@cloudscape-design/components/alert';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 
-import { WeatherAPI, DEFAULT_LOCATIONS } from '../../services/weather-api';
+import { WeatherAPI } from '../../services/weather-api';
+import { useWeatherContext } from '../../context/weather-context';
 import { WeatherAPIResponse } from '../interfaces';
 import { WeatherWidgetConfig } from '../interfaces';
 
@@ -31,12 +32,13 @@ interface WeatherAlert {
 function WeatherAlertsWidget() {
   const [alerts, setAlerts] = useState<WeatherAlert[]>([]);
   const [loading, setLoading] = useState(true);
+  const { currentLocation } = useWeatherContext();
 
   useEffect(() => {
     const fetchAndAnalyzeWeather = async () => {
       try {
         setLoading(true);
-        const response = await WeatherAPI.getCurrentWeather(DEFAULT_LOCATIONS[0]);
+        const response = await WeatherAPI.getCurrentWeather(currentLocation);
 
         // Generate alerts based on weather conditions
         const generatedAlerts: WeatherAlert[] = [];
@@ -139,7 +141,7 @@ function WeatherAlertsWidget() {
     // Refresh every 15 minutes
     const interval = setInterval(fetchAndAnalyzeWeather, 15 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [currentLocation]);
 
   if (loading) {
     return (

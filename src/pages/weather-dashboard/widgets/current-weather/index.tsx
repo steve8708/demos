@@ -8,13 +8,16 @@ import KeyValuePairs from '@cloudscape-design/components/key-value-pairs';
 import Spinner from '@cloudscape-design/components/spinner';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 
-import { WeatherAPI, DEFAULT_LOCATIONS } from '../../services/weather-api';
+import { WeatherAPI } from '../../services/weather-api';
 import { CurrentWeatherData } from '../interfaces';
 import { WeatherWidgetConfig } from '../interfaces';
+import { useWeatherContext } from '../../context/weather-context';
 
 function CurrentWeatherHeader() {
+  const { currentLocation } = useWeatherContext();
+
   return (
-    <Header variant="h2" description="Live weather conditions for New York">
+    <Header variant="h2" description={`Live weather conditions for ${currentLocation.name}`}>
       Current Weather
     </Header>
   );
@@ -24,13 +27,14 @@ function CurrentWeatherWidget() {
   const [weatherData, setWeatherData] = useState<CurrentWeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { currentLocation } = useWeatherContext();
 
   useEffect(() => {
     const fetchWeather = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await WeatherAPI.getCurrentWeather(DEFAULT_LOCATIONS[0]); // New York
+        const response = await WeatherAPI.getCurrentWeather(currentLocation);
         setWeatherData(response.current);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch weather data');
@@ -44,7 +48,7 @@ function CurrentWeatherWidget() {
     // Refresh every 5 minutes
     const interval = setInterval(fetchWeather, 5 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [currentLocation]);
 
   if (loading) {
     return (
