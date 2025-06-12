@@ -1,0 +1,14 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: MIT-0
+
+.weatherWidget {
+  height: 100%;
+
+  :global(.awsui-container) {
+    height: 100%;
+  }
+
+  :global(.awsui-container-content) {
+    padding-bottom: 0;
+  }
+}
