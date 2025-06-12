@@ -9,6 +9,18 @@ import Spinner from '@cloudscape-design/components/spinner';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 
 import { WeatherAPI } from '../../services/weather-api';
+import { CurrentWeatherData } from '../interfaces';
+import { WeatherWidgetConfig } from '../interfaces';
+import { useWeatherContext } from '../../context/weather-context';
+import { HumidityMeter } from './humidity-meter';
+
+import Box from '@cloudscape-design/components/box';
+import Header from '@cloudscape-design/components/header';
+import KeyValuePairs from '@cloudscape-design/components/key-value-pairs';
+import Spinner from '@cloudscape-design/components/spinner';
+import StatusIndicator from '@cloudscape-design/components/status-indicator';
+
+import { WeatherAPI } from '../../services/weather-api';
 import { useWeatherContext } from '../../context/weather-context';
 import { CurrentWeatherData } from '../interfaces';
 import { WeatherWidgetConfig } from '../interfaces';
@@ -77,16 +89,12 @@ function HumidityWidget() {
   const getHumidityLevel = (humidity: number): { description: string; emoji: string; color: string } => {
     if (humidity < 30) return { description: 'Very dry', emoji: '🏜️', color: '#d91515' };
     if (humidity < 50) return { description: 'Dry', emoji: '🌵', color: '#ff9900' };
-    if (humidity < 70) return { description: 'Comfortable', emoji: '😌', color: '#1d8102' };
+    if (humidity < 70) return { description: 'Comfortable', emoji: '��', color: '#1d8102' };
     if (humidity < 80) return { description: 'Humid', emoji: '💧', color: '#0073bb' };
     return { description: 'Very humid', emoji: '🌊', color: '#232f3e' };
   };
 
   const humidityLevel = getHumidityLevel(weatherData.humidity);
-
-  // Create a simple humidity meter visualization
-  const meterWidth = 200;
-  const fillWidth = (weatherData.humidity / 100) * meterWidth;
 
   return (
     <Box>
@@ -102,32 +110,7 @@ function HumidityWidget() {
         </Box>
       </Box>
 
-      <Box textAlign="center" margin={{ bottom: 'l' }}>
-        <div
-          style={{
-            width: `${meterWidth}px`,
-            height: '20px',
-            backgroundColor: '#f1f1f1',
-            borderRadius: '10px',
-            position: 'relative',
-            margin: '0 auto',
-            overflow: 'hidden',
-          }}
-        >
-          <div
-            style={{
-              width: `${fillWidth}px`,
-              height: '100%',
-              backgroundColor: humidityLevel.color,
-              borderRadius: '10px',
-              transition: 'width 0.3s ease',
-            }}
-          />
-        </div>
-        <Box variant="small" margin={{ top: 'xs' }}>
-          Humidity Level
-        </Box>
-      </Box>
+      <HumidityMeter humidity={weatherData.humidity} color={humidityLevel.color} />
 
       <KeyValuePairs
         columns={2}
