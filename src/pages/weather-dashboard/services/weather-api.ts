@@ -137,3 +137,23 @@ export function getWeatherIcon(code: number, isDay: boolean = true): string {
 
   return 'cloud';
 }
+
+/**
+ * Gets weather emoji based on weather code and time of day
+ */
+export function getWeatherEmoji(code: number, isDay: boolean = true): string {
+  if (code === 0) return isDay ? '☀️' : '🌙';
+  if (code === 1) return isDay ? '🌤️' : '🌙';
+  if (code === 2) return isDay ? '⛅' : '☁️';
+  if (code === 3) return '☁️';
+  if (code >= 45 && code <= 48) return '🌫️';
+  if (code >= 51 && code <= 57) return '🌦️';
+  if (code >= 61 && code <= 65) return '🌧️';
+  if (code >= 66 && code <= 67) return '🌨️';
+  if (code >= 71 && code <= 77) return '❄️';
+  if (code >= 80 && code <= 82) return '🌦️';
+  if (code >= 85 && code <= 86) return '🌨️';
+  if (code >= 95 && code <= 99) return '⛈️';
+
+  return '☁️';
+}

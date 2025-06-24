@@ -4,14 +4,12 @@
 import React from 'react';
 import Container from '@cloudscape-design/components/container';
 import Header from '@cloudscape-design/components/header';
-import Table from '@cloudscape-design/components/table';
 import Box from '@cloudscape-design/components/box';
 import SpaceBetween from '@cloudscape-design/components/space-between';
-import Icon from '@cloudscape-design/components/icon';
 
 import { WeatherData } from '../types';
-import { formatTemperature, formatWindSpeed, formatPrecipitation, formatDate } from '../utils';
-import { getWeatherDescription, getWeatherIcon } from '../services/weather-api';
+import { formatTemperature, formatDate } from '../utils';
+import { getWeatherDescription, getWeatherEmoji } from '../services/weather-api';
 
 interface DailyForecastTableProps {
   weatherData: WeatherData;
@@ -38,50 +36,6 @@ export function DailyForecastTable({ weatherData }: DailyForecastTableProps) {
     windSpeed: daily.wind_speed_10m_max[index],
   }));
 
-  const columnDefinitions = [
-    {
-      id: 'date',
-      header: 'Date',
-      cell: (item: DailyForecastItem) => <Box fontWeight="bold">{formatDate(item.date)}</Box>,
-      sortingField: 'date',
-      isRowHeader: true,
-    },
-    {
-      id: 'weather',
-      header: 'Weather',
-      cell: (item: DailyForecastItem) => (
-        <SpaceBetween direction="horizontal" size="xs" alignItems="center">
-          <Icon name={getWeatherIcon(item.weatherCode, true)} />
-          <Box>{getWeatherDescription(item.weatherCode, true)}</Box>
-        </SpaceBetween>
-      ),
-    },
-    {
-      id: 'temperature',
-      header: 'Temperature',
-      cell: (item: DailyForecastItem) => (
-        <SpaceBetween direction="horizontal" size="xs">
-          <Box fontWeight="bold">{formatTemperature(item.maxTemp)}</Box>
-          <Box color="text-body-secondary">/</Box>
-          <Box color="text-body-secondary">{formatTemperature(item.minTemp)}</Box>
-        </SpaceBetween>
-      ),
-      sortingField: 'maxTemp',
-    },
-    {
-      id: 'precipitation',
-      header: 'Precipitation',
-      cell: (item: DailyForecastItem) => formatPrecipitation(item.precipitation),
-      sortingField: 'precipitation',
-    },
-    {
-      id: 'wind',
-      header: 'Max Wind Speed',
-      cell: (item: DailyForecastItem) => formatWindSpeed(item.windSpeed),
-      sortingField: 'windSpeed',
-    },
-  ];
-
   return (
     <Container
       header={
@@ -90,27 +44,50 @@ export function DailyForecastTable({ weatherData }: DailyForecastTableProps) {
         </Header>
       }
     >
-      <Table
-        columnDefinitions={columnDefinitions}
-        items={dailyData}
-        trackBy="date"
-        ariaLabels={{
-          itemSelectionLabel: (data, row) => `Select forecast for ${formatDate(row.date)}`,
-          allItemsSelectionLabel: () => 'Select all forecasts',
-          selectionGroupLabel: 'Daily forecast selection',
+      <div
+        style={{
+          display: 'flex',
+          overflowX: 'auto',
+          gap: '16px',
+          padding: '8px',
+          scrollbarWidth: 'thin',
         }}
-        empty={
-          <Box textAlign="center" color="inherit" margin={{ top: 'xxl', bottom: 'xxl' }}>
-            <Box variant="h3" padding={{ bottom: 'xs' }}>
-              No forecast data available
-            </Box>
-            <Box variant="p">Daily forecast data could not be loaded</Box>
-          </Box>
-        }
-        loading={false}
-        loadingText="Loading daily forecast..."
-        variant="embedded"
-      />
+      >
+        {dailyData.map((item, index) => (
+          <div
+            key={item.date}
+            style={{
+              minWidth: '120px',
+              textAlign: 'center',
+              padding: '16px',
+              border: '1px solid var(--color-border-divider-default)',
+              borderRadius: '8px',
+              backgroundColor: index === 0 ? 'var(--color-background-container-content)' : 'transparent',
+            }}
+          >
+            <SpaceBetween size="xs">
+              <Box variant="small" fontWeight="bold" color={index === 0 ? 'text-status-info' : 'inherit'}>
+                {index === 0 ? 'Today' : formatDate(item.date)}
+              </Box>
+
+              <div style={{ fontSize: '48px', lineHeight: '1' }}>{getWeatherEmoji(item.weatherCode, true)}</div>
+
+              <Box variant="small" textAlign="center">
+                {getWeatherDescription(item.weatherCode, true)}
+              </Box>
+
+              <SpaceBetween size="xxs">
+                <Box fontWeight="bold" fontSize="body-m">
+                  {formatTemperature(item.maxTemp)}
+                </Box>
+                <Box color="text-body-secondary" fontSize="body-s">
+                  {formatTemperature(item.minTemp)}
+                </Box>
+              </SpaceBetween>
+            </SpaceBetween>
+          </div>
+        ))}
+      </div>
     </Container>
   );
 }
