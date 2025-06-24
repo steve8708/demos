@@ -169,13 +169,13 @@ export function App() {
                 <Header variant="h3">y-axis label</Header>
                 <BarChart
                   series={barChartData}
-                  xDomain={['Q1', 'Q2', 'Q3', 'Q4', 'Q5']}
+                  xDomain={['x1', 'x2', 'x3', 'x4', 'x5']}
                   yDomain={[0, 60]}
                   height={300}
                   xTitle="X-axis label"
                   yTitle=""
-                  ariaLabel="Bar chart showing quarterly performance"
-                  ariaDescription="Bar chart showing performance metrics across five quarters"
+                  ariaLabel="Bar chart showing performance metrics"
+                  ariaDescription="Bar chart showing performance metrics across five categories"
                   legendTitle=""
                   hideFilter={false}
                   fitHeight={false}
