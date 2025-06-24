@@ -17,7 +17,7 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import Table from '@cloudscape-design/components/table';
 import TextFilter from '@cloudscape-design/components/text-filter';
 
-import { Navigation } from '../commons';
+import { Navigation } from '../commons/navigation';
 import { areaChartData, barChartData, performanceGoal } from './chart-data';
 import { AdminItem, columnDefinitions, tableData } from './table-config';
 import styles from './styles.module.scss';
