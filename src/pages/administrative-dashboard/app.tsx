@@ -114,24 +114,40 @@ export function App() {
           </Container>
 
           {/* Charts Section */}
-          <Grid gridDefinition={[{ colspan: 6 }, { colspan: 6 }]}>
+          <Grid
+            gridDefinition={[
+              { colspan: { default: 12, xs: 12, s: 12, m: 6, l: 6, xl: 6 } },
+              { colspan: { default: 12, xs: 12, s: 12, m: 6, l: 6, xl: 6 } },
+            ]}
+          >
             {/* Area Chart */}
             <Container>
               <SpaceBetween size="m">
-                <Box variant="h3">y-axis label</Box>
+                <Header variant="h3">y-axis label</Header>
                 <AreaChart
                   series={areaChartData}
                   xDomain={[new Date('2024-01-01'), new Date('2024-01-12')]}
                   yDomain={[0, 60]}
                   height={300}
                   xTitle="X-axis label"
-                  yTitle="y-axis label"
+                  yTitle=""
                   ariaLabel="Area chart showing performance over time"
                   ariaDescription="Area chart with two data series showing performance metrics over a 12-day period"
-                  legendTitle="Legend"
+                  legendTitle=""
+                  hideFilter={false}
+                  fitHeight={false}
                   threshold={{
                     y: 35,
                     label: 'Performance goal',
+                  }}
+                  i18nStrings={{
+                    filterLabel: 'Filter displayed data series',
+                    filterPlaceholder: 'Search data series',
+                    filterSelectedAriaLabel: 'selected',
+                    legendAriaLabel: 'Legend',
+                    chartAriaRoleDescription: 'area chart',
+                    xAxisAriaRoleDescription: 'x axis',
+                    yAxisAriaRoleDescription: 'y axis',
                   }}
                 />
               </SpaceBetween>
@@ -140,20 +156,31 @@ export function App() {
             {/* Bar Chart */}
             <Container>
               <SpaceBetween size="m">
-                <Box variant="h3">y-axis label</Box>
+                <Header variant="h3">y-axis label</Header>
                 <BarChart
                   series={barChartData}
                   xDomain={['Q1', 'Q2', 'Q3', 'Q4', 'Q5']}
                   yDomain={[0, 60]}
                   height={300}
                   xTitle="X-axis label"
-                  yTitle="y-axis label"
+                  yTitle=""
                   ariaLabel="Bar chart showing quarterly performance"
                   ariaDescription="Bar chart showing performance metrics across five quarters"
-                  legendTitle="Legend"
+                  legendTitle=""
+                  hideFilter={false}
+                  fitHeight={false}
                   threshold={{
                     y: 35,
                     label: 'Performance goal',
+                  }}
+                  i18nStrings={{
+                    filterLabel: 'Filter displayed data series',
+                    filterPlaceholder: 'Search data series',
+                    filterSelectedAriaLabel: 'selected',
+                    legendAriaLabel: 'Legend',
+                    chartAriaRoleDescription: 'bar chart',
+                    xAxisAriaRoleDescription: 'x axis',
+                    yAxisAriaRoleDescription: 'y axis',
                   }}
                 />
               </SpaceBetween>
