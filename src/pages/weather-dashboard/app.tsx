@@ -131,16 +131,11 @@ export function App() {
                 {/* Current Weather */}
                 <CurrentWeatherCard weatherData={weatherData} locationName={locationName} />
 
-                {/* Charts and Tables Grid */}
-                <Grid
-                  gridDefinition={[
-                    { colspan: { default: 12, xs: 12, s: 12, m: 12, l: 6, xl: 6 } },
-                    { colspan: { default: 12, xs: 12, s: 12, m: 12, l: 6, xl: 6 } },
-                  ]}
-                >
-                  <HourlyForecastChart weatherData={weatherData} />
-                  <DailyForecastTable weatherData={weatherData} />
-                </Grid>
+                {/* Daily Forecast */}
+                <DailyForecastTable weatherData={weatherData} />
+
+                {/* Hourly Forecast Chart */}
+                <HourlyForecastChart weatherData={weatherData} />
               </SpaceBetween>
             )}
 
