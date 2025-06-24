@@ -20,6 +20,7 @@ import TextFilter from '@cloudscape-design/components/text-filter';
 import { Navigation } from '../commons';
 import { areaChartData, barChartData, performanceGoal } from './chart-data';
 import { AdminItem, columnDefinitions, tableData } from './table-config';
+import styles from './styles.module.scss';
 
 export function App() {
   const [selectedItems, setSelectedItems] = useState<AdminItem[]>([]);
