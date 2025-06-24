@@ -74,16 +74,9 @@ export function App() {
 
           {/* Warning Banner */}
           {showWarning && (
-            <Flashbar
-              items={[
-                {
-                  type: 'warning',
-                  content: 'This is a warning message',
-                  dismissible: true,
-                  onDismiss: () => setShowWarning(false),
-                },
-              ]}
-            />
+            <Alert type="warning" statusIconAriaLabel="Warning" dismissible onDismiss={() => setShowWarning(false)}>
+              This is a warning message
+            </Alert>
           )}
 
           {/* Search and Pagination Controls */}
