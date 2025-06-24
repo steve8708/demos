@@ -136,13 +136,13 @@ export function App() {
                 <Header variant="h3">y-axis label</Header>
                 <AreaChart
                   series={areaChartData}
-                  xDomain={[new Date('2024-01-01'), new Date('2024-01-12')]}
+                  xDomain={['x1', 'x2', 'x3', 'x4', 'x5', 'x6', 'x7', 'x8', 'x9', 'x10', 'x11', 'x12']}
                   yDomain={[0, 60]}
                   height={300}
                   xTitle="X-axis label"
                   yTitle=""
                   ariaLabel="Area chart showing performance over time"
-                  ariaDescription="Area chart with two data series showing performance metrics over a 12-day period"
+                  ariaDescription="Area chart with two data series showing performance metrics over a 12-period timeline"
                   legendTitle=""
                   hideFilter={false}
                   fitHeight={false}
