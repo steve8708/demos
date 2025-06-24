@@ -87,30 +87,40 @@ export function App() {
 
           {/* Search and Pagination Controls */}
           <Container>
-            <SpaceBetween direction="horizontal" size="s">
-              <Box flex="1">
-                <TextFilter
-                  filteringText={filterText}
-                  filteringPlaceholder="Placeholder"
-                  filteringAriaLabel="Filter items"
-                  onChange={({ detail }) => {
-                    setFilterText(detail.filteringText);
-                    setCurrentPageIndex(1);
-                  }}
-                />
-              </Box>
-              <Pagination
-                currentPageIndex={currentPageIndex}
-                onChange={({ detail }) => setCurrentPageIndex(detail.currentPageIndex)}
-                pagesCount={Math.ceil(filteredItems.length / itemsPerPage)}
-                ariaLabels={{
-                  nextPageLabel: 'Next page',
-                  previousPageLabel: 'Previous page',
-                  pageLabel: pageNumber => `Page ${pageNumber}`,
+            <Grid
+              gridDefinition={[
+                { colspan: { default: 12, xs: 12, s: 8, m: 8, l: 8, xl: 8 } },
+                { colspan: { default: 12, xs: 12, s: 4, m: 4, l: 4, xl: 4 } },
+              ]}
+            >
+              <TextFilter
+                filteringText={filterText}
+                filteringPlaceholder="Placeholder"
+                filteringAriaLabel="Filter items"
+                countText={`${filteredItems.length} match${filteredItems.length !== 1 ? 'es' : ''}`}
+                onChange={({ detail }) => {
+                  setFilterText(detail.filteringText);
+                  setCurrentPageIndex(1);
                 }}
               />
-              <Button iconName="settings" variant="icon" />
-            </SpaceBetween>
+              <Box display="flex" justifyContent="flex-end">
+                <SpaceBetween direction="horizontal" size="s">
+                  <Pagination
+                    currentPageIndex={currentPageIndex}
+                    onChange={({ detail }) => setCurrentPageIndex(detail.currentPageIndex)}
+                    pagesCount={Math.ceil(filteredItems.length / itemsPerPage)}
+                    ariaLabels={{
+                      nextPageLabel: 'Next page',
+                      previousPageLabel: 'Previous page',
+                      pageLabel: pageNumber => `Page ${pageNumber}`,
+                    }}
+                  />
+                  <Box borderLeft="divider-default" paddingLeft="s">
+                    <Button iconName="settings" variant="icon" ariaLabel="Settings" />
+                  </Box>
+                </SpaceBetween>
+              </Box>
+            </Grid>
           </Container>
 
           {/* Charts Section */}
