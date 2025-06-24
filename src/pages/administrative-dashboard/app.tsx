@@ -195,6 +195,11 @@ export function App() {
             selectedItems={selectedItems}
             onSelectionChange={({ detail }) => setSelectedItems(detail.selectedItems)}
             selectionType="multi"
+            resizableColumns
+            stickyHeader
+            stripedRows
+            trackBy="id"
+            variant="container"
             ariaLabels={{
               selectionGroupLabel: 'Items selection',
               allItemsSelectionLabel: ({ selectedItems }) =>
@@ -211,6 +216,12 @@ export function App() {
                     ? `(${selectedItems.length}/${filteredItems.length})`
                     : `(${filteredItems.length})`
                 }
+                actions={
+                  <SpaceBetween direction="horizontal" size="xs">
+                    <Button disabled={selectedItems.length === 0}>Edit</Button>
+                    <Button disabled={selectedItems.length === 0}>Delete</Button>
+                  </SpaceBetween>
+                }
               >
                 Administrative Resources
               </Header>
@@ -219,9 +230,21 @@ export function App() {
               <Box margin={{ vertical: 'xs' }} textAlign="center" color="inherit">
                 <SpaceBetween size="m">
                   <b>No resources</b>
-                  <Button>Create resource</Button>
+                  <Button variant="primary">Create resource</Button>
                 </SpaceBetween>
               </Box>
+            }
+            footer={
+              <Pagination
+                currentPageIndex={currentPageIndex}
+                onChange={({ detail }) => setCurrentPageIndex(detail.currentPageIndex)}
+                pagesCount={Math.ceil(filteredItems.length / itemsPerPage)}
+                ariaLabels={{
+                  nextPageLabel: 'Next page',
+                  previousPageLabel: 'Previous page',
+                  pageLabel: pageNumber => `Page ${pageNumber}`,
+                }}
+              />
             }
           />
         </SpaceBetween>
