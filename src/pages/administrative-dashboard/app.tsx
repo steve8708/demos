@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT-0
 import React, { useState } from 'react';
 
+import Alert from '@cloudscape-design/components/alert';
 import AppLayout from '@cloudscape-design/components/app-layout';
 import AreaChart from '@cloudscape-design/components/area-chart';
 import BarChart from '@cloudscape-design/components/bar-chart';
@@ -9,7 +10,6 @@ import Box from '@cloudscape-design/components/box';
 import BreadcrumbGroup from '@cloudscape-design/components/breadcrumb-group';
 import Button from '@cloudscape-design/components/button';
 import Container from '@cloudscape-design/components/container';
-import Flashbar from '@cloudscape-design/components/flashbar';
 import Grid from '@cloudscape-design/components/grid';
 import Header from '@cloudscape-design/components/header';
 import Pagination from '@cloudscape-design/components/pagination';
