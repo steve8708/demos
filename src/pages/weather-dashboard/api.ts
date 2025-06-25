@@ -11,7 +11,6 @@ export async function searchCities(query: string): Promise<GeocodingResponse> {
     name: query,
     count: '10',
     language: 'en',
-    format: 'json',
   });
 
   const response = await fetch(`${GEOCODING_API_BASE}/search?${params}`);
