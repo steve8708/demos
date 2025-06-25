@@ -10,7 +10,8 @@ import KeyValuePairs from '@cloudscape-design/components/key-value-pairs';
 import Badge from '@cloudscape-design/components/badge';
 
 import { WeatherResponse, SelectedLocation } from '../types';
-import { getWeatherDescription, getWeatherIcon, formatTemperature, formatWindDirection } from '../api';
+import { getWeatherDescription, getWeatherIcon, formatTemperature } from '../api';
+import { createWeatherDetailsItems } from '../constants';
 
 interface CurrentWeatherProps {
   location: SelectedLocation;
