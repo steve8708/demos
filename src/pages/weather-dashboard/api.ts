@@ -3,8 +3,8 @@
 
 import { GeocodingResponse, WeatherResponse } from './types';
 
-const GEOCODING_API_BASE = 'https://geocoding.open-meteo.com/v1';
-const WEATHER_API_BASE = 'https://api.open-meteo.com/v1';
+const GEOCODING_API_BASE = '/api/geocoding';
+const WEATHER_API_BASE = '/api/weather';
 
 export async function searchCities(query: string): Promise<GeocodingResponse> {
   const params = new URLSearchParams({
@@ -135,7 +135,7 @@ export function getWeatherIcon(weatherCode: number, isDay: boolean): string {
   if (weatherCode >= 51 && weatherCode <= 57) return '🌦️';
   if (weatherCode >= 61 && weatherCode <= 67) return '🌧️';
   if (weatherCode >= 71 && weatherCode <= 77) return '❄️';
-  if (weatherCode >= 80 && weatherCode <= 86) return '🌧️';
+  if (weatherCode >= 80 && weatherCode <= 86) return '���️';
   if (weatherCode >= 95) return '⛈️';
   return '🌤️';
 }
