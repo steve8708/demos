@@ -13,13 +13,28 @@ export async function searchCities(query: string): Promise<GeocodingResponse> {
     language: 'en',
   });
 
-  const response = await fetch(`${GEOCODING_API_BASE}/search?${params}`);
+  const url = `${GEOCODING_API_BASE}/search?${params}`;
+  console.log('Fetching geocoding data from:', url);
 
-  if (!response.ok) {
-    throw new Error(`Failed to search cities: ${response.statusText}`);
+  try {
+    const response = await fetch(url);
+
+    console.log('Response status:', response.status);
+    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('API Error response:', errorText);
+      throw new Error(`Failed to search cities: ${response.status} ${response.statusText} - ${errorText}`);
+    }
+
+    const data = await response.json();
+    console.log('Geocoding API response:', data);
+    return data;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
   }
-
-  return response.json();
 }
 
 export async function getWeatherData(latitude: number, longitude: number): Promise<WeatherResponse> {
