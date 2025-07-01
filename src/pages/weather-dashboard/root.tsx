@@ -43,21 +43,40 @@ export function App() {
         throw new Error(`Weather API error: ${response.status}`);
       }
 
-      const data: WeatherResponse = await response.json();
+      const data = await response.json();
 
       // Transform the current weather data to match our interface
-      const transformedData = {
-        ...data,
+      const transformedData: WeatherResponse = {
+        latitude: data.latitude,
+        longitude: data.longitude,
+        timezone: data.timezone,
+        timezone_abbreviation: data.timezone_abbreviation,
         current: {
-          temperature: data.current.temperature_2m,
-          weather_code: data.current.weather_code,
-          wind_speed: data.current.wind_speed_10m,
-          wind_direction: data.current.wind_direction_10m,
-          humidity: data.current.relative_humidity_2m,
-          pressure: data.current.surface_pressure,
+          temperature: data.current.temperature_2m || 0,
+          weather_code: data.current.weather_code || 0,
+          wind_speed: data.current.wind_speed_10m || 0,
+          wind_direction: data.current.wind_direction_10m || 0,
+          humidity: data.current.relative_humidity_2m || 0,
+          pressure: data.current.surface_pressure || 1013,
           visibility: 10, // Open Meteo doesn't provide visibility, using default
           uv_index: 3, // Open Meteo doesn't provide current UV index, using default
-          time: data.current.time,
+          time: data.current.time || new Date().toISOString(),
+        },
+        hourly: {
+          time: data.hourly.time || [],
+          temperature_2m: data.hourly.temperature_2m || [],
+          precipitation_probability: data.hourly.precipitation_probability || [],
+          weather_code: data.hourly.weather_code || [],
+          wind_speed_10m: data.hourly.wind_speed_10m || [],
+        },
+        daily: {
+          time: data.daily.time || [],
+          weather_code: data.daily.weather_code || [],
+          temperature_2m_max: data.daily.temperature_2m_max || [],
+          temperature_2m_min: data.daily.temperature_2m_min || [],
+          precipitation_probability_max: data.daily.precipitation_probability_max || [],
+          wind_speed_10m_max: data.daily.wind_speed_10m_max || [],
+          uv_index_max: data.daily.uv_index_max || [],
         },
       };
 
